@@ -413,7 +413,7 @@
                     android:orientation="horizontal">
 
                     <ImageButton
-                        android:id="@+id/userCard1IB"
+                        android:id="@+id/userCard0IB"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -422,7 +422,7 @@
                         tools:ignore="SpeakableTextPresentCheck" />
 
                     <ImageButton
-                        android:id="@+id/userCard2IB"
+                        android:id="@+id/userCard1IB"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -431,7 +431,7 @@
                         tools:ignore="SpeakableTextPresentCheck" />
 
                     <ImageButton
-                        android:id="@+id/userCard3IB"
+                        android:id="@+id/userCard2IB"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -440,7 +440,7 @@
                         tools:ignore="SpeakableTextPresentCheck" />
 
                     <ImageButton
-                        android:id="@+id/userCard4IB"
+                        android:id="@+id/userCard3IB"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="1"

@@ -69,7 +69,7 @@ public class SHState extends GameState {
         this.players[1] = new Player("Player 1", 1);
         this.players[2] = new Player("Player 2", 2);
 
-        this.players[0].toggleIsTurn();
+        this.players[0].setIsTurn(true);
 
         //Creates all 52 card objects and puts them into the deck arraylist
         for (char s : "SHDC".toCharArray()) {
@@ -109,6 +109,7 @@ public class SHState extends GameState {
         for(int i = 0; i < orig.phases.length; i++){
             this.phases[i] = orig.phases[i];
         }
+
         //creates deep copy of the deck arrayList
         this.deck = new ArrayList<>();
         for(int h = 0; h < this.deck.size(); h++){
@@ -119,6 +120,7 @@ public class SHState extends GameState {
         for(int j = 0; j < orig.players.length; j++){
             this.players[j] = new Player(orig.players[j]);
         }
+
     }
 
     /**

@@ -67,8 +67,11 @@ public class SHLocalGame extends LocalGame {
         //to clean up code a bit
         Player p = SHGS.getPlayersArray()[thisPlayerIdx];
 
-        if (thisPlayerIdx < 0 || thisPlayerIdx > 2) { // illegal player
-            Log.d("no action made","Player tried to take an action on someone else's turn");
+        if (thisPlayerIdx < 0 || thisPlayerIdx > 2
+                || SHGS.getPlayerTurnId() != thisPlayerIdx
+                || SHGS.getPlayersArray()[thisPlayerIdx].getFolded()) { // illegal player
+            Log.d("no action made",
+                 "Player tried to take an action on someone else's turn or after they folded");
             return false;
         }
 
@@ -165,7 +168,7 @@ public class SHLocalGame extends LocalGame {
         }
 
         else if(sham.isFold()) {
-            SHGS.getPlayersArray()[thisPlayerIdx].toggleFolded();
+            SHGS.getPlayersArray()[thisPlayerIdx].setFolded(true);
             Log.d("Fold Action","player has folded");
         }
 
@@ -174,13 +177,13 @@ public class SHLocalGame extends LocalGame {
         }
 
         //changes whose turn it is
-        SHGS.getPlayersArray()[thisPlayerIdx].toggleIsTurn();
+        SHGS.getPlayersArray()[thisPlayerIdx].setIsTurn(false);
         int nextPlayerIdx = thisPlayerIdx++;
         if(thisPlayerIdx == 2){
              nextPlayerIdx = 0;
         }
-        SHGS.getPlayersArray()[nextPlayerIdx].toggleIsTurn();
-        Log.d("playerTurn","it is the next player's turn");
+        SHGS.getPlayersArray()[nextPlayerIdx].setIsTurn(true);
+        Log.d("playerTurn","it is player " + nextPlayerIdx + "'s turn");
 
         return true;
     }//makeMove

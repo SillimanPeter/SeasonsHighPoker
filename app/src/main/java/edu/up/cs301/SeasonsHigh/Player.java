@@ -52,9 +52,9 @@ public class Player{
     }
 
     //set methods
-    public void toggleIsTurn(){ this.isTurn =! this.isTurn; }
+    public void setIsTurn(boolean turn){ this.isTurn = turn; }
 
-    public void toggleFolded(){ this.folded =! this.folded; }
+    public void setFolded(boolean fold){ this.folded = fold; }
 
     public void setLastBet(int bet){ this.lastBet = bet; }
 

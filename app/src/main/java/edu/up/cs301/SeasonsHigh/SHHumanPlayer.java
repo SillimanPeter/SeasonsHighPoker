@@ -49,10 +49,10 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
     private Button drawButt;
     private Button betButt;
 
+    private ImageButton userCard0;
     private ImageButton userCard1;
     private ImageButton userCard2;
     private ImageButton userCard3;
-    private ImageButton userCard4;
 
     private EditText userBetAmount;
 
@@ -93,7 +93,7 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
                 foe0Name.setText("" + shgs.getPName(1));
                 foe1Name.setText("" + shgs.getPName(2));
                 //sets user's cards
-                userCard4.setImageResource(shgs.getPCardRecId(0, 0));
+                userCard0.setImageResource(shgs.getPCardRecId(0, 0));
                 userCard1.setImageResource(shgs.getPCardRecId(0, 1));
                 userCard2.setImageResource(shgs.getPCardRecId(0, 2));
                 userCard3.setImageResource(shgs.getPCardRecId(0, 3));
@@ -117,7 +117,7 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
                 foe0Name.setText("" + shgs.getPName(0));
                 foe1Name.setText("" + shgs.getPName(2));
                 //sets user's cards
-                userCard4.setImageResource(shgs.getPCardRecId(1, 0));
+                userCard0.setImageResource(shgs.getPCardRecId(1, 0));
                 userCard1.setImageResource(shgs.getPCardRecId(1, 1));
                 userCard2.setImageResource(shgs.getPCardRecId(1, 2));
                 userCard3.setImageResource(shgs.getPCardRecId(1, 3));
@@ -141,7 +141,7 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
                 foe0Name.setText("" + shgs.getPName(1));
                 foe1Name.setText("" + shgs.getPName(0));
                 //sets user's cards
-                userCard4.setImageResource(shgs.getPCardRecId(2, 0));
+                userCard0.setImageResource(shgs.getPCardRecId(2, 0));
                 userCard1.setImageResource(shgs.getPCardRecId(2, 1));
                 userCard2.setImageResource(shgs.getPCardRecId(2, 2));
                 userCard3.setImageResource(shgs.getPCardRecId(2, 3));
@@ -175,33 +175,32 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
     @Override
     public void onClick(View button) {
         if(button instanceof ImageButton) {
-            if(button.getId() == userCard1.getId()){
-                //TODO: set card 1 object's isSelected = true;
-                infoSection.append("\n Fold Button Pressed");
-                userCard1.isSelected();
-            } else if(button.getId() == userCard2.getId()){
-                //TODO: set card 2 object's isSelected = true;
-                userCard2.isSelected();
-            } else if(button.getId() == userCard3.getId()){
-                //TODO: set card 3 object's isSelected = true;
-                userCard3.isSelected();
-            } else if(button.getId() == userCard4.getId()){
-                //TODO: set card 4 object's isSelected = true;
-                userCard4.isSelected();
+            if(button.getId() == this.userCard0.getId()){
+                this.game.sendAction(new SHActionCard0Select(this));
+                this.infoSection.append("\nCard 0 has been clicked");
+            } else if(button.getId() == this.userCard1.getId()){
+                this.game.sendAction(new SHActionCard1Select(this));
+                this.infoSection.append("\nCard 1 has been clicked");
+            } else if(button.getId() == this.userCard2.getId()){
+                this.game.sendAction(new SHActionCard2Select(this));
+                this.infoSection.append("\nCard 2 has been clicked");
+            } else if(button.getId() == this.userCard3.getId()){
+                this.game.sendAction(new SHActionCard3Select(this));
+                this.infoSection.append("\nCard 3 has been clicked");
             }
         } else if(button instanceof Button){
-            if(button.getId() == foldButt.getId()){
-                super.game.sendAction(new SHActionFold(this));
-                infoSection.append("Fold button clicked. \n");
-            } else if(button.getId() == holdButt.getId()){
-                super.game.sendAction(new SHActionHold(this));
-                infoSection.append("Hold button clicked. \n");
-            } else if(button.getId() == drawButt.getId()){
-                super.game.sendAction(new SHActionDraw(this));
-                infoSection.append("Draw button clicked. \n");
-            } else if(button.getId() == betButt.getId()){
+            if(button.getId() == this.betButt.getId()){
                 super.game.sendAction(new SHActionBet(this));
-                infoSection.append("Bet button clicked. \n");
+                this.infoSection.append("\nBet button clicked");
+            } else if(button.getId() == this.holdButt.getId()){
+                super.game.sendAction(new SHActionHold(this));
+                this.infoSection.append("\nHold button clicked");
+            } else if(button.getId() == this.drawButt.getId()){
+                super.game.sendAction(new SHActionDraw(this));
+                this.infoSection.append("\nDraw button clicked");
+            } else if(button.getId() == foldButt.getId()){
+                super.game.sendAction(new SHActionFold(this));
+                this.infoSection.append("\nFold button clicked");
             }
         }
     }// onClick
@@ -227,10 +226,10 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
         this.userName = (TextView)activity.findViewById(R.id.userTV);
         this.userBal = (TextView)activity.findViewById(R.id.userBalanceTV);
         this.userBetAmount = (EditText)activity.findViewById(R.id.betAmountET);
+        this.userCard0 = (ImageButton)activity.findViewById(R.id.userCard0IB);
         this.userCard1 = (ImageButton)activity.findViewById(R.id.userCard1IB);
         this.userCard2 = (ImageButton)activity.findViewById(R.id.userCard2IB);
         this.userCard3 = (ImageButton)activity.findViewById(R.id.userCard3IB);
-        this.userCard4 = (ImageButton)activity.findViewById(R.id.userCard4IB);
         this.infoSection = (TextView)activity.findViewById(R.id.infoSectionTV);
 
         //user buttons
@@ -260,15 +259,15 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
         this.currentBet = (TextView)activity.findViewById(R.id.currentBetTV);
 
         //Listen for button/ImageButton presses
-        betButt.setOnClickListener(this);
-        holdButt.setOnClickListener(this);
-        drawButt.setOnClickListener(this);
-        foldButt.setOnClickListener(this);
+        this.betButt.setOnClickListener(this);
+        this.holdButt.setOnClickListener(this);
+        this.drawButt.setOnClickListener(this);
+        this.foldButt.setOnClickListener(this);
 
-        userCard1.setOnClickListener(this);
-        userCard2.setOnClickListener(this);
-        userCard3.setOnClickListener(this);
-        userCard4.setOnClickListener(this);
+        this.userCard0.setOnClickListener(this);
+        this.userCard1.setOnClickListener(this);
+        this.userCard2.setOnClickListener(this);
+        this.userCard3.setOnClickListener(this);
 
     }//setAsGui
 
