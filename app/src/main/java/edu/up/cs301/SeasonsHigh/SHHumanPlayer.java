@@ -42,6 +42,7 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
     private TextView userName;
     private TextView foe0Name;
     private TextView foe1Name;
+    private TextView infoSection;
 
     private Button holdButt;
     private Button foldButt;
@@ -79,87 +80,87 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
     public void receiveInfo(GameInfo info) {
         //set gui
         if(info instanceof SHState){
-            SHState pgs = (SHState)info;
-
+            SHState shgs = (SHState)info;
+            infoSection.setText("Let's play a game! \n");
             //determine human player, set TextViews accordingly
             if(super.playerNum == 0) {
                 //sets balances
-                this.userBal.setText("" + pgs.getPBal(0));
-                this.foe0Bal.setText("" + pgs.getPBal(1));
-                this.foe1Bal.setText("" + pgs.getPBal(2));
+                userBal.setText("" + shgs.getPBal(0));
+                foe0Bal.setText("" + shgs.getPBal(1));
+                foe1Bal.setText("" + shgs.getPBal(2));
                 //sets names
-                this.userName.setText("" + pgs.getPName(0));
-                this.foe0Name.setText("" + pgs.getPName(1));
-                this.foe1Name.setText("" + pgs.getPName(2));
+                userName.setText("" + shgs.getPName(0));
+                foe0Name.setText("" + shgs.getPName(1));
+                foe1Name.setText("" + shgs.getPName(2));
                 //sets user's cards
-                this.userCard4.setImageResource(pgs.getPCardRecId(0, 0));
-                this.userCard1.setImageResource(pgs.getPCardRecId(0, 1));
-                this.userCard2.setImageResource(pgs.getPCardRecId(0, 2));
-                this.userCard3.setImageResource(pgs.getPCardRecId(0, 3));
+                userCard4.setImageResource(shgs.getPCardRecId(0, 0));
+                userCard1.setImageResource(shgs.getPCardRecId(0, 1));
+                userCard2.setImageResource(shgs.getPCardRecId(0, 2));
+                userCard3.setImageResource(shgs.getPCardRecId(0, 3));
                 //sets foe0's cards
-                this.foe0Card4.setImageResource(pgs.getPCardRecId(1, 0));
-                this.foe0Card1.setImageResource(pgs.getPCardRecId(1, 1));
-                this.foe0Card2.setImageResource(pgs.getPCardRecId(1, 2));
-                this.foe0Card3.setImageResource(pgs.getPCardRecId(1, 3));
+                foe0Card4.setImageResource(shgs.getPCardRecId(1, 0));
+                foe0Card1.setImageResource(shgs.getPCardRecId(1, 1));
+                foe0Card2.setImageResource(shgs.getPCardRecId(1, 2));
+                foe0Card3.setImageResource(shgs.getPCardRecId(1, 3));
                 //sets foe1's cards
-                this.foe1Card4.setImageResource(pgs.getPCardRecId(2, 0));
-                this.foe1Card1.setImageResource(pgs.getPCardRecId(2, 1));
-                this.foe1Card2.setImageResource(pgs.getPCardRecId(2, 2));
-                this.foe1Card3.setImageResource(pgs.getPCardRecId(2, 3));
+                foe1Card4.setImageResource(shgs.getPCardRecId(2, 0));
+                foe1Card1.setImageResource(shgs.getPCardRecId(2, 1));
+                foe1Card2.setImageResource(shgs.getPCardRecId(2, 2));
+                foe1Card3.setImageResource(shgs.getPCardRecId(2, 3));
             } else if(super.playerNum == 1){
                 //sets balances
-                this.userBal.setText("" + pgs.getPBal(1));
-                this.foe0Bal.setText("" + pgs.getPBal(0));
-                this.foe1Bal.setText("" + pgs.getPBal(2));
+                userBal.setText("" + shgs.getPBal(1));
+                foe0Bal.setText("" + shgs.getPBal(0));
+                foe1Bal.setText("" + shgs.getPBal(2));
                 //sets names
-                this.userName.setText("" + pgs.getPName(1));
-                this.foe0Name.setText("" + pgs.getPName(0));
-                this.foe1Name.setText("" + pgs.getPName(2));
+                userName.setText("" + shgs.getPName(1));
+                foe0Name.setText("" + shgs.getPName(0));
+                foe1Name.setText("" + shgs.getPName(2));
                 //sets user's cards
-                this.userCard4.setImageResource(pgs.getPCardRecId(1, 0));
-                this.userCard1.setImageResource(pgs.getPCardRecId(1, 1));
-                this.userCard2.setImageResource(pgs.getPCardRecId(1, 2));
-                this.userCard3.setImageResource(pgs.getPCardRecId(1, 3));
+                userCard4.setImageResource(shgs.getPCardRecId(1, 0));
+                userCard1.setImageResource(shgs.getPCardRecId(1, 1));
+                userCard2.setImageResource(shgs.getPCardRecId(1, 2));
+                userCard3.setImageResource(shgs.getPCardRecId(1, 3));
                 //sets foe0's cards
-                this.foe0Card4.setImageResource(pgs.getPCardRecId(0, 0));
-                this.foe0Card1.setImageResource(pgs.getPCardRecId(0, 1));
-                this.foe0Card2.setImageResource(pgs.getPCardRecId(0, 2));
-                this.foe0Card3.setImageResource(pgs.getPCardRecId(0, 3));
+                foe0Card4.setImageResource(shgs.getPCardRecId(0, 0));
+                foe0Card1.setImageResource(shgs.getPCardRecId(0, 1));
+                foe0Card2.setImageResource(shgs.getPCardRecId(0, 2));
+                foe0Card3.setImageResource(shgs.getPCardRecId(0, 3));
                 //sets foe1's cards
-                this.foe1Card4.setImageResource(pgs.getPCardRecId(2, 0));
-                this.foe1Card1.setImageResource(pgs.getPCardRecId(2, 1));
-                this.foe1Card2.setImageResource(pgs.getPCardRecId(2, 2));
-                this.foe1Card3.setImageResource(pgs.getPCardRecId(2, 3));
+                foe1Card4.setImageResource(shgs.getPCardRecId(2, 0));
+                foe1Card1.setImageResource(shgs.getPCardRecId(2, 1));
+                foe1Card2.setImageResource(shgs.getPCardRecId(2, 2));
+                foe1Card3.setImageResource(shgs.getPCardRecId(2, 3));
             } else {
                 //sets balances
-                this.userBal.setText("" + pgs.getPBal(2));
-                this.foe0Bal.setText("" + pgs.getPBal(1));
-                this.foe1Bal.setText("" + pgs.getPBal(0));
+                userBal.setText("" + shgs.getPBal(2));
+                foe0Bal.setText("" + shgs.getPBal(1));
+                foe1Bal.setText("" + shgs.getPBal(0));
                 //sets names
-                this.userName.setText("" + pgs.getPName(2));
-                this.foe0Name.setText("" + pgs.getPName(1));
-                this.foe1Name.setText("" + pgs.getPName(0));
+                userName.setText("" + shgs.getPName(2));
+                foe0Name.setText("" + shgs.getPName(1));
+                foe1Name.setText("" + shgs.getPName(0));
                 //sets user's cards
-                this.userCard4.setImageResource(pgs.getPCardRecId(2, 0));
-                this.userCard1.setImageResource(pgs.getPCardRecId(2, 1));
-                this.userCard2.setImageResource(pgs.getPCardRecId(2, 2));
-                this.userCard3.setImageResource(pgs.getPCardRecId(2, 3));
+                userCard4.setImageResource(shgs.getPCardRecId(2, 0));
+                userCard1.setImageResource(shgs.getPCardRecId(2, 1));
+                userCard2.setImageResource(shgs.getPCardRecId(2, 2));
+                userCard3.setImageResource(shgs.getPCardRecId(2, 3));
                 //sets foe0's cards
-                this.foe0Card4.setImageResource(pgs.getPCardRecId(1, 0));
-                this.foe0Card1.setImageResource(pgs.getPCardRecId(1, 1));
-                this.foe0Card2.setImageResource(pgs.getPCardRecId(1, 2));
-                this.foe0Card3.setImageResource(pgs.getPCardRecId(1, 3));
+                foe0Card4.setImageResource(shgs.getPCardRecId(1, 0));
+                foe0Card1.setImageResource(shgs.getPCardRecId(1, 1));
+                foe0Card2.setImageResource(shgs.getPCardRecId(1, 2));
+                foe0Card3.setImageResource(shgs.getPCardRecId(1, 3));
                 //sets foe1's cards
-                this.foe1Card4.setImageResource(pgs.getPCardRecId(0, 0));
-                this.foe1Card1.setImageResource(pgs.getPCardRecId(0, 1));
-                this.foe1Card2.setImageResource(pgs.getPCardRecId(0, 2));
-                this.foe1Card3.setImageResource(pgs.getPCardRecId(0, 3));
+                foe1Card4.setImageResource(shgs.getPCardRecId(0, 0));
+                foe1Card1.setImageResource(shgs.getPCardRecId(0, 1));
+                foe1Card2.setImageResource(shgs.getPCardRecId(0, 2));
+                foe1Card3.setImageResource(shgs.getPCardRecId(0, 3));
             }/* TODO: issue - establishes the correct user but not other players
                                 (i.e. non-user players' may be switched in order)*/
             //sets current pot
-            this.potAmount.setText("" + pgs.getPotBalance());
+            potAmount.setText("" + shgs.getPotBalance());
             //sets current bet
-            this.currentBet.setText("" + pgs.getCurrentBet());
+            currentBet.setText("" + shgs.getCurrentBet());
 
         } else { super.flash(Color.RED, 20); } //send error flash (is not PigGameState)
     }//receiveInfo
@@ -174,24 +175,33 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
     @Override
     public void onClick(View button) {
         if(button instanceof ImageButton) {
-            if(button.getId() == this.userCard1.getId()){
-                super.game.sendAction(new SHActionCard0Select(this));
-            } else if(button.getId() == this.userCard2.getId()){
-                super.game.sendAction(new SHActionCard1Select(this));
-            } else if(button.getId() == this.userCard3.getId()){
-                super.game.sendAction(new SHActionCard2Select(this));
-            } else if(button.getId() == this.userCard4.getId()){
-                super.game.sendAction(new SHActionCard3Select(this));
+            if(button.getId() == userCard1.getId()){
+                //TODO: set card 1 object's isSelected = true;
+                infoSection.append("\n Fold Button Pressed");
+                userCard1.isSelected();
+            } else if(button.getId() == userCard2.getId()){
+                //TODO: set card 2 object's isSelected = true;
+                userCard2.isSelected();
+            } else if(button.getId() == userCard3.getId()){
+                //TODO: set card 3 object's isSelected = true;
+                userCard3.isSelected();
+            } else if(button.getId() == userCard4.getId()){
+                //TODO: set card 4 object's isSelected = true;
+                userCard4.isSelected();
             }
         } else if(button instanceof Button){
-            if(button.getId() == this.foldButt.getId()){
+            if(button.getId() == foldButt.getId()){
                 super.game.sendAction(new SHActionFold(this));
-            } else if(button.getId() == this.holdButt.getId()){
+                infoSection.append("Fold button clicked. \n");
+            } else if(button.getId() == holdButt.getId()){
                 super.game.sendAction(new SHActionHold(this));
-            } else if(button.getId() == this.drawButt.getId()){
+                infoSection.append("Hold button clicked. \n");
+            } else if(button.getId() == drawButt.getId()){
                 super.game.sendAction(new SHActionDraw(this));
-            } else if(button.getId() == this.betButt.getId()){
+                infoSection.append("Draw button clicked. \n");
+            } else if(button.getId() == betButt.getId()){
                 super.game.sendAction(new SHActionBet(this));
+                infoSection.append("Bet button clicked. \n");
             }
         }
     }// onClick
@@ -221,6 +231,7 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
         this.userCard2 = (ImageButton)activity.findViewById(R.id.userCard2IB);
         this.userCard3 = (ImageButton)activity.findViewById(R.id.userCard3IB);
         this.userCard4 = (ImageButton)activity.findViewById(R.id.userCard4IB);
+        this.infoSection = (TextView)activity.findViewById(R.id.infoSectionTV);
 
         //user buttons
         this.betButt = (Button)activity.findViewById(R.id.betButton);
@@ -249,15 +260,15 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
         this.currentBet = (TextView)activity.findViewById(R.id.currentBetTV);
 
         //Listen for button/ImageButton presses
-        this.betButt.setOnClickListener(this);
-        this.holdButt.setOnClickListener(this);
-        this.drawButt.setOnClickListener(this);
-        this.foldButt.setOnClickListener(this);
+        betButt.setOnClickListener(this);
+        holdButt.setOnClickListener(this);
+        drawButt.setOnClickListener(this);
+        foldButt.setOnClickListener(this);
 
-        this.userCard1.setOnClickListener(this);
-        this.userCard2.setOnClickListener(this);
-        this.userCard3.setOnClickListener(this);
-        this.userCard4.setOnClickListener(this);
+        userCard1.setOnClickListener(this);
+        userCard2.setOnClickListener(this);
+        userCard3.setOnClickListener(this);
+        userCard4.setOnClickListener(this);
 
     }//setAsGui
 

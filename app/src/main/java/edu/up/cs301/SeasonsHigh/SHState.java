@@ -117,8 +117,7 @@ public class SHState extends GameState {
 
         //creates deep copy of the players array
         for(int j = 0; j < orig.players.length; j++){
-            Player player = new Player(orig.players[j]);
-            this.players[j] = player;
+            this.players[j] = new Player(orig.players[j]);
         }
     }
 

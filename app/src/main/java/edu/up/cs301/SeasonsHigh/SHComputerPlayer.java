@@ -12,7 +12,7 @@ public class SHComputerPlayer extends GameComputerPlayer {
     private SHState savedState;
 
     /**
-     * Constructor for the SJComputerPlayer class; creates an "average"
+     * Constructor for the SHComputerPlayer class; creates an "average"
      * player.
      *
      * @param name
@@ -25,7 +25,7 @@ public class SHComputerPlayer extends GameComputerPlayer {
     }
 
     /*
-     * Constructor for the SJComputerPlayer class
+     * Constructor for the SHComputerPlayer class
      */
     public SHComputerPlayer(String name, double avgReactionTime) {
         // invoke superclass constructor
