@@ -46,6 +46,30 @@ public abstract class SHActionMove extends GameAction {
 
     /**
      * @return
+     * 		whether the move was a "Card0Select"
+     */
+    public boolean isCard0Select(){ return false; }
+
+    /**
+     * @return
+     * 		whether the move was a "Card1Select"
+     */
+    public boolean isCard1Select(){ return false; }
+
+    /**
+     * @return
+     * 		whether the move was a "Card2Select"
+     */
+    public boolean isCard2Select(){ return false; }
+
+    /**
+     * @return
+     * 		whether the move was a "Card3Select"
+     */
+    public boolean isCard3Select(){ return false; }
+
+    /**
+     * @return
      * 		whether the move was a "Bet", "Raise", "Check" or "Call"
      * 	(each do very similar things so they are combined into one action)
      */

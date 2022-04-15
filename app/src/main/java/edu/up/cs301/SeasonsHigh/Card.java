@@ -65,6 +65,8 @@ public class Card {
 
     public boolean getIsSelected(){ return this.isSelected; }
 
+    public void toggleIsSelected(){ this.isSelected = !this.isSelected; }
+
     public boolean getIsDealt(){ return this.isDealt; }
 
     public void setIsDealt(boolean f){ this.isDealt = f; }

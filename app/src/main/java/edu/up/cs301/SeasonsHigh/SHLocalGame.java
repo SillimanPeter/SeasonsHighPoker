@@ -92,6 +92,38 @@ public class SHLocalGame extends LocalGame {
             }
         }
 
+        else if(sham.isCard0Select()){
+            if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
+                return false;
+            } else {
+                p.getHand()[0].toggleIsSelected();
+            }
+        }
+
+        else if(sham.isCard1Select()){
+            if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
+                return false;
+            } else {
+                p.getHand()[1].toggleIsSelected();
+            }
+        }
+
+        else if(sham.isCard2Select()){
+            if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
+                return false;
+            } else {
+                p.getHand()[2].toggleIsSelected();
+            }
+        }
+
+        else if(sham.isCard3Select()){
+            if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
+                return false;
+            } else {
+                p.getHand()[3].toggleIsSelected();
+            }
+        }
+
         else if (sham.isBet()) {
             if(!SHGS.getCurrentPhase().equals("Bet-Phase")) {
                 return false;
@@ -127,6 +159,7 @@ public class SHLocalGame extends LocalGame {
              nextPlayerIdx = 0;
         }
         SHGS.getPlayersArray()[nextPlayerIdx].toggleIsTurn();
+
         return true;
     }//makeMove
 

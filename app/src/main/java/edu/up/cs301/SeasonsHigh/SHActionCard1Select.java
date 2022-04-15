@@ -1,29 +1,28 @@
 package edu.up.cs301.SeasonsHigh;
 
-
 import edu.up.cs301.game.GameFramework.players.GamePlayer;
 
 /**
- * handles the bet action
+ * handles the Card1Select action
  *
  * @author Peter S. Silliman
  */
-public class SHActionBet extends SHActionMove {
+public class SHActionCard1Select extends SHActionMove {
 
     private static final long serialVersionUID = 0L;
 
     /**
-     * Constructor for the SHActionBet class.
+     * Constructor for the SHActionCard1Select class.
      *
      * @param player  the player making the move
      */
-    public SHActionBet(GamePlayer player) {
+    public SHActionCard1Select(GamePlayer player) {
         super(player);
     }
 
     /**
-     * @return whether this action is a "Bet" move
+     * @return whether this action is a "Card1Select" move
      */
-    public boolean isBetRaiseCheckCall() { return true; }
+    public boolean isCard1Select() { return true; }
 
 }
