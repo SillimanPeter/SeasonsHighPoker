@@ -80,6 +80,7 @@ public class SHLocalGame extends LocalGame {
                     p.getHand()[i] = null; //removes card from hand
                     p.getHand()[i] = SHGS.draw(); //draws new card
                     p.getHand()[i].setIsDealt(true);
+                    Log.d("Draw Action","player drew new cards");
                 }
             }
         }
@@ -89,6 +90,7 @@ public class SHLocalGame extends LocalGame {
                 return false;
             } else {
                 //do nothing
+                Log.d("Hold Action","player held");
             }
         }
 
@@ -97,6 +99,8 @@ public class SHLocalGame extends LocalGame {
                 return false;
             } else {
                 p.getHand()[0].toggleIsSelected();
+                Log.d("Card0Select Action","was called and Card 0 was toggled");
+
             }
         }
 
@@ -105,6 +109,8 @@ public class SHLocalGame extends LocalGame {
                 return false;
             } else {
                 p.getHand()[1].toggleIsSelected();
+                Log.d("Card1Select Action","was called and Card 1 was toggled");
+
             }
         }
 
@@ -113,6 +119,8 @@ public class SHLocalGame extends LocalGame {
                 return false;
             } else {
                 p.getHand()[2].toggleIsSelected();
+                Log.d("Card2Select Action","was called and Card 2 was toggled");
+
             }
         }
 
@@ -121,6 +129,8 @@ public class SHLocalGame extends LocalGame {
                 return false;
             } else {
                 p.getHand()[3].toggleIsSelected();
+                Log.d("Card3Select Action","was called and Card 3 was toggled");
+
             }
         }
 
@@ -140,12 +150,15 @@ public class SHLocalGame extends LocalGame {
                 SHGS.setCurrentBet(p.getCurrentBet());
                 SHGS.setPotBalance(SHGS.getPotBalance() + p.getCurrentBet());
                 p.setLastBet(p.getCurrentBet());
+                Log.d("Bet Action","was made");
+
             }
 
         }
 
         else if(sham.isFold()) {
             SHGS.getPlayersArray()[thisPlayerIdx].toggleFolded();
+            Log.d("Fold Action","player has folded");
         }
 
         else { // some unexpected action
@@ -159,6 +172,7 @@ public class SHLocalGame extends LocalGame {
              nextPlayerIdx = 0;
         }
         SHGS.getPlayersArray()[nextPlayerIdx].toggleIsTurn();
+        Log.d("playerTurn","it is the next player's turn");
 
         return true;
     }//makeMove
