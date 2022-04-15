@@ -65,7 +65,9 @@ public class SHState extends GameState {
         this.deck = new ArrayList<Card>();
         this.players = new Player[3]; //3 player max
 
-
+        this.players[0] = new Player("name0", 0);
+        this.players[1] = new Player("name1", 1);
+        this.players[2] = new Player("name2", 2);
 
         //Creates all 52 card objects and puts them into the deck arraylist
         for (char s : "SHDC".toCharArray()) {
@@ -99,6 +101,7 @@ public class SHState extends GameState {
         this.currentPhaseLocation = orig.currentPhaseLocation;
         this.minimumBet = orig.minimumBet;
         this.currentPhase = orig.currentPhase;
+        this.players = new Player[3]; //3 player max
         //creates deep copy of the phases array
         this.phases = new String[orig.phases.length];
         for(int i = 0; i < orig.phases.length; i++){
@@ -117,224 +120,6 @@ public class SHState extends GameState {
         }
     }
 
-    //TODO: implement legalFold() method
-    /**
-     *
-     *
-     * @param player is the player that is attempting the move
-     *
-     * @return true if bet is a legal move for player and that is has been committed
-     */
-    public boolean legalFold(Player player) {
-        //is it the players turn?
-        if (getPlayerTurnId() == player.getTurnId()) {
-            player.toggleFolded();
-            //changes whose turn it is
-            player.toggleIsTurn();
-            changeFirstPlayer();
-            getPlayersArray()[getPlayerTurnId()].toggleIsTurn();
-
-            return true;
-        }
-        //if not all of the above is true
-        return false;
-    }
-
-    /**
-     * checks if it's players turn, it's the betting-phase, the betting value is
-     *      at least minimum bet and not greater than the players balance and changes
-     *
-     * @param bet the value of
-     * @param player is the player that is attempting the move
-     *
-     * @return true if bet is a legal move for player and that is has been committed
-     */
-    public boolean legalBet(int bet, Player player) {
-        //is it currently the bet phase?
-        if (getCurrentPhase().equals("Betting-Phase")) {
-            //is it the players turn?
-            if (getPlayerTurnId() == player.getTurnId()) {
-                //is the players balance greater than or equal to the bet value?
-                if (player.getBalance() >= getCurrentBet()) {
-                    //is the bet value greater than or equal to current bet?
-                    if (player.getLastBet() >= getCurrentBet()) {
-                        //commits bet made
-                        setCurrentBet(bet);
-                        setPotBalance(getPotBalance() + bet);
-                        player.setLastBet(bet);
-                        //changes whose turn it is
-                        player.toggleIsTurn();
-                        changeFirstPlayer();
-                        getPlayersArray()[getPlayerTurnId()].toggleIsTurn();
-
-                        return true;
-                    }
-                }
-            }
-        }
-        //if not all of the above is true
-        return false;
-    }
-
-    /**
-     * checks if it's players turn, it's the betting-phase, if player is not first bet,
-     * if player has the money they are trying to bet, if bet is at least the minimum bet value
-     *
-     * @param bet
-     * @param player is the player that is attempting the move
-     *
-     * @return true if draw is a legal move
-     */
-    public boolean legalRaise(int bet, Player player){
-        //is it currently the bet phase?
-        if(getCurrentPhase().equals("Betting-Phase")){
-            //is it the players turn?
-            if(getPlayerTurnId() == player.getTurnId()){
-                //is the current bet greater than 0? i.e. a player can't raise if they're first bet.
-                if(getCurrentBet() > 0){
-                    //is the players balance greater than or equal to the bet value?
-                    if(player.getBalance() >= bet){
-                        //is the bet value greater than or equal to current bet plus minimum bet?
-                        if(bet == getCurrentBet() + getMinimumBet()){
-                            //commits the bet made
-                            setCurrentBet(bet);
-                            setPotBalance(getPotBalance() + bet);
-                            player.setLastBet(bet);
-                            player.setBalance(player.getBalance()-bet);
-                            //changes whose turn it is
-                            player.toggleIsTurn();
-                            changeFirstPlayer();
-                            getPlayersArray()[getPlayerTurnId()].toggleIsTurn();
-
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-        //if not all of the above is true
-        return false;
-    }
-
-    /**
-     * Checks if it is players turn, if player is first bet and if it is currently the
-     * betting-phase then changes whose turn it is without making a bet.
-     *
-     * @param player is the player that is attempting the move
-     *
-     * @return true if draw is a legal move
-     */
-    public boolean legalCheck(Player player){
-        //is it currently the bet phase?
-        if(getCurrentPhase().equals("Betting-Phase")){
-            //is it the players turn?
-            if(getPlayerTurnId() == player.getTurnId()){
-                //is the current bet 0?
-                if(getCurrentBet() == 0){
-                    //changes whose turn it is
-                    player.toggleIsTurn();
-                    changeFirstPlayer();
-                    getPlayersArray()[getPlayerTurnId()].toggleIsTurn();
-
-                    return true;
-                }
-            }
-        }
-        //if not all of the above is true
-        return false;
-    }
-
-    /**
-     * checks if it is players turn, it's the betting-phase, if player is first bet,
-     * and if player has the money they are trying to bet
-     *
-     * @param player is the player that is attempting the move
-     *
-     * @return true if draw is a legal move
-     */
-    public boolean legalCall(Player player){
-        //vars to clean up code
-        int callVal = getCurrentBet();
-        //is it currently the bet phase?
-        if(getCurrentPhase().equals("Betting-Phase")){
-            //is it the players turn?
-            if(getPlayerTurnId() == player.getTurnId()){
-                //is the current bet greater than 0?
-                if(getCurrentBet() > 0){
-                    //is the current bet less than players current balance?
-                    if(player.getBalance() >= callVal){
-                        //commits the bet made
-                        setPotBalance(getPotBalance() + callVal);
-                        player.setLastBet(callVal);
-                        player.setBalance(player.getBalance()-callVal);
-                        //changes whose turn it is
-                        player.toggleIsTurn();
-                        changeFirstPlayer();
-                        getPlayersArray()[getPlayerTurnId()].toggleIsTurn();
-
-                        return true;
-                    }
-                }
-            }
-        }
-        //if not all of the above is true
-        return false;
-    }
-
-    /**
-     * checks if it is players turn, it's the draw phase, and if cards have been selected to discard
-     *
-     * @param player is the player that is attempting the move
-     *
-     * @return true if draw is a legal
-     */
-    public boolean legalDraw(Player player){
-        boolean cardsHaveBeenSelected = false;
-        //is it currently the bet phase?
-        if(getCurrentPhase().equals("Draw-Phase")){
-            //is it the players turn?
-            if(getPlayerTurnId() == player.getTurnId()){
-                for(int i = 0; i < 4; i++){
-                    if(player.getHand()[i].getIsSelected()){
-                        cardsHaveBeenSelected = true;
-                        player.getHand()[i] = null; //removes card from hand
-                        player.getHand()[i] = draw(); //draws new card
-                        player.getHand()[i].setIsDealt(true);
-                    }
-                }
-                if(cardsHaveBeenSelected){
-                    //changes whose turn it is
-                    player.toggleIsTurn();
-                    changeFirstPlayer();
-                    getPlayersArray()[getPlayerTurnId()].toggleIsTurn();
-
-                    return true;
-                }
-            }
-        }
-        //if not all of the above is true
-        return false;
-    }
-
-    /**
-     * checks if it is players turn, and if it is draw phase
-     *
-     * @param player is the player that is attempting the move i.e. pressed the "stand" button
-     *
-     * @return true if stand is a legal move
-     */
-    public boolean legalStand(Player player){
-        //is it currently the bet phase?
-        if(getCurrentPhase().equals("Draw-Phase")){
-            //is it the players turn?
-            if(getPlayerTurnId() == player.getTurnId()){
-                return true;
-            }
-        }
-        //if not all of the above is true
-        return false;
-    }
-
     /**
      * finds the first card in the deck that has not been dealt
      *
@@ -343,7 +128,6 @@ public class SHState extends GameState {
      * @return the card drawn
      */
     public Card draw(){
-
         for(Card i: this.deck){
             if(!i.getIsDealt()){
                 i.setIsDealt(true);
@@ -354,7 +138,7 @@ public class SHState extends GameState {
          * the deck had been dealt before being shuffled which will not happen
          * due to the max possible cards drawn per round) */
         System.exit(305);
-        return this.deck.get(0);
+        return this.deck.get(-1);
     }
 
     /**
@@ -376,14 +160,6 @@ public class SHState extends GameState {
             this.currentPhaseLocation++;
         }
         this.currentPhase = this.phases[this.currentPhaseLocation];
-    }
-
-    /** rotates between the player to be the first better */
-    public void changeFirstPlayer(){
-        this.playersTurnId++;
-        if(this.playersTurnId == this.players.length){
-            this.playersTurnId = 0;
-        }
     }
 
     /**

@@ -3,7 +3,7 @@ package edu.up.cs301.SeasonsHigh;
 /**
  * TODO: comment class
  */
-public class Player extends SHState {
+public class Player{
 
     private static final long serialVersionUID = 96L;
 
@@ -15,45 +15,35 @@ public class Player extends SHState {
     private int turnId;
     private boolean isTurn;
     private boolean folded;
-    private SHState gameState;
+    private int currentBet;
 
     /**
      * Constructor declares default values for base variables
      * @param playerName will be in format "Player " + 'a number between 0 and 2'
-     * @param playerGSCopy is a copy of the goldenGS but excludes enemy players' hands
      */
-    public Player(String playerName, SHState playerGSCopy, int initTurnId){
-        this.name = playerName;
-        this.gameState = playerGSCopy;
-        this.balance = 250; //$250k or $0.25m (initial value may change)
-        this.isTurn = false;
-        this.folded = false;
-        for(Card i: this.hand){ i = null; } //sets all Card obj in player hand to null
-        this.turnId = initTurnId;
-        this.hand = new Card[4];
-    }
-
     public Player(String playerName, int initTurnId){
         this.name = playerName;
-        //this.gameState = new SHState();//TODO: change this
         this.balance = 250; //$250k or $0.25m (initial value may change)
         this.isTurn = false;
         this.folded = false;
-        for(Card i: this.hand){ i = null; } //sets all Card obj in player hand to null
-        this.turnId = initTurnId;
         this.hand = new Card[4];
+        for(int i = 0; i < hand.length; i++){
+            hand[i] = new Card('c','b');
+        } //sets all Card obj in player hand to card back
+        this.turnId = initTurnId;
     }
 
+    //copy constructor
     public Player(Player orig){
         this.name = orig.name;
-        this.gameState = orig.gameState;
         this.balance = orig.balance;
         this.isTurn = orig.isTurn;
         this.folded = orig.folded;
+        this.turnId = orig.turnId;
+        this.hand = new Card[4];
         for(int i = 0; i < orig.hand.length; i++){
             this.hand[i] = new Card(orig.hand[i]);
         }
-        this.turnId = orig.turnId;
     }
 
     public void bet(int newBet){
@@ -62,8 +52,6 @@ public class Player extends SHState {
     }
 
     //set methods
-    public void updateGSCopy(SHState copy){ this.gameState = copy; }
-
     public void toggleIsTurn(){ this.isTurn =! this.isTurn; }
 
     public void toggleFolded(){ this.folded =! this.folded; }
@@ -71,6 +59,8 @@ public class Player extends SHState {
     public void setLastBet(int bet){ this.lastBet = bet; }
 
     public void setBalance(int value){ this.balance = value; }
+
+    public void setCurrentBet(int value){ this.currentBet = value; }
 
     //get methods
     public int getBalance(){ return this.balance; }
@@ -85,6 +75,8 @@ public class Player extends SHState {
 
     public Card[] getHand(){ return this.hand; }
 
-    public int getTurnId(){return this.turnId;}
+    public int getTurnId(){ return this.turnId; }
+
+    public int getCurrentBet(){ return this.currentBet; }
 
 }

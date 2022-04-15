@@ -49,6 +49,6 @@ public abstract class SHActionMove extends GameAction {
      * 		whether the move was a "Bet", "Raise", "Check" or "Call"
      * 	(each do very similar things so they are combined into one action)
      */
-    public boolean isBetRaiseCheckCall(){ return false; }
+    public boolean isBet(){ return false; }
 
 }

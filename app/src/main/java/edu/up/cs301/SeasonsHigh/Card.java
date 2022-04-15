@@ -29,6 +29,7 @@ public class Card {
         this.isSelected = false;
     }
 
+    //copy constructor
     public Card(Card orig){
         this.cardRank = orig.cardRank;
         this.cardSuit = orig.cardSuit;
@@ -39,7 +40,9 @@ public class Card {
      * @return the int value of the rank of the card
      */
     public int getValue(){
-        if(this.cardRank == 'A'){
+        if(this.cardRank == 'c') {
+            return 0;
+        } else if(this.cardRank == 'A'){
             return 1;
         } else if(this.cardRank == 'T') {
             return 10;

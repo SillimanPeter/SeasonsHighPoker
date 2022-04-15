@@ -13,51 +13,21 @@ import edu.up.cs301.game.GameFramework.players.GamePlayer;
 public class SHLocalGame extends LocalGame {
 
     //initializing variables
-    //private int playersTurnId;
-    //variable names with "golden" in them are a pointer to the goldenGameState variables
     private SHState SHGS;
-    //private Player[] goldenPlayers;
-    //private List<Card> goldenDeck;
-    //creates a different copy for each player
-    //TODO: turn into an array with length players.size()
-    private List<SHState> playerCopies;
 
     /**
      * declares the goldenGameState and creates a copy that excludes the hand for each
      */
     public SHLocalGame(){
         super();
-        Log.i("SJLocalGame", "creating game");
+        Log.i("SHLocalGame", "creating game");
         // create the state for the beginning of the game
         this.SHGS = new SHState();
         super.state = this.SHGS;
-        //declare base variables
-        //this.SHGS = new SHState();
-        //this.goldenDeck = this.SHGS.getDeckArray();
-        //this.goldenPlayers = this.SHGS.getPlayersArray();
-        //sets who the first player
-        //this.playersTurnId = 0;
-        this.SHGS.getPlayersArray()[0].toggleIsTurn();
-
-        //populates playerCopies with copies of the gameState excluding other players' hands
-        for(int n = 0; n < SHGS.getPlayersArray().length; n++){
-            SHState playerGSCopy = new SHState(SHGS);
-            //removes other player's hands
-            for(int m = 0; m < playerGSCopy.getPlayersArray().length; m++) {
-                for(int b = 0; b < SHGS.getPlayersArray().length; b++){
-                    if(b != n){ //skips the player who's gameStateCopy this is
-                        //clears the player's hand
-                        playerGSCopy.getPlayersArray()[b].getHand()[m] = null;
-                    }
-                }
-            }
-            this.playerCopies.add(playerGSCopy);
-        }
-
     }
 
     public SHLocalGame(SHState initState) {
-        Log.i("SJLocalGame", "creating game");
+        Log.i("SHLocalGame", "creating game");
         // create the state for the beginning of the game
         this.SHGS = initState;
         super.state = initState;
@@ -68,10 +38,14 @@ public class SHLocalGame extends LocalGame {
      */
     @Override
     protected boolean canMove(int playerIdx) {
-        if(SHGS.getPlayerTurnId() == playerIdx){
+        if (playerIdx < 0 || playerIdx > 2 ||
+                SHGS.getPlayersArray()[playerIdx].getFolded()) {
+            // if our player-number is out of range, return false
+            return false;
+        }
+        else {
             return true;
         }
-        return false;
     }
 
     /**
@@ -81,7 +55,78 @@ public class SHLocalGame extends LocalGame {
      */
     @Override
     protected boolean makeMove(GameAction action) {
-        //TODO: this method
+
+        // check that we have slap-jack action; if so cast it
+        if (!(action instanceof SHActionMove)) {
+            return false;
+        }
+        SHActionMove sham = (SHActionMove) action;
+
+        // get the index of the player making the move; return false
+        int thisPlayerIdx = getPlayerIdx(sham.getPlayer());
+        //to clean up code a bit
+        Player p = SHGS.getPlayersArray()[thisPlayerIdx];
+
+        if (thisPlayerIdx < 0 || thisPlayerIdx > 2) { // illegal player
+            return false;
+        }
+
+        if(sham.isDraw()){
+            if(!SHGS.getCurrentPhase().equals("Draw-Phase")) {
+                return false;
+            }
+            for(int i = 0; i < 4; i++){
+                if(p.getHand()[i].getIsSelected()){
+                    p.getHand()[i] = null; //removes card from hand
+                    p.getHand()[i] = SHGS.draw(); //draws new card
+                    p.getHand()[i].setIsDealt(true);
+                }
+            }
+        }
+
+        else if(sham.isHold()){
+            if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
+                return false;
+            } else {
+                //do nothing
+            }
+        }
+
+        else if (sham.isBet()) {
+            if(!SHGS.getCurrentPhase().equals("Bet-Phase")) {
+                return false;
+            }
+            //is the players balance greater than or equal to the bet value?
+            else if (p.getBalance() < SHGS.getCurrentBet()) {
+                return false;
+            }
+            //is the bet value greater than or equal to current bet?
+            else if (p.getLastBet() > SHGS.getCurrentBet()) {
+                return false;
+            } else {
+                //commits bet made
+                SHGS.setCurrentBet(p.getCurrentBet());
+                SHGS.setPotBalance(SHGS.getPotBalance() + p.getCurrentBet());
+                p.setLastBet(p.getCurrentBet());
+            }
+
+        }
+
+        else if(sham.isFold()) {
+            SHGS.getPlayersArray()[thisPlayerIdx].toggleFolded();
+        }
+
+        else { // some unexpected action
+            return false;
+        }
+
+        //changes whose turn it is
+        SHGS.getPlayersArray()[thisPlayerIdx].toggleIsTurn();
+        int nextPlayerIdx = thisPlayerIdx++;
+        if(thisPlayerIdx == 2){
+             nextPlayerIdx = 0;
+        }
+        SHGS.getPlayersArray()[nextPlayerIdx].toggleIsTurn();
         return true;
     }//makeMove
 
