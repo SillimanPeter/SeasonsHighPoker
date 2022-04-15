@@ -16,7 +16,6 @@ import edu.up.cs301.game.GameFramework.players.GamePlayer;
 import edu.up.cs301.game.GameFramework.utilities.GameTimer;
 import edu.up.cs301.game.GameFramework.utilities.Tickable;
 import edu.up.cs301.game.GameFramework.utilities.Logger;
-import edu.up.cs301.slapjack.SJState;
 
 import android.os.Handler;
 import android.os.Looper;
