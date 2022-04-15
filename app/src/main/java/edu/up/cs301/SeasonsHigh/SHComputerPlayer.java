@@ -1,6 +1,9 @@
 package edu.up.cs301.SeasonsHigh;
 
 
+import java.util.Random;
+
+import edu.up.cs301.card.Rank;
 import edu.up.cs301.game.GameFramework.infoMessage.GameInfo;
 import edu.up.cs301.game.GameFramework.players.GameComputerPlayer;
 
@@ -24,7 +27,7 @@ public class SHComputerPlayer extends GameComputerPlayer {
         this(name, 0.5);
     }
 
-    /*
+    /**
      * Constructor for the SHComputerPlayer class
      */
     public SHComputerPlayer(String name, double avgReactionTime) {
@@ -72,30 +75,45 @@ public class SHComputerPlayer extends GameComputerPlayer {
         savedState = (SHState)info;
 
         /**TODO create the computerPlayer brain here (what moves to make when)*/
-//        // access the state's middle deck
-//        Deck middleDeck = savedState.getDeck(2);
-//
-//        // look at the top card
-//        Card topCard = middleDeck.peekAtTopCard();
-//
-//        // if it's a Jack, slap it; otherwise, if it's our turn to
-//        // play, play a card
-//        if (topCard != null && topCard.getRank() == Rank.JACK) {
-//            // we have a Jack to slap: set up a timer, depending on reaction time.
-//            // The slap will occur when the timer "ticks". Our reaction time will be
-//            // between the minimum reaction time and 3 times the minimum reaction time
-//            int time = (int)(minReactionTimeInMillis*(1+2*Math.random()));
-//            this.getTimer().setInterval(time);
-//            this.getTimer().start();
-//        }
-//        else if (savedState.toPlay() == this.playerNum) {
-//            // not a Jack but it's my turn to play a card
-//
-//            // delay for up to two seconds; then play
-//            sleep(2.0 * Math.random());
-//
-//            // submit our move to the game object
-//            game.sendAction(new SHPlayAction(this));
-//        }
+        // access the state's middle deck
+
+
+        // look at the top card
+
+
+        // if it's not their turn do nothing else make a move depending
+        //  on the phase of the game
+        if (savedState.getPlayerTurnId() != this.playerNum) {
+            //do nothing if not their turn
+        }
+       else if (savedState.getPlayerTurnId() == this.playerNum) {
+            Random gen = new Random();
+            int move = gen.nextInt(4);
+
+            if(savedState.getCurrentPhase() == "Betting-Phase"){
+                if(move <= 1) {
+                    sleep(2.0 * Math.random());
+                    game.sendAction(new SHActionBet(this));
+                }else{
+                    sleep(2.0 * Math.random());
+                    game.sendAction(new SHActionFold(this));
+                }
+            }else if(savedState.getCurrentPhase() == "Drawing-Phase"){
+                if(move == 0){
+                    sleep(2.0 * Math.random());
+                    game.sendAction((new SHActionHold(this)));
+                }else if (move == 1){
+                    sleep(2.0 * Math.random());
+                    game.sendAction(new SHActionFold(this));
+                }else if(move > 1){
+                    sleep(2.0 * Math.random());
+                    game.sendAction((new SHActionDraw(this)));
+                }
+            }else{
+                    sleep(2.0 * Math.random());
+                    game.sendAction(new SHActionFold(this));
+            }
+
+        }
     }
 }

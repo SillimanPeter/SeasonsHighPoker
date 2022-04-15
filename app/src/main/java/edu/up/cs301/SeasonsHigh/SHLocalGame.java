@@ -75,7 +75,7 @@ public class SHLocalGame extends LocalGame {
             return false;
         }
 
-        if(sham.isDraw()){
+        if(sham instanceof SHActionDraw){
             if(!SHGS.getCurrentPhase().equals("Draw-Phase")) {
                 Log.d("flash red","wrong game phase for that action");
                 return false;
@@ -90,7 +90,7 @@ public class SHLocalGame extends LocalGame {
             }
         }
 
-        else if(sham.isHold()){
+        else if(sham instanceof SHActionHold){
             if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
                 Log.d("flash red","wrong game phase for that action");
                 return false;
@@ -144,7 +144,7 @@ public class SHLocalGame extends LocalGame {
             }
         }
 
-        else if (sham.isBet()) {
+        else if (sham instanceof SHActionBet) {
             if(!SHGS.getCurrentPhase().equals("Bet-Phase")) {
                 Log.d("flash red","wrong game phase for that action");
                 return false;
@@ -167,7 +167,7 @@ public class SHLocalGame extends LocalGame {
 
         }
 
-        else if(sham.isFold()) {
+        else if(sham instanceof SHActionFold) {
             SHGS.getPlayersArray()[thisPlayerIdx].setFolded(true);
             Log.d("Fold Action","player has folded");
         }

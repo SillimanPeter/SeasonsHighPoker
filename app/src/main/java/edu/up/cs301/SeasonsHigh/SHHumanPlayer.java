@@ -177,30 +177,30 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
         if(button instanceof ImageButton) {
             if(button.getId() == this.userCard0.getId()){
                 this.game.sendAction(new SHActionCard0Select(this));
-                this.infoSection.append("\nCard 0 has been clicked");
+                this.infoSection.append("Card 0 has been clicked \n");
             } else if(button.getId() == this.userCard1.getId()){
                 this.game.sendAction(new SHActionCard1Select(this));
-                this.infoSection.append("\nCard 1 has been clicked");
+                this.infoSection.append("Card 1 has been clicked \n");
             } else if(button.getId() == this.userCard2.getId()){
                 this.game.sendAction(new SHActionCard2Select(this));
-                this.infoSection.append("\nCard 2 has been clicked");
+                this.infoSection.append("Card 2 has been clicked \n");
             } else if(button.getId() == this.userCard3.getId()){
                 this.game.sendAction(new SHActionCard3Select(this));
-                this.infoSection.append("\nCard 3 has been clicked");
+                this.infoSection.append("Card 3 has been clicked \n");
             }
         } else if(button instanceof Button){
             if(button.getId() == this.betButt.getId()){
                 super.game.sendAction(new SHActionBet(this));
-                this.infoSection.append("\nBet button clicked");
+                this.infoSection.append("Bet button clicked \n");
             } else if(button.getId() == this.holdButt.getId()){
                 super.game.sendAction(new SHActionHold(this));
-                this.infoSection.append("\nHold button clicked");
+                this.infoSection.append("Hold button clicked \n");
             } else if(button.getId() == this.drawButt.getId()){
                 super.game.sendAction(new SHActionDraw(this));
-                this.infoSection.append("\nDraw button clicked");
+                this.infoSection.append("Draw button clicked \n");
             } else if(button.getId() == foldButt.getId()){
                 super.game.sendAction(new SHActionFold(this));
-                this.infoSection.append("\nFold button clicked");
+                this.infoSection.append("Fold button clicked \n");
             }
         }
     }// onClick
