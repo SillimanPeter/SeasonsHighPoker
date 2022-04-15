@@ -11,12 +11,13 @@ import edu.up.cs301.game.GameFramework.actionMessage.GameAction;
 import edu.up.cs301.game.GameFramework.players.GamePlayer;
 
 public class SHLocalGame extends LocalGame {
+
     //initializing variables
-    private int playersTurnId;
+    //private int playersTurnId;
     //variable names with "golden" in them are a pointer to the goldenGameState variables
     private SHState SHGS;
-    private Player[] goldenPlayers;
-    private List<Card> goldenDeck;
+    //private Player[] goldenPlayers;
+    //private List<Card> goldenDeck;
     //creates a different copy for each player
     //TODO: turn into an array with length players.size()
     private List<SHState> playerCopies;
@@ -25,21 +26,25 @@ public class SHLocalGame extends LocalGame {
      * declares the goldenGameState and creates a copy that excludes the hand for each
      */
     public SHLocalGame(){
-
-        //declare base variables
+        super();
+        Log.i("SJLocalGame", "creating game");
+        // create the state for the beginning of the game
         this.SHGS = new SHState();
-        this.goldenDeck = this.SHGS.getDeckArray();
-        this.goldenPlayers = this.SHGS.getPlayersArray();
+        super.state = this.SHGS;
+        //declare base variables
+        //this.SHGS = new SHState();
+        //this.goldenDeck = this.SHGS.getDeckArray();
+        //this.goldenPlayers = this.SHGS.getPlayersArray();
         //sets who the first player
-        this.playersTurnId = 0;
+        //this.playersTurnId = 0;
         this.SHGS.getPlayersArray()[0].toggleIsTurn();
 
         //populates playerCopies with copies of the gameState excluding other players' hands
-        for(int n = 0; n < goldenPlayers.length; n++){
+        for(int n = 0; n < SHGS.getPlayersArray().length; n++){
             SHState playerGSCopy = new SHState(SHGS);
             //removes other player's hands
             for(int m = 0; m < playerGSCopy.getPlayersArray().length; m++) {
-                for(int b = 0; b < goldenPlayers.length; b++){
+                for(int b = 0; b < SHGS.getPlayersArray().length; b++){
                     if(b != n){ //skips the player who's gameStateCopy this is
                         //clears the player's hand
                         playerGSCopy.getPlayersArray()[b].getHand()[m] = null;
@@ -85,6 +90,17 @@ public class SHLocalGame extends LocalGame {
      */
     @Override
     protected void sendUpdatedStateTo(GamePlayer p) {
+        // if there is no state to send, ignore
+        if (SHGS == null) {
+            return;
+        }
+        // make a copy of the state; null out all cards except for the
+        // top card in the middle deck
+        SHState stateForPlayer = new SHState(SHGS); // copy of state
+
+        // send the modified copy of the state to the player
+        p.sendInfo(stateForPlayer);
+
         SHState playerGS = new SHState(SHGS);
         p.sendInfo(playerGS);
     }//sendUpdatedS

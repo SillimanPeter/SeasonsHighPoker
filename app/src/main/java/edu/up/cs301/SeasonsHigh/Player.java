@@ -33,6 +33,17 @@ public class Player extends SHState {
         this.hand = new Card[4];
     }
 
+    public Player(String playerName, int initTurnId){
+        this.name = playerName;
+        //this.gameState = new SHState();//TODO: change this
+        this.balance = 250; //$250k or $0.25m (initial value may change)
+        this.isTurn = false;
+        this.folded = false;
+        for(Card i: this.hand){ i = null; } //sets all Card obj in player hand to null
+        this.turnId = initTurnId;
+        this.hand = new Card[4];
+    }
+
     public Player(Player orig){
         this.name = orig.name;
         this.gameState = orig.gameState;

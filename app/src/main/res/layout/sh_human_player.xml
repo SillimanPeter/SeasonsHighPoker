@@ -399,7 +399,7 @@
                     <ImageButton
                         android:id="@+id/userCard1IB"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:scaleType="centerInside"
                         app:srcCompat="@drawable/card_ts"
@@ -408,7 +408,7 @@
                     <ImageButton
                         android:id="@+id/userCard2IB"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:scaleType="centerInside"
                         app:srcCompat="@drawable/card_jc"
@@ -417,7 +417,7 @@
                     <ImageButton
                         android:id="@+id/userCard3IB"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:scaleType="centerInside"
                         app:srcCompat="@drawable/card_qc"
@@ -426,7 +426,7 @@
                     <ImageButton
                         android:id="@+id/userCard4IB"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:scaleType="centerInside"
                         app:srcCompat="@drawable/card_jh"

@@ -1,7 +1,5 @@
 package edu.up.cs301.SeasonsHigh;
 
-
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -67,9 +65,7 @@ public class SHState extends GameState {
         this.deck = new ArrayList<Card>();
         this.players = new Player[3]; //3 player max
 
-        for(Player i: this.players){
-            i = null;
-        }
+
 
         //Creates all 52 card objects and puts them into the deck arraylist
         for (char s : "SHDC".toCharArray()) {
@@ -93,6 +89,7 @@ public class SHState extends GameState {
         this.phases[index] = "Reset-Phase";
         //sets current phase
         this.currentPhase = this.phases[this.currentPhaseLocation];
+
     }
 
     //copy constructor
@@ -121,6 +118,27 @@ public class SHState extends GameState {
     }
 
     //TODO: implement legalFold() method
+    /**
+     *
+     *
+     * @param player is the player that is attempting the move
+     *
+     * @return true if bet is a legal move for player and that is has been committed
+     */
+    public boolean legalFold(Player player) {
+        //is it the players turn?
+        if (getPlayerTurnId() == player.getTurnId()) {
+            player.toggleFolded();
+            //changes whose turn it is
+            player.toggleIsTurn();
+            changeFirstPlayer();
+            getPlayersArray()[getPlayerTurnId()].toggleIsTurn();
+
+            return true;
+        }
+        //if not all of the above is true
+        return false;
+    }
 
     /**
      * checks if it's players turn, it's the betting-phase, the betting value is
@@ -428,6 +446,10 @@ public class SHState extends GameState {
         }
         int rec = cardRecIds[recIndex];
         return rec;
+    }
+
+    public void addPlayer(Player p, int index){
+        this.players[index] = p;
     }
 
     public int getPBal(int playerId){ return players[playerId].getBalance(); }

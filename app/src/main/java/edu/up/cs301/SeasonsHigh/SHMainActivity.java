@@ -2,6 +2,8 @@ package edu.up.cs301.SeasonsHigh;
 
 
 
+import android.graphics.Color;
+
 import java.util.ArrayList;
 
 import edu.up.cs301.game.GameFramework.GameMainActivity;
@@ -30,19 +32,19 @@ public class SHMainActivity extends GameMainActivity {
             public GamePlayer createPlayer(String name) {
                 return new SHHumanPlayer(name);
             }});
-        playerTypes.add(new GamePlayerType("computer player (Noob)") {
+        playerTypes.add(new GamePlayerType("computer player (pro)") {
             public GamePlayer createPlayer(String name) {
-                return new SHComputerPlayer(name);
-            }
-        });
-        playerTypes.add(new GamePlayerType("computer player (Pro)") {
+
+                return new SHComputerPlayer(name, 0.3);
+            }});
+        playerTypes.add(new GamePlayerType("computer player (noob)") {
             public GamePlayer createPlayer(String name) {
-                return new SHComputerPlayer(name, 0.15);
-            }
-        });
+
+                return new SHComputerPlayer(name, 1.0);
+            }});
 
         // Create a game configuration class for SlapJack
-        GameConfig defaultConfig = new GameConfig(playerTypes, 3, 3, "SlapJack", PORT_NUMBER);
+        GameConfig defaultConfig = new GameConfig(playerTypes, 3, 3, "SeasonsHigh", PORT_NUMBER);
 
         // Add the default players
         defaultConfig.addPlayer("Human", 0);
