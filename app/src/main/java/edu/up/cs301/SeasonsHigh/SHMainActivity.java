@@ -34,12 +34,10 @@ public class SHMainActivity extends GameMainActivity {
             }});
         playerTypes.add(new GamePlayerType("computer player (pro)") {
             public GamePlayer createPlayer(String name) {
-
                 return new SHComputerPlayer(name, 0.3);
             }});
         playerTypes.add(new GamePlayerType("computer player (noob)") {
             public GamePlayer createPlayer(String name) {
-
                 return new SHComputerPlayer(name, 1.0);
             }});
 

@@ -284,9 +284,9 @@
                     android:cursorVisible="false"
                     android:editable="false"
                     android:ems="10"
-                    android:focusable="false"
+                    android:focusable="auto"
                     android:focusableInTouchMode="false"
-                    android:gravity="start|top"
+                    android:gravity="bottom|start"
                     android:inputType="textMultiLine" />
 
             </LinearLayout>
@@ -398,7 +398,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="serif"
-                            android:text="$25,000"
+                            android:text="$0"
                             android:textColor="#000000"
                             android:textSize="18sp" />
                     </LinearLayout>
@@ -504,7 +504,7 @@
                     android:layout_margin="5dp"
                     android:ems="10"
                     android:gravity="center"
-                    android:hint="Bet Amount"
+                    android:hint="Bet Amount (min 5)"
                     android:inputType="number"
                     android:minHeight="48dp"
                     android:textColor="@color/white" />

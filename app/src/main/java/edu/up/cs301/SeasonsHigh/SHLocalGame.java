@@ -38,9 +38,11 @@ public class SHLocalGame extends LocalGame {
      */
     @Override
     protected boolean canMove(int playerIdx) {
-        if (playerIdx < 0 || playerIdx > 2 ||
-                SHGS.getPlayersArray()[playerIdx].getFolded()) {
-            // if our player-number is out of range, return false
+        if (playerIdx < 0 || playerIdx > 2
+                || SHGS.getPlayerTurnId() != playerIdx
+                || SHGS.getPlayersArray()[playerIdx].getFolded()) {
+            // if our player-number is out of range or it is not this players turn
+            //      or player folded, return false
             return false;
         }
         else {
@@ -151,10 +153,12 @@ public class SHLocalGame extends LocalGame {
             }
             //is the players balance greater than or equal to the bet value?
             else if (p.getBalance() < SHGS.getCurrentBet()) {
+                Log.d("flash red","not enough balance for that action");
                 return false;
             }
             //is the bet value greater than or equal to current bet?
             else if (p.getLastBet() > SHGS.getCurrentBet()) {
+                Log.d("flash red","not high enough bet for that action");
                 return false;
             } else {
                 //commits bet made
@@ -176,17 +180,128 @@ public class SHLocalGame extends LocalGame {
             return false;
         }
 
+        //checks if a game phase change is needed and makes that change
+        afterActionMade();
+
         //changes whose turn it is
         SHGS.getPlayersArray()[thisPlayerIdx].setIsTurn(false);
+
         int nextPlayerIdx = thisPlayerIdx++;
         if(thisPlayerIdx == 2){
-             nextPlayerIdx = 0;
+            nextPlayerIdx = 0;
         }
         SHGS.getPlayersArray()[nextPlayerIdx].setIsTurn(true);
         Log.d("playerTurn","it is player " + nextPlayerIdx + "'s turn");
 
         return true;
     }//makeMove
+
+    private void afterActionMade(){
+        //find how many players have folded
+        int numFolded = 0;
+        for(int h = 0; h < SHGS.getPlayersArray().length; h++){
+            if(SHGS.getPlayersArray()[h].getFolded()){
+                numFolded ++;
+            }
+        }
+
+        //find how many players have lost the game
+        int haveLost = 0;
+        for(Player i: SHGS.getPlayersArray()){
+            if(i.getBalance() <= 5/*minimumBet*/){
+                haveLost++;
+            }
+        }
+
+        //declare winner and end game
+        if(haveLost == SHGS.getPlayersArray().length - 1){
+            //TODO: game is over, declare winner and end game
+        }
+
+        //checks if the betting phase is over, then changes it.
+        int playersMatched = 0;
+        for(int i = 0; i < SHGS.getPlayersArray().length; i++) {
+            if (SHGS.getPlayersArray()[i].getLastBet() == SHGS.getCurrentBet()
+                    || !SHGS.getPlayersArray()[i].getFolded()) {
+                playersMatched ++;
+            }
+        }
+        if(playersMatched == SHGS.getPlayersArray().length - numFolded){
+            SHGS.changeGamePhase();
+            Log.d("phase change", "It is now the" + SHGS.getCurrentPhase());
+        }
+
+        //checks if the drawing phase is over, then changes it.
+        int playersHaveDrawnOrHeld = 0;
+        for(int i = 0; i < SHGS.getPlayersArray().length; i++) {
+            if (SHGS.getPlayersArray()[i].getHasDrawnOrHeld()
+                    || !SHGS.getPlayersArray()[i].getFolded()) {
+                playersHaveDrawnOrHeld ++;
+            }
+        }
+        if(playersHaveDrawnOrHeld == SHGS.getPlayersArray().length - numFolded){
+            SHGS.changeGamePhase();
+            Log.d("phase change", "It is now the" + SHGS.getCurrentPhase());
+        }
+
+        //checks if the ante phase is over, draws players' cards then changes it
+        int playersAnted = 0;
+        if(SHGS.getCurrentPhaseLocation() == 0){
+            for(int i = 0; i < SHGS.getPlayersArray().length; i++) {
+                if (SHGS.getPlayersArray()[i].getLastBet() == SHGS.getCurrentBet()
+                        || !SHGS.getPlayersArray()[i].getFolded()) {
+                    playersAnted ++;
+                }
+            }
+            if(playersAnted == SHGS.getPlayersArray().length - numFolded){
+                for(int j = 0; j < SHGS.getPlayersArray().length; j++){
+                    if(!SHGS.getPlayersArray()[j].getFolded()){
+                        for(int handIndex = 0; handIndex < 4; handIndex++){
+                            SHGS.getPlayersArray()[j].getHand()[handIndex] = SHGS.draw();
+                        }
+                    }
+                }
+                SHGS.changeGamePhase();
+                Log.d("phase change", "It is now the" + SHGS.getCurrentPhase());
+            }
+        }
+
+        //checks if the round is over, then reset hands,  and give the winner the potBalance
+        int winnerId = -1;
+        if(SHGS.getCurrentPhaseLocation() == SHGS.getPhases().length - 1){
+            //TODO: calculate who won by hand strengths
+
+            //add pot balance to winner balance
+            SHGS.getPlayersArray()[winnerId].addBalance(SHGS.getPotBalance());
+            SHGS.setPotBalance(0);
+
+            //resets all players' data for this round
+            for(int k = 0; k < SHGS.getPlayersArray().length; k++){
+                //resets all players hands to card backs
+                for(int l = 0; l < SHGS.getPlayersArray()[k].getHand().length; l++){
+                    SHGS.getPlayersArray()[k].getHand()[l] = new Card('c','b');
+                }
+                //resets lastBet
+                SHGS.getPlayersArray()[k].setLastBet(0);
+                //resets folded
+                SHGS.getPlayersArray()[k].setFolded(false);
+                //resets hasDrawnOrHeld
+                SHGS.getPlayersArray()[k].setHasDrawnOrHeld(false);
+                //resets current bet
+                SHGS.getPlayersArray()[k].setCurrentBet(0);
+            }
+
+            for(Card allCards: SHGS.getDeckArray()){
+                allCards.toggleIsSelected();
+                allCards.setIsDealt(false);
+            } //resets the deck
+
+            Log.d("This round is over", SHGS.getPName(winnerId) + "has won this round");
+            SHGS.changeGamePhase();
+            Log.d("phase change", "It is now the" + SHGS.getCurrentPhase());
+        }
+
+    }
 
     /**
      * send the updated state to a given player

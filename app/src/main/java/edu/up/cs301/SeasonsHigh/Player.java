@@ -16,6 +16,7 @@ public class Player{
     private boolean isTurn;
     private boolean folded;
     private int currentBet;
+    private boolean hasDrawnOrHeld;
 
     /**
      * Constructor declares default values for base variables
@@ -26,6 +27,7 @@ public class Player{
         this.balance = 250; //$250k or $0.25m (initial value may change)
         this.isTurn = false;
         this.folded = false;
+        this.hasDrawnOrHeld = false;
         this.hand = new Card[4];
         for(int i = 0; i < hand.length; i++){
             hand[i] = new Card('c','b');
@@ -40,6 +42,7 @@ public class Player{
         this.isTurn = orig.isTurn;
         this.folded = orig.folded;
         this.turnId = orig.turnId;
+        this.hasDrawnOrHeld = orig.hasDrawnOrHeld;
         this.hand = new Card[4];
         for(int i = 0; i < orig.hand.length; i++){
             this.hand[i] = new Card(orig.hand[i]);
@@ -48,7 +51,7 @@ public class Player{
 
     public void bet(int newBet){
         this.lastBet = newBet;
-        this.balance = this.balance - newBet;
+        this.balance -= newBet;
     }
 
     //set methods
@@ -58,11 +61,17 @@ public class Player{
 
     public void setLastBet(int bet){ this.lastBet = bet; }
 
+    public void addBalance(int value){ this.balance += value; }
+
     public void setBalance(int value){ this.balance = value; }
 
     public void setCurrentBet(int value){ this.currentBet = value; }
 
+    public void setHasDrawnOrHeld(boolean drawnOrHeld){ this.hasDrawnOrHeld = drawnOrHeld; }
+
     //get methods
+    public boolean getHasDrawnOrHeld(){ return this.hasDrawnOrHeld; }
+
     public int getBalance(){ return this.balance; }
 
     public int getLastBet(){ return this.lastBet; }

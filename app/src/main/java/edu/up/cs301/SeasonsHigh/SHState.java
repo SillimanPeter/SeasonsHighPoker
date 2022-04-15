@@ -69,7 +69,7 @@ public class SHState extends GameState {
         this.players[1] = new Player("Player 1", 1);
         this.players[2] = new Player("Player 2", 2);
 
-        this.players[0].setIsTurn(true);
+        this.players[1].setIsTurn(true);
 
         //Creates all 52 card objects and puts them into the deck arraylist
         for (char s : "SHDC".toCharArray()) {
@@ -149,18 +149,9 @@ public class SHState extends GameState {
      * Also if all but one player has folded, skip to the Reset-Phase.
      */
     public void changeGamePhase(){
-        int numPlayersFolded = 0;
-        for(Player i: this.players){ //counts how many players have folded
-            if(i.getFolded()){
-                numPlayersFolded++;
-            }
-        }
-        if(this.currentPhaseLocation + 1 == this.currentPhase.length()){
+        this.currentPhaseLocation++;
+        if(this.currentPhaseLocation == this.currentPhase.length()){
             this.currentPhaseLocation = 0;
-        } else if(numPlayersFolded == this.players.length - 1){//checks last person standing situation
-            this.currentPhaseLocation = this.currentPhase.length() - 1;//skips to Reset-Phase
-        } else {
-            this.currentPhaseLocation++;
         }
         this.currentPhase = this.phases[this.currentPhaseLocation];
     }
@@ -250,6 +241,10 @@ public class SHState extends GameState {
     public List<Card> getDeckArray(){ return this.deck; }
 
     public String getCurrentPhase(){ return this.currentPhase; }
+
+    public String[] getPhases(){ return this.phases; }
+
+    public int getCurrentPhaseLocation(){ return this.currentPhaseLocation; }
 
     public int getPlayerTurnId(){ return this.playersTurnId; }
 
