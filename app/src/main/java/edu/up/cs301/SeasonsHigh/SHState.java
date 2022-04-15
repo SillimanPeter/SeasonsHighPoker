@@ -34,7 +34,7 @@ public class SHState extends GameState {
                                         "card_kc","card_kd","card_kh","card_ks",
                                         "card_qc","card_qd","card_qh","card_qs",
                                         "card_tc","card_td","card_th","card_ts",
-                                        "back_of_card"};
+                                        "card_cb"};
     final private int[] cardRecIds = {
                         R.drawable.card_2c,R.drawable.card_2d,R.drawable.card_2h,R.drawable.card_2s,
                         R.drawable.card_3c,R.drawable.card_3d,R.drawable.card_3h,R.drawable.card_3s,
@@ -49,7 +49,7 @@ public class SHState extends GameState {
                         R.drawable.card_kc,R.drawable.card_kd,R.drawable.card_kh,R.drawable.card_ks,
                         R.drawable.card_qc,R.drawable.card_qd,R.drawable.card_qh,R.drawable.card_qs,
                         R.drawable.card_tc,R.drawable.card_td,R.drawable.card_th,R.drawable.card_ts,
-                        R.drawable.back_of_card};
+                        R.drawable.card_cb};
 
     /**
      * constructor method declares variables and populates the arrays and lists

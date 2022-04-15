@@ -92,20 +92,20 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
                 foe0Name.setText("" + pgs.getPName(1));
                 foe1Name.setText("" + pgs.getPName(2));
                 //sets user's cards
+                userCard4.setImageResource(pgs.getPCardRecId(0, 0));
                 userCard1.setImageResource(pgs.getPCardRecId(0, 1));
                 userCard2.setImageResource(pgs.getPCardRecId(0, 2));
                 userCard3.setImageResource(pgs.getPCardRecId(0, 3));
-                userCard4.setImageResource(pgs.getPCardRecId(0, 4));
                 //sets foe0's cards
+                foe0Card4.setImageResource(pgs.getPCardRecId(1, 0));
                 foe0Card1.setImageResource(pgs.getPCardRecId(1, 1));
                 foe0Card2.setImageResource(pgs.getPCardRecId(1, 2));
                 foe0Card3.setImageResource(pgs.getPCardRecId(1, 3));
-                foe0Card4.setImageResource(pgs.getPCardRecId(1, 4));
                 //sets foe1's cards
+                foe1Card4.setImageResource(pgs.getPCardRecId(2, 0));
                 foe1Card1.setImageResource(pgs.getPCardRecId(2, 1));
                 foe1Card2.setImageResource(pgs.getPCardRecId(2, 2));
                 foe1Card3.setImageResource(pgs.getPCardRecId(2, 3));
-                foe1Card4.setImageResource(pgs.getPCardRecId(2, 4));
             } else if(super.playerNum == 1){
                 //sets balances
                 userBal.setText("" + pgs.getPBal(1));
@@ -116,20 +116,20 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
                 foe0Name.setText("" + pgs.getPName(0));
                 foe1Name.setText("" + pgs.getPName(2));
                 //sets user's cards
+                userCard4.setImageResource(pgs.getPCardRecId(1, 0));
                 userCard1.setImageResource(pgs.getPCardRecId(1, 1));
                 userCard2.setImageResource(pgs.getPCardRecId(1, 2));
                 userCard3.setImageResource(pgs.getPCardRecId(1, 3));
-                userCard4.setImageResource(pgs.getPCardRecId(1, 4));
                 //sets foe0's cards
+                foe0Card4.setImageResource(pgs.getPCardRecId(0, 0));
                 foe0Card1.setImageResource(pgs.getPCardRecId(0, 1));
                 foe0Card2.setImageResource(pgs.getPCardRecId(0, 2));
                 foe0Card3.setImageResource(pgs.getPCardRecId(0, 3));
-                foe0Card4.setImageResource(pgs.getPCardRecId(0, 4));
                 //sets foe1's cards
+                foe1Card4.setImageResource(pgs.getPCardRecId(2, 0));
                 foe1Card1.setImageResource(pgs.getPCardRecId(2, 1));
                 foe1Card2.setImageResource(pgs.getPCardRecId(2, 2));
                 foe1Card3.setImageResource(pgs.getPCardRecId(2, 3));
-                foe1Card4.setImageResource(pgs.getPCardRecId(2, 4));
             } else {
                 //sets balances
                 userBal.setText("" + pgs.getPBal(2));
@@ -140,26 +140,26 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
                 foe0Name.setText("" + pgs.getPName(1));
                 foe1Name.setText("" + pgs.getPName(0));
                 //sets user's cards
+                userCard4.setImageResource(pgs.getPCardRecId(2, 0));
                 userCard1.setImageResource(pgs.getPCardRecId(2, 1));
                 userCard2.setImageResource(pgs.getPCardRecId(2, 2));
                 userCard3.setImageResource(pgs.getPCardRecId(2, 3));
-                userCard4.setImageResource(pgs.getPCardRecId(2, 4));
                 //sets foe0's cards
+                foe0Card4.setImageResource(pgs.getPCardRecId(1, 0));
                 foe0Card1.setImageResource(pgs.getPCardRecId(1, 1));
                 foe0Card2.setImageResource(pgs.getPCardRecId(1, 2));
                 foe0Card3.setImageResource(pgs.getPCardRecId(1, 3));
-                foe0Card4.setImageResource(pgs.getPCardRecId(1, 4));
                 //sets foe1's cards
+                foe1Card4.setImageResource(pgs.getPCardRecId(0, 0));
                 foe1Card1.setImageResource(pgs.getPCardRecId(0, 1));
                 foe1Card2.setImageResource(pgs.getPCardRecId(0, 2));
                 foe1Card3.setImageResource(pgs.getPCardRecId(0, 3));
-                foe1Card4.setImageResource(pgs.getPCardRecId(0, 4));
             }/* TODO: issue - establishes the correct user but not other players
                                 (i.e. non-user players' may be switched in order)*/
             //sets current pot
-            potAmount.setText(pgs.getPotBalance());
+            potAmount.setText("" + pgs.getPotBalance());
             //sets current bet
-            currentBet.setText(pgs.getCurrentBet());
+            currentBet.setText("" + pgs.getCurrentBet());
 
         } else { super.flash(Color.RED, 20); } //send error flash (is not PigGameState)
     }//receiveInfo

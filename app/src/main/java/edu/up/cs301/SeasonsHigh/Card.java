@@ -71,7 +71,7 @@ public class Card {
 
     @Override
     public String toString(){
-        return this.cardRank + " of " + this.cardSuit +"s";
+        return this.cardRank + "" + this.cardSuit;
     }
 
 }
