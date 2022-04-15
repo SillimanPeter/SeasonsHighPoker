@@ -84,7 +84,7 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
             //determine human player, set TextViews accordingly
             if(super.playerNum == 0) {
                 //sets balances
-                //userBal.setText("" + pgs.getPBal(0));
+                userBal.setText("" + pgs.getPBal(0));
                 foe0Bal.setText("" + pgs.getPBal(1));
                 foe1Bal.setText("" + pgs.getPBal(2));
                 //sets names
