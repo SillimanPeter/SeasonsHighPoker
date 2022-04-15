@@ -68,11 +68,13 @@ public class SHLocalGame extends LocalGame {
         Player p = SHGS.getPlayersArray()[thisPlayerIdx];
 
         if (thisPlayerIdx < 0 || thisPlayerIdx > 2) { // illegal player
+            Log.d("no action made","Player tried to take an action on someone else's turn");
             return false;
         }
 
         if(sham.isDraw()){
             if(!SHGS.getCurrentPhase().equals("Draw-Phase")) {
+                Log.d("flash red","wrong game phase for that action");
                 return false;
             }
             for(int i = 0; i < 4; i++){
@@ -87,6 +89,7 @@ public class SHLocalGame extends LocalGame {
 
         else if(sham.isHold()){
             if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
+                Log.d("flash red","wrong game phase for that action");
                 return false;
             } else {
                 //do nothing
@@ -96,6 +99,7 @@ public class SHLocalGame extends LocalGame {
 
         else if(sham.isCard0Select()){
             if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
+                Log.d("flash red","wrong game phase for that action");
                 return false;
             } else {
                 p.getHand()[0].toggleIsSelected();
@@ -106,6 +110,7 @@ public class SHLocalGame extends LocalGame {
 
         else if(sham.isCard1Select()){
             if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
+                Log.d("flash red","wrong game phase for that action");
                 return false;
             } else {
                 p.getHand()[1].toggleIsSelected();
@@ -116,6 +121,7 @@ public class SHLocalGame extends LocalGame {
 
         else if(sham.isCard2Select()){
             if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
+                Log.d("flash red","wrong game phase for that action");
                 return false;
             } else {
                 p.getHand()[2].toggleIsSelected();
@@ -126,6 +132,7 @@ public class SHLocalGame extends LocalGame {
 
         else if(sham.isCard3Select()){
             if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
+                Log.d("flash red","wrong game phase for that action");
                 return false;
             } else {
                 p.getHand()[3].toggleIsSelected();
@@ -136,6 +143,7 @@ public class SHLocalGame extends LocalGame {
 
         else if (sham.isBet()) {
             if(!SHGS.getCurrentPhase().equals("Bet-Phase")) {
+                Log.d("flash red","wrong game phase for that action");
                 return false;
             }
             //is the players balance greater than or equal to the bet value?
