@@ -65,9 +65,11 @@ public class SHState extends GameState {
         this.deck = new ArrayList<Card>();
         this.players = new Player[3]; //3 player max
 
-        this.players[0] = new Player("name0", 0);
-        this.players[1] = new Player("name1", 1);
-        this.players[2] = new Player("name2", 2);
+        this.players[0] = new Player("Player 0", 0);
+        this.players[1] = new Player("Player 1", 1);
+        this.players[2] = new Player("Player 2", 2);
+
+        this.players[0].toggleIsTurn();
 
         //Creates all 52 card objects and puts them into the deck arraylist
         for (char s : "SHDC".toCharArray()) {
@@ -78,12 +80,12 @@ public class SHState extends GameState {
 
         //Sets up game phases and their order
         int index = 0;
-        this.phases[index] = "Betting-Phase 0";
+        this.phases[index] = "Betting-Phase";
         index++;
         for(int i = 0; i < 3; i++) {
-            this.phases[index] = "Betting-Phase " + i;
+            this.phases[index] = "Betting-Phase";
             index++;
-            this.phases[index] = "Draw-Phase " + i;
+            this.phases[index] = "Draw-Phase";
             index++;
         }
         this.phases[index] = "Reveal-Phase";
