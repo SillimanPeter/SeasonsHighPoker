@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/Main_Layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -93,8 +94,9 @@
                     android:id="@+id/opponent0TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-black"
+                    android:fontFamily="serif"
                     android:text="Player Name: "
+                    android:textColor="#000000"
                     android:textSize="25sp"
                     android:typeface="normal" />
 
@@ -173,8 +175,9 @@
                     android:id="@+id/opponent1TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-black"
+                    android:fontFamily="serif"
                     android:text="Player Name: "
+                    android:textColor="#000000"
                     android:textSize="25sp"
                     android:typeface="normal" />
 
@@ -399,7 +402,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:scaleType="centerInside"
-                        app:srcCompat="@drawable/card_ts" />
+                        app:srcCompat="@drawable/card_ts"
+                        tools:ignore="SpeakableTextPresentCheck" />
 
                     <ImageButton
                         android:id="@+id/userCard2IB"
@@ -407,7 +411,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:scaleType="centerInside"
-                        app:srcCompat="@drawable/card_jc" />
+                        app:srcCompat="@drawable/card_jc"
+                        tools:ignore="SpeakableTextPresentCheck" />
 
                     <ImageButton
                         android:id="@+id/userCard3IB"
@@ -415,7 +420,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:scaleType="centerInside"
-                        app:srcCompat="@drawable/card_qc" />
+                        app:srcCompat="@drawable/card_qc"
+                        tools:ignore="SpeakableTextPresentCheck" />
 
                     <ImageButton
                         android:id="@+id/userCard4IB"
@@ -423,7 +429,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:scaleType="centerInside"
-                        app:srcCompat="@drawable/card_jh" />
+                        app:srcCompat="@drawable/card_jh"
+                        tools:ignore="SpeakableTextPresentCheck" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -456,14 +463,6 @@
                     android:backgroundTint="#707D7F"
                     android:text="Hold" />
 
-                <Button
-                    android:id="@+id/foldButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:backgroundTint="#707D7F"
-                    android:text="Fold" />
-
             </LinearLayout>
 
             <LinearLayout
@@ -473,6 +472,14 @@
                 android:background="#525252"
                 android:gravity="center"
                 android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/foldButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:backgroundTint="#707D7F"
+                    android:text="Fold" />
 
                 <EditText
                     android:id="@+id/betAmountET"

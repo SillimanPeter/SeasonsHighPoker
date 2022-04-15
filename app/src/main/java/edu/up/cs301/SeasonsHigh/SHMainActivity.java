@@ -42,11 +42,12 @@ public class SHMainActivity extends GameMainActivity {
         });
 
         // Create a game configuration class for SlapJack
-        GameConfig defaultConfig = new GameConfig(playerTypes, 2, 2, "SlapJack", PORT_NUMBER);
+        GameConfig defaultConfig = new GameConfig(playerTypes, 3, 3, "SlapJack", PORT_NUMBER);
 
         // Add the default players
         defaultConfig.addPlayer("Human", 0);
         defaultConfig.addPlayer("Computer", 2);
+        defaultConfig.addPlayer("Computer", 1);
 
         // Set the initial information for the remote player
         defaultConfig.setRemoteData("Guest", "", 1);
