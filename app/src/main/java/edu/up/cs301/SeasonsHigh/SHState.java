@@ -109,11 +109,11 @@ public class SHState extends GameState {
         for(int h = 0; h < this.deck.size(); h++){
             this.deck.add(new Card(orig.getDeckArray().get(h)));
         }
-        //TODO: finish deep copy of players[]
+
         //creates deep copy of the players array
         for(int j = 0; j < orig.players.length; j++){
-            //doesn't work because the copy constructor in Player.java doesn't return a Player obj
-            //players[j] = Player(this.players[j]);
+            Player player = new Player(orig.players[j]);
+            this.players[j] = player;
         }
     }
 
