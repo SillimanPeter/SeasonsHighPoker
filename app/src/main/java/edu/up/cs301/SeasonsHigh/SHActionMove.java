@@ -1,4 +1,4 @@
-package edu.up.cs301.SeasonsHigh.Actions;
+package edu.up.cs301.SeasonsHigh;
 
 
 import edu.up.cs301.game.GameFramework.actionMessage.GameAction;
