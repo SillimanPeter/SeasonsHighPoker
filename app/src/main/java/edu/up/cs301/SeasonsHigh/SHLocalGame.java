@@ -80,7 +80,7 @@ public class SHLocalGame extends LocalGame {
             return false;
         }
 
-        if(sham instanceof SHActionDraw){
+        if(sham.isDraw()){
             if(!SHGS.getCurrentPhase().equals("Draw-Phase")) {
                 Log.d("flash red","It must be the Draw-Phase for that action");
                 return false;
@@ -95,7 +95,7 @@ public class SHLocalGame extends LocalGame {
             }
         }
 
-        else if(sham instanceof SHActionHold){
+        else if(sham.isHold()){
             if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
                 Log.d("flash red","It must be the Draw-Phase for that action");
                 return false;
@@ -105,7 +105,7 @@ public class SHLocalGame extends LocalGame {
             }
         }
 
-        else if(sham instanceof SHActionCard0Select){
+        else if(sham.isCard0Select()){
             if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
                 Log.d("flash red","It must be the Draw-Phase for that action");
                 return false;
@@ -116,7 +116,7 @@ public class SHLocalGame extends LocalGame {
             }
         }
 
-        else if(sham instanceof SHActionCard1Select){
+        else if(sham.isCard1Select()){
             if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
                 Log.d("flash red","It must be the Draw-Phase for that action");
                 return false;
@@ -127,7 +127,7 @@ public class SHLocalGame extends LocalGame {
             }
         }
 
-        else if(sham instanceof SHActionCard2Select){
+        else if(sham.isCard2Select()){
             if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
                 Log.d("flash red","It must be the Draw-Phase for that action");
                 return false;
@@ -138,7 +138,7 @@ public class SHLocalGame extends LocalGame {
             }
         }
 
-        else if(sham instanceof SHActionCard3Select){
+        else if(sham.isCard3Select()){
             if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
                 Log.d("flash red","It must be the Draw-Phase for that action");
                 return false;
@@ -149,7 +149,7 @@ public class SHLocalGame extends LocalGame {
             }
         }
 
-        else if (sham instanceof SHActionBet) {
+        else if (sham.isBet()) {
             if(!SHGS.getCurrentPhase().equals("Betting-Phase")) {
                 Log.d("flash red","It must be the Betting-Phase for that action");
                 return false;
@@ -309,6 +309,188 @@ public class SHLocalGame extends LocalGame {
             Log.d("phase change", "It is now the " + SHGS.getCurrentPhase());
         }
 
+    }
+
+    public int compareHands(){
+
+        /** instantiate and declare helper variables */
+        //creates copies of each players hand
+        Card[] p0Cards = new Card[4];
+        Card[] p1Cards = new Card[4];
+        Card[] p2Cards = new Card[4];
+
+        int[] pHandScores = new int[3];
+        for(int score: pHandScores){
+            score = 0;
+        }
+
+        boolean seasoned = true;
+        boolean fourKind = true;
+        boolean straight = false;
+        boolean threeKind = false;
+        int pairNum = 0;
+        int handNum = 0;
+        int numPairs = 0;
+
+        //copy player hand array to new help arrays
+        for(int i = 0; i < SHGS.getPlayersArray().length; i++){
+            for(int h = 0; h < SHGS.getPlayersArray()[i].getHand().length; h++){
+                if (i == 0) {
+                    for(int handIndex = 0; handIndex < p0Cards.length; handIndex++){
+                        p0Cards[handIndex] = new Card(SHGS.getPlayersArray()[i].getHand()[handIndex]);
+                    }
+                } else if (i == 1) {
+                    for(int handIndex = 0; handIndex < p1Cards.length; handIndex++){
+                        p1Cards[handIndex] = new Card(SHGS.getPlayersArray()[i].getHand()[handIndex]);
+                    }
+                } else { //i == 2
+                    for(int handIndex = 0; handIndex < p2Cards.length; handIndex++){
+                        p2Cards[handIndex] = new Card(SHGS.getPlayersArray()[i].getHand()[handIndex]);
+                    }
+                }
+            }
+        }
+
+        //compare player 0's cards
+        for(int pc = 0; pc < p0Cards.length; pc++){
+            for(int pc2 = 0; pc2 < p0Cards.length; pc2++){
+                if(pc < pc2){
+                    if(p0Cards[pc].getSuit() != p0Cards[pc2].getSuit()){
+                        seasoned = false;
+                    }
+                    if(p0Cards[pc].getValue() == p0Cards[pc2].getValue()){
+                        if(pairNum == p0Cards[pc].getValue()){
+                            if(threeKind) {
+                                threeKind = false;
+                                fourKind = true;
+                            } else {
+                                threeKind = true;
+                            }
+                        }
+                        numPairs++;
+                        pairNum = p0Cards[pc].getValue();
+                    }
+                }
+            }
+        }
+        //add values relative to the hand to the player 0's handStrength
+        if(seasoned){ pHandScores[0] += 100; } //seasoned
+
+        if(fourKind){ pHandScores[0] += 50; } //four of a kind
+        else if(straight){ pHandScores[0] += 40; } //straight
+        else if(threeKind){ pHandScores[0] += 30; } //three of a kind
+        else if(numPairs == 2){ pHandScores[0] += 20; } //two pair
+        else if(numPairs == 1){ pHandScores[0] += 10; } //single pair
+
+        pHandScores[0] += handNum; //handType rank
+
+        //reset helper variables
+        seasoned = true;
+        fourKind = true;
+        straight = false;
+        threeKind = false;
+        pairNum = 0;
+        handNum = 0;
+        numPairs = 0;
+
+        //compare player 1's cards
+        for(int pc = 0; pc < p1Cards.length; pc++){
+            for(int pc2 = 0; pc2 < p1Cards.length; pc2++){
+                if(pc < pc2){
+                    if(p1Cards[pc].getSuit() != p1Cards[pc2].getSuit()){
+                        seasoned = false;
+                    }
+                    if(p1Cards[pc].getValue() == p1Cards[pc2].getValue()){
+                        if(pairNum == p1Cards[pc].getValue()){
+                            if(threeKind) {
+                                threeKind = false;
+                                fourKind = true;
+                            } else {
+                                threeKind = true;
+                            }
+                        }
+                        numPairs++;
+                        pairNum = p1Cards[pc].getValue();
+                    }
+                }
+            }
+        }
+        //add values relative to the hand to the player 0's handStrength
+        if(seasoned){ pHandScores[1] += 100; } //seasoned
+
+        if(fourKind){ pHandScores[1] += 50; } //four of a kind
+        else if(straight){ pHandScores[1] += 40; } //straight
+        else if(threeKind){ pHandScores[1] += 30; } //three of a kind
+        else if(numPairs == 2){ pHandScores[1] += 20; } //two pair
+        else if(numPairs == 1){ pHandScores[1] += 10; } //single pair
+
+        pHandScores[1] += handNum; //handType rank
+
+        //reset helper variables
+        seasoned = true;
+        fourKind = true;
+        straight = false;
+        threeKind = false;
+        pairNum = 0;
+        handNum = 0;
+        numPairs = 0;
+
+        //compare player 2's cards
+        for(int pc = 0; pc < p2Cards.length; pc++){
+            for(int pc2 = 0; pc2 < p2Cards.length; pc2++){
+                if(pc < pc2){
+                    if(p2Cards[pc].getSuit() != p2Cards[pc2].getSuit()){
+                        seasoned = false;
+                    }
+                    if(p2Cards[pc].getValue() == p2Cards[pc2].getValue()){
+                        if(pairNum == p1Cards[pc].getValue()){
+                            if(threeKind) {
+                                threeKind = false;
+                                fourKind = true;
+                            } else {
+                                threeKind = true;
+                            }
+                        }
+                        numPairs++;
+                        pairNum = p1Cards[pc].getValue();
+                    }
+                }
+            }
+        }
+        //add values relative to the hand to the player 0's handStrength
+        if(seasoned){ pHandScores[2] += 100; } //seasoned
+
+        if(fourKind){ pHandScores[2] += 50; } //four of a kind
+        else if(straight){ pHandScores[2] += 40; } //straight
+        else if(threeKind){ pHandScores[2] += 30; } //three of a kind
+        else if(numPairs == 2){ pHandScores[2] += 20; } //two pair
+        else if(numPairs == 1){ pHandScores[2] += 10; } //single pair
+
+        pHandScores[2] += handNum; //handType rank
+
+
+        /** find out which player (or players) have won*/
+        int highestScorePlayerId = -1;//id of player with highest score
+        int highestScore = 0;
+        int highestScoreTieId = -1;//id of player that tied highest score (if tied)
+        int highestScoreTie = 0;//needed to ensure there has been a tie
+        for(int v = 0; v < pHandScores.length; v++){
+            if(pHandScores[v] > highestScore && !SHGS.getPlayersArray()[v].getFolded()){
+                highestScore = pHandScores[v];
+                highestScorePlayerId = v;
+            } else if(pHandScores[v] == highestScore && !SHGS.getPlayersArray()[v].getFolded()){
+                highestScoreTieId = v;
+            }
+        }
+        if(highestScore == highestScoreTie){
+            //there has been a tie return both winners
+            Log.d("The round is over", "Player " + highestScorePlayerId +
+                    " and Player " + highestScoreTieId + "have Tied!");
+        } else {
+            Log.d("The round is over", "Player " + highestScorePlayerId + " has Won!");
+        }
+
+        return highestScorePlayerId; //TODO: doesn't account for ties
     }
 
     /**

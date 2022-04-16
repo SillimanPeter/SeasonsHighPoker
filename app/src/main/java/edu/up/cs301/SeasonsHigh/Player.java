@@ -3,7 +3,7 @@ package edu.up.cs301.SeasonsHigh;
 /**
  * TODO: comment class
  */
-public class Player{
+public class Player {
 
     private static final long serialVersionUID = 96L;
 
