@@ -297,7 +297,8 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
 
             @Override
             public void afterTextChanged(Editable editable) {
-                game.sendAction(new SHActionChangeBetValue(this));
+                //game.sendAction(new SHActionChangeBetValue(this)); //error
+
                 Log.d("Human sendAction", "ChangeBetValue Action");
                 infoSection.append("EditText has been changed \n");
             }

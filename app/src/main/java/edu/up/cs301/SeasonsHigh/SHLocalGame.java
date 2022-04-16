@@ -165,6 +165,7 @@ public class SHLocalGame extends LocalGame {
                 return false;
             } else {
                 //commits bet made
+                p.setCurrentBet(.getText()); //TODO: change currentBet of player
                 SHGS.setCurrentBet(p.getCurrentBet());
                 SHGS.setPotBalance(SHGS.getPotBalance() + p.getCurrentBet());
                 p.setLastBet(p.getCurrentBet());
@@ -317,6 +318,10 @@ public class SHLocalGame extends LocalGame {
             SHGS.changeGamePhase();
             Log.d("phase change", "It is now the " + SHGS.getCurrentPhase());
         }
+
+    }
+
+    public void compareHands(){
 
     }
 
