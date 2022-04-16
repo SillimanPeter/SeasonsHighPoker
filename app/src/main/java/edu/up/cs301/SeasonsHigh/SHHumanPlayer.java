@@ -246,7 +246,6 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
         this.userCard1 = (ImageButton)activity.findViewById(R.id.userCard1IB);
         this.userCard2 = (ImageButton)activity.findViewById(R.id.userCard2IB);
         this.userCard3 = (ImageButton)activity.findViewById(R.id.userCard3IB);
-        this.infoSection = (TextView)activity.findViewById(R.id.infoSectionTV);
         this.betValue = (TextView)activity.findViewById(R.id.betAmountET);
 
         //user buttons
@@ -274,6 +273,7 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
         //game info
         this.potAmount = (TextView)activity.findViewById(R.id.potAmountTV);
         this.currentBet = (TextView)activity.findViewById(R.id.currentBetTV);
+        this.infoSection = (TextView)activity.findViewById(R.id.infoSectionTV);
 
         //Listen for button/ImageButton presses
         this.betButt.setOnClickListener(this);

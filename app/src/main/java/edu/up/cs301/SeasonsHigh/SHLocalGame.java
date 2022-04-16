@@ -1,11 +1,13 @@
 package edu.up.cs301.SeasonsHigh;
 
 import android.util.Log;
+import android.widget.TextView;
 
-
+import java.util.ArrayList;
 import edu.up.cs301.game.GameFramework.LocalGame;
 import edu.up.cs301.game.GameFramework.actionMessage.GameAction;
 import edu.up.cs301.game.GameFramework.players.GamePlayer;
+import edu.up.cs301.game.R;
 
 public class SHLocalGame extends LocalGame {
 
@@ -272,12 +274,29 @@ public class SHLocalGame extends LocalGame {
         }
 
         //checks if the round is over, then reset hands, and give the winner the potBalance
-        int winnerId = -1;
-        if(SHGS.getCurrentPhaseLocation() == SHGS.getPhases().length - 1){
-            //TODO: calculate who won by hand strengths
+        ArrayList<Integer> winnerIdList = new ArrayList<Integer>();
 
-            //add pot balance to winner balance
-            SHGS.getPlayersArray()[winnerId].addBalance(SHGS.getPotBalance());
+        if(SHGS.getCurrentPhaseLocation() == SHGS.getPhases().length - 1){
+            //gives the winners their share of the pot
+            for(int winIdIndex = 0; winIdIndex < compareHands().size(); winIdIndex++) {
+                winnerIdList.add(compareHands().get(winIdIndex));//arraylist of winner id's
+            }
+            if(winnerIdList.size() == 1){
+                //add pot balance to winner balance
+                SHGS.getPlayersArray()[winnerIdList.get(0)].addBalance(SHGS.getPotBalance());
+            } else if(winnerIdList.size() == 2){
+                //add pot balance to winners' balance
+                int splitPotBal = SHGS.getPotBalance()/2;
+                for(int g = 0; g < winnerIdList.size(); g++){
+                    SHGS.getPlayersArray()[winnerIdList.get(g)].addBalance(splitPotBal);
+                }
+            } else if(winnerIdList.size() == 3){
+                //add pot balance to winners' balance
+                int splitPotBal = SHGS.getPotBalance()/3;
+                for(int w = 0; w < winnerIdList.size(); w++){
+                    SHGS.getPlayersArray()[winnerIdList.get(w)].addBalance(splitPotBal);
+                }
+            }
             SHGS.setPotBalance(0);
 
             //resets all players' data for this round
@@ -301,16 +320,17 @@ public class SHLocalGame extends LocalGame {
                 allCards.setIsDealt(false);
             } //resets the deck
 
-            Log.d("This round is over", SHGS.getPName(winnerId) + " has won this round");
             SHGS.changeGamePhase();
             Log.d("phase change", "It is now the " + SHGS.getCurrentPhase());
         }
 
     }
 
-    public int compareHands(){
+    public ArrayList<Integer> compareHands(){
 
         /** instantiate and declare helper variables */
+        ArrayList<Integer> winnerIds = new ArrayList<Integer>();
+
         //creates copies of each players hand
         Card[] p0Cards = new Card[4];
         Card[] p1Cards = new Card[4];
@@ -463,31 +483,45 @@ public class SHLocalGame extends LocalGame {
         else if(numPairs == 2){ pHandScores[2] += 20; } //two pair
         else if(numPairs == 1){ pHandScores[2] += 10; } //single pair
 
-        pHandScores[2] += handNum; //handType rank
+        pHandScores[2] += handNum; //handType rank TODO: calculate handNum
 
 
         /** find out which player (or players) have won*/
         int highestScorePlayerId = -1;//id of player with highest score
         int highestScore = 0;
-        int highestScoreTieId = -1;//id of player that tied highest score (if tied)
+        int highestScoreTieId = -1;//id of 2nd player that has the highest score (for ties)
         int highestScoreTie = 0;//needed to ensure there has been a tie
+        int highestScoreTie2Id = -1;//id of 3rd player that has the highest score (for 3-way ties)
+        int highestScoreTie2 = 0;//needed to ensure there has been a 3-way tie
+
         for(int v = 0; v < pHandScores.length; v++){
             if(pHandScores[v] > highestScore && !SHGS.getPlayersArray()[v].getFolded()){
                 highestScore = pHandScores[v];
                 highestScorePlayerId = v;
             } else if(pHandScores[v] == highestScore && !SHGS.getPlayersArray()[v].getFolded()){
-                highestScoreTieId = v;
+                if(highestScoreTieId != -1){
+                    highestScoreTie2Id = v;
+                } else {
+                    highestScoreTieId = v;
+                }
             }
         }
-        if(highestScore == highestScoreTie){
-            //there has been a tie return both winners
+        if(highestScore == highestScoreTie2){
+            winnerIds.add(highestScorePlayerId);
+            winnerIds.add(highestScoreTieId);
+            winnerIds.add(highestScoreTie2Id);
+            Log.d("The round is over", "Player " + highestScorePlayerId +
+                    ", Player " + highestScoreTieId + " and Player " + highestScoreTie2Id + "have all Tied!");
+        } else if(highestScore == highestScoreTie){
+            winnerIds.add(highestScorePlayerId);
+            winnerIds.add(highestScoreTieId);
             Log.d("The round is over", "Player " + highestScorePlayerId +
                     " and Player " + highestScoreTieId + "have Tied!");
         } else {
+            winnerIds.add(highestScorePlayerId);
             Log.d("The round is over", "Player " + highestScorePlayerId + " has Won!");
         }
-
-        return highestScorePlayerId; //TODO: doesn't account for ties
+        return winnerIds;
     }
 
     /**
