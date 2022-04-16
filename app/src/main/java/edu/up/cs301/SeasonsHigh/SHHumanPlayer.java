@@ -59,7 +59,7 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
     private ImageButton userCard2;
     private ImageButton userCard3;
 
-    private SeekBar userBetAmount;
+    private EditText userBetAmount;
 
     // the android activity that we are running
     private GameMainActivity myActivity;
@@ -238,7 +238,7 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
         //user info
         this.userName = (TextView)activity.findViewById(R.id.userTV);
         this.userBal = (TextView)activity.findViewById(R.id.userBalanceTV);
-        this.userBetAmount = (SeekBar)activity.findViewById(R.id.betAmountET);
+        this.userBetAmount = (EditText)activity.findViewById(R.id.betAmountET);
         this.userCard0 = (ImageButton)activity.findViewById(R.id.userCard0IB);
         this.userCard1 = (ImageButton)activity.findViewById(R.id.userCard1IB);
         this.userCard2 = (ImageButton)activity.findViewById(R.id.userCard2IB);
@@ -282,20 +282,26 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
         this.userCard2.setOnClickListener(this);
         this.userCard3.setOnClickListener(this);
 
-//        //listen for Seekbar changes
-//        this.userBetAmount.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-//
-//            @Override
-//            public void onStopTrackingTouch(SeekBar seekBar) { }
-//
-//            @Override
-//            public void onStartTrackingTouch(SeekBar seekBar) { }
-//
-//            @Override
-//            public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {
-//                betValue.setTextSize(progress);
-//            }
-//        });
+        //listen for Seekbar changes
+        this.userBetAmount.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                game.sendAction(new SHActionChangeBetValue(this));
+                Log.d("Human sendAction", "ChangeBetValue Action");
+                infoSection.append("EditText has been changed \n");
+            }
+        });
 
     }//setAsGui
 

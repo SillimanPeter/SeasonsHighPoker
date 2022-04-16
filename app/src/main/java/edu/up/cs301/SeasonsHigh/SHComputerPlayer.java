@@ -56,9 +56,9 @@ public class SHComputerPlayer extends GameComputerPlayer {
         // update our state variable
         savedState = (SHState)info;
 
-        //*TODO create the computerPlayer brain here (what moves to make when)*/
+        /**Create the computerPlayer brain here (what moves to make when)*/
         // if it's not their turn do nothing else make a move depending
-        //  on the phase of the game
+        //      on the phase of the game
         if (savedState.getPlayerTurnId() != this.playerNum) {
             //do nothing if not their turn
         }
@@ -69,6 +69,7 @@ public class SHComputerPlayer extends GameComputerPlayer {
             if(savedState.getCurrentPhase() == "Betting-Phase"){
                 if(move <= 1) {
                     sleep(2.0 * Math.random());
+                    game.sendAction(new SHActionCard0Select(this));
                     game.sendAction(new SHActionBet(this));
                     Log.d("Computer sendAction", "Bet Action");
                 }else{

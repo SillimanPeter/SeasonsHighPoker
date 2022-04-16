@@ -178,7 +178,7 @@ public class SHLocalGame extends LocalGame {
                 Log.d("flash red","It must be the Betting-Phase for that action");
                 return false;
             } else {
-                SHGS.getPlayersArray()[thisPlayerIdx].setCurrentBet(5);
+                SHGS.getPlayersArray()[thisPlayerIdx].setCurrentBet(5/**TODO: Need to get text from the editText box*/);
 
                 Log.d("ChangeBetValueAction", "player has changed their currentBet");
             }
