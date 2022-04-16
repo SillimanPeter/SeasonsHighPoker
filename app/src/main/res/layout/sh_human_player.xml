@@ -458,6 +458,14 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
+                <Button
+                    android:id="@+id/foldButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:backgroundTint="#707D7F"
+                    android:text="Fold" />
+
                 <EditText
                     android:id="@+id/betAmountET"
                     android:layout_width="180dp"
@@ -488,14 +496,6 @@
                 android:background="#525252"
                 android:gravity="center"
                 android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/foldButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:backgroundTint="#707D7F"
-                    android:text="Fold" />
 
                 <Button
                     android:id="@+id/drawButton"

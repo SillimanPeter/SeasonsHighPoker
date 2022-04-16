@@ -165,24 +165,15 @@ public class SHLocalGame extends LocalGame {
                 return false;
             } else {
                 //commits bet made
+                p.setCurrentBet(SHGS.getCurrentBet());
                 SHGS.setCurrentBet(p.getCurrentBet());
                 SHGS.setPotBalance(SHGS.getPotBalance() + p.getCurrentBet());
                 p.setLastBet(p.getCurrentBet());
                 Log.d("Bet Action","was made");
+
             }
 
         }
-
-        else if(sham instanceof SHActionChangeBetValue){
-            if(!SHGS.getCurrentPhase().equals("Betting-Phase")) {
-                Log.d("flash red","It must be the Betting-Phase for that action");
-                return false;
-            } else {
-                SHGS.getPlayersArray()[thisPlayerIdx].setCurrentBet(5/**TODO: Need to get text from the editText box*/);
-
-                Log.d("ChangeBetValueAction", "player has changed their currentBet");
-            }
-        } //hard coded 5 should come from progress of seekbar
 
         else if(sham instanceof SHActionFold) {
             SHGS.getPlayersArray()[thisPlayerIdx].setFolded(true);

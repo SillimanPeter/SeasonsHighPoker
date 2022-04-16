@@ -94,6 +94,8 @@ public class SHState extends GameState {
         //sets current phase
         this.currentPhase = this.phases[this.currentPhaseLocation];
 
+        shuffleDeck();
+
     }
 
     //copy constructor
@@ -152,7 +154,7 @@ public class SHState extends GameState {
      */
     public void changeGamePhase(){
         this.currentPhaseLocation++;
-        if(this.currentPhaseLocation == this.currentPhase.length()){
+        if(this.currentPhaseLocation == phases.length-1){
             this.currentPhaseLocation = 0;
         }
         this.currentPhase = this.phases[this.currentPhaseLocation];
@@ -225,9 +227,6 @@ public class SHState extends GameState {
 
     public void setPotBalance(int value){ this.potBalance += value; }
 
-    public void addPlayer(Player p, int index){
-        this.players[index] = p;
-    }
 
     //getter methods
     public int getCurrentBet(){ return this.currentBet; }
