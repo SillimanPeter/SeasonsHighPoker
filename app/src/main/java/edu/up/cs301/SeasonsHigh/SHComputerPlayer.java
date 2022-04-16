@@ -5,7 +5,6 @@ import android.util.Log;
 
 import java.util.Random;
 
-import edu.up.cs301.card.Rank;
 import edu.up.cs301.game.GameFramework.infoMessage.GameInfo;
 import edu.up.cs301.game.GameFramework.players.GameComputerPlayer;
 

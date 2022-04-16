@@ -1,6 +1,7 @@
-package edu.up.cs301.SeasonsHigh;
+package edu.up.cs301.SeasonsHigh.Actions;
 
 
+import edu.up.cs301.SeasonsHigh.SHActionMove;
 import edu.up.cs301.game.GameFramework.players.GamePlayer;
 
 public class SHActionDraw extends SHActionMove {
