@@ -282,20 +282,20 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
         this.userCard2.setOnClickListener(this);
         this.userCard3.setOnClickListener(this);
 
-        //listen for editText changes
-        this.userBetAmount.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) { }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) { }
-
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {
-                betValue.setTextSize(progress);
-            }
-        });
+//        //listen for Seekbar changes
+//        this.userBetAmount.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+//
+//            @Override
+//            public void onStopTrackingTouch(SeekBar seekBar) { }
+//
+//            @Override
+//            public void onStartTrackingTouch(SeekBar seekBar) { }
+//
+//            @Override
+//            public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {
+//                betValue.setTextSize(progress);
+//            }
+//        });
 
     }//setAsGui
 
