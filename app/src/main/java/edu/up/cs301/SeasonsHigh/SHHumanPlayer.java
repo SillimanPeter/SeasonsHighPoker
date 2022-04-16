@@ -1,11 +1,15 @@
 package edu.up.cs301.SeasonsHigh;
 
 import android.graphics.Color;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import edu.up.cs301.game.GameFramework.GameMainActivity;
@@ -43,6 +47,7 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
     private TextView foe0Name;
     private TextView foe1Name;
     private TextView infoSection;
+    private TextView betValue;
 
     private Button holdButt;
     private Button foldButt;
@@ -54,7 +59,7 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
     private ImageButton userCard2;
     private ImageButton userCard3;
 
-    private EditText userBetAmount;
+    private SeekBar userBetAmount;
 
     // the android activity that we are running
     private GameMainActivity myActivity;
@@ -177,29 +182,37 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
         if(button instanceof ImageButton) {
             if(button.getId() == this.userCard0.getId()){
                 this.game.sendAction(new SHActionCard0Select(this));
+                Log.d("Human sendAction", "Card0Select Action");
                 this.infoSection.append("Card 0 has been clicked \n");
             } else if(button.getId() == this.userCard1.getId()){
                 this.game.sendAction(new SHActionCard1Select(this));
+                Log.d("Human sendAction", "Card1Select Action");
                 this.infoSection.append("Card 1 has been clicked \n");
             } else if(button.getId() == this.userCard2.getId()){
                 this.game.sendAction(new SHActionCard2Select(this));
+                Log.d("Human sendAction", "Card2Select Action");
                 this.infoSection.append("Card 2 has been clicked \n");
             } else if(button.getId() == this.userCard3.getId()){
                 this.game.sendAction(new SHActionCard3Select(this));
+                Log.d("Human sendAction", "Card3Select Action");
                 this.infoSection.append("Card 3 has been clicked \n");
             }
         } else if(button instanceof Button){
             if(button.getId() == this.betButt.getId()){
                 super.game.sendAction(new SHActionBet(this));
+                Log.d("Human sendAction", "Bet Action");
                 this.infoSection.append("Bet button clicked \n");
             } else if(button.getId() == this.holdButt.getId()){
                 super.game.sendAction(new SHActionHold(this));
+                Log.d("Human sendAction", "Hold Action");
                 this.infoSection.append("Hold button clicked \n");
             } else if(button.getId() == this.drawButt.getId()){
                 super.game.sendAction(new SHActionDraw(this));
+                Log.d("Human sendAction", "Draw Action");
                 this.infoSection.append("Draw button clicked \n");
             } else if(button.getId() == foldButt.getId()){
                 super.game.sendAction(new SHActionFold(this));
+                Log.d("Human sendAction", "Fold Action");
                 this.infoSection.append("Fold button clicked \n");
             }
         }
@@ -225,7 +238,7 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
         //user info
         this.userName = (TextView)activity.findViewById(R.id.userTV);
         this.userBal = (TextView)activity.findViewById(R.id.userBalanceTV);
-        this.userBetAmount = (EditText)activity.findViewById(R.id.betAmountET);
+        this.userBetAmount = (SeekBar)activity.findViewById(R.id.betAmountET);
         this.userCard0 = (ImageButton)activity.findViewById(R.id.userCard0IB);
         this.userCard1 = (ImageButton)activity.findViewById(R.id.userCard1IB);
         this.userCard2 = (ImageButton)activity.findViewById(R.id.userCard2IB);
@@ -268,6 +281,21 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
         this.userCard1.setOnClickListener(this);
         this.userCard2.setOnClickListener(this);
         this.userCard3.setOnClickListener(this);
+
+        //listen for editText changes
+        this.userBetAmount.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) { }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) { }
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {
+                betValue.setTextSize(progress);
+            }
+        });
 
     }//setAsGui
 

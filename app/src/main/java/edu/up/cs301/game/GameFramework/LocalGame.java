@@ -20,6 +20,7 @@ import edu.up.cs301.game.GameFramework.utilities.Logger;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 
 /**
  * A class that knows how to play the game. The data in this class represent the

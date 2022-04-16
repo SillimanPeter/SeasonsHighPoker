@@ -38,6 +38,8 @@ public class SHLocalGame extends LocalGame {
      */
     @Override
     protected boolean canMove(int playerIdx) {
+        Log.d("CanMove","has been called");
+        Log.d("Current Phase", "it is the " + SHGS.getCurrentPhase());
         if (playerIdx < 0 || playerIdx > 2
                 || SHGS.getPlayerTurnId() != playerIdx
                 || SHGS.getPlayersArray()[playerIdx].getFolded()) {
@@ -57,6 +59,7 @@ public class SHLocalGame extends LocalGame {
      */
     @Override
     protected boolean makeMove(GameAction action) {
+        Log.d("MakeMove","has been called");
 
         // check that we have slap-jack action; if so cast it
         if (!(action instanceof SHActionMove)) {
@@ -79,7 +82,7 @@ public class SHLocalGame extends LocalGame {
 
         if(sham instanceof SHActionDraw){
             if(!SHGS.getCurrentPhase().equals("Draw-Phase")) {
-                Log.d("flash red","wrong game phase for that action");
+                Log.d("flash red","It must be the Draw-Phase for that action");
                 return false;
             }
             for(int i = 0; i < 4; i++){
@@ -94,7 +97,7 @@ public class SHLocalGame extends LocalGame {
 
         else if(sham instanceof SHActionHold){
             if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
-                Log.d("flash red","wrong game phase for that action");
+                Log.d("flash red","It must be the Draw-Phase for that action");
                 return false;
             } else {
                 //do nothing
@@ -102,9 +105,9 @@ public class SHLocalGame extends LocalGame {
             }
         }
 
-        else if(sham.isCard0Select()){
+        else if(sham instanceof SHActionCard0Select){
             if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
-                Log.d("flash red","wrong game phase for that action");
+                Log.d("flash red","It must be the Draw-Phase for that action");
                 return false;
             } else {
                 p.getHand()[0].toggleIsSelected();
@@ -113,9 +116,9 @@ public class SHLocalGame extends LocalGame {
             }
         }
 
-        else if(sham.isCard1Select()){
+        else if(sham instanceof SHActionCard1Select){
             if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
-                Log.d("flash red","wrong game phase for that action");
+                Log.d("flash red","It must be the Draw-Phase for that action");
                 return false;
             } else {
                 p.getHand()[1].toggleIsSelected();
@@ -124,9 +127,9 @@ public class SHLocalGame extends LocalGame {
             }
         }
 
-        else if(sham.isCard2Select()){
+        else if(sham instanceof SHActionCard2Select){
             if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
-                Log.d("flash red","wrong game phase for that action");
+                Log.d("flash red","It must be the Draw-Phase for that action");
                 return false;
             } else {
                 p.getHand()[2].toggleIsSelected();
@@ -135,9 +138,9 @@ public class SHLocalGame extends LocalGame {
             }
         }
 
-        else if(sham.isCard3Select()){
+        else if(sham instanceof SHActionCard3Select){
             if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
-                Log.d("flash red","wrong game phase for that action");
+                Log.d("flash red","It must be the Draw-Phase for that action");
                 return false;
             } else {
                 p.getHand()[3].toggleIsSelected();
@@ -147,8 +150,8 @@ public class SHLocalGame extends LocalGame {
         }
 
         else if (sham instanceof SHActionBet) {
-            if(!SHGS.getCurrentPhase().equals("Bet-Phase")) {
-                Log.d("flash red","wrong game phase for that action");
+            if(!SHGS.getCurrentPhase().equals("Betting-Phase")) {
+                Log.d("flash red","It must be the Betting-Phase for that action");
                 return false;
             }
             //is the players balance greater than or equal to the bet value?
@@ -166,10 +169,20 @@ public class SHLocalGame extends LocalGame {
                 SHGS.setPotBalance(SHGS.getPotBalance() + p.getCurrentBet());
                 p.setLastBet(p.getCurrentBet());
                 Log.d("Bet Action","was made");
-
             }
 
         }
+
+        else if(sham instanceof SHActionChangeBetValue){
+            if(!SHGS.getCurrentPhase().equals("Betting-Phase")) {
+                Log.d("flash red","It must be the Betting-Phase for that action");
+                return false;
+            } else {
+                SHGS.getPlayersArray()[thisPlayerIdx].setCurrentBet(5);
+
+                Log.d("ChangeBetValueAction", "player has changed their currentBet");
+            }
+        } //hard coded 5 should come from progress of seekbar
 
         else if(sham instanceof SHActionFold) {
             SHGS.getPlayersArray()[thisPlayerIdx].setFolded(true);
@@ -220,15 +233,19 @@ public class SHLocalGame extends LocalGame {
 
         //checks if the betting phase is over, then changes it.
         int playersMatched = 0;
-        for(int i = 0; i < SHGS.getPlayersArray().length; i++) {
-            if (SHGS.getPlayersArray()[i].getLastBet() == SHGS.getCurrentBet()
-                    || !SHGS.getPlayersArray()[i].getFolded()) {
+        for(int i = 0; i < SHGS.getPlayersArray().length; i++) { //loops through the players array
+            if (SHGS.getPlayersArray()[i].getLastBet() == SHGS.getCurrentBet() //checks if player has called
+                    && !SHGS.getPlayersArray()[i].getFolded()) {
                 playersMatched ++;
             }
         }
         if(playersMatched == SHGS.getPlayersArray().length - numFolded){
             SHGS.changeGamePhase();
-            Log.d("phase change", "It is now the" + SHGS.getCurrentPhase());
+            Log.d("numFolded","" + numFolded);
+            Log.d("numPlayersMatched","" + playersMatched);
+            Log.d("currentBet","" + SHGS.getCurrentBet());
+            Log.d("PlayersArrayLength","" + SHGS.getPlayersArray().length);
+            Log.d("phase change", "It is now the " + SHGS.getCurrentPhase());
         }
 
         //checks if the drawing phase is over, then changes it.
@@ -241,7 +258,7 @@ public class SHLocalGame extends LocalGame {
         }
         if(playersHaveDrawnOrHeld == SHGS.getPlayersArray().length - numFolded){
             SHGS.changeGamePhase();
-            Log.d("phase change", "It is now the" + SHGS.getCurrentPhase());
+            Log.d("phase change", "It is now the " + SHGS.getCurrentPhase());
         }
 
         //checks if the ante phase is over, draws players' cards then changes it
@@ -262,11 +279,11 @@ public class SHLocalGame extends LocalGame {
                     }
                 }
                 SHGS.changeGamePhase();
-                Log.d("phase change", "It is now the" + SHGS.getCurrentPhase());
+                Log.d("phase change", "It is now the " + SHGS.getCurrentPhase());
             }
         }
 
-        //checks if the round is over, then reset hands,  and give the winner the potBalance
+        //checks if the round is over, then reset hands, and give the winner the potBalance
         int winnerId = -1;
         if(SHGS.getCurrentPhaseLocation() == SHGS.getPhases().length - 1){
             //TODO: calculate who won by hand strengths
@@ -296,9 +313,9 @@ public class SHLocalGame extends LocalGame {
                 allCards.setIsDealt(false);
             } //resets the deck
 
-            Log.d("This round is over", SHGS.getPName(winnerId) + "has won this round");
+            Log.d("This round is over", SHGS.getPName(winnerId) + " has won this round");
             SHGS.changeGamePhase();
-            Log.d("phase change", "It is now the" + SHGS.getCurrentPhase());
+            Log.d("phase change", "It is now the " + SHGS.getCurrentPhase());
         }
 
     }

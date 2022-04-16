@@ -58,7 +58,6 @@ public class SHState extends GameState {
         //declare default values for the variables
         this.potBalance = 0;
         this.currentBet = 0;
-        this.currentPhaseLocation = 0;
         this.minimumBet = 5; //$5k (this may change)
         this.playersTurnId = 0;
         this.phases = new String[9];
@@ -79,10 +78,11 @@ public class SHState extends GameState {
         }
 
         //Sets up game phases and their order
+        this.currentPhaseLocation = 0;
         int index = 0;
         this.phases[index] = "Betting-Phase";
         index++;
-        for(int i = 0; i < 3; i++) {
+        for(; index < 4; index++) {
             this.phases[index] = "Betting-Phase";
             index++;
             this.phases[index] = "Draw-Phase";
@@ -100,23 +100,25 @@ public class SHState extends GameState {
     public SHState(SHState orig){
         this.potBalance = orig.potBalance;
         this.currentBet = orig.currentBet;
-        this.currentPhaseLocation = orig.currentPhaseLocation;
         this.minimumBet = orig.minimumBet;
-        this.currentPhase = orig.currentPhase;
-        this.players = new Player[3]; //3 player max
+
         //creates deep copy of the phases array
+        this.currentPhaseLocation = orig.currentPhaseLocation;
+        this.currentPhase = orig.currentPhase;
         this.phases = new String[orig.phases.length];
         for(int i = 0; i < orig.phases.length; i++){
             this.phases[i] = orig.phases[i];
         }
+        //Log.d("SHState",this.currentPhase);
 
         //creates deep copy of the deck arrayList
         this.deck = new ArrayList<>();
-        for(int h = 0; h < this.deck.size(); h++){
+        for(int h = 0; h < orig.deck.size(); h++){
             this.deck.add(new Card(orig.getDeckArray().get(h)));
         }
 
         //creates deep copy of the players array
+        this.players = new Player[orig.players.length]; //3 player max
         for(int j = 0; j < orig.players.length; j++){
             this.players[j] = new Player(orig.players[j]);
         }
@@ -218,23 +220,25 @@ public class SHState extends GameState {
         return rec;
     }
 
-    public void addPlayer(Player p, int index){
-        this.players[index] = p;
-    }
-
-    public int getPBal(int playerId){ return players[playerId].getBalance(); }
-
-    public String getPName(int playerId){ return players[playerId].getName(); }
-
+    //setter methods
     public void setCurrentBet(int value){ this.currentBet = value; }
 
     public void setPotBalance(int value){ this.potBalance += value; }
 
+    public void addPlayer(Player p, int index){
+        this.players[index] = p;
+    }
+
+    //getter methods
     public int getCurrentBet(){ return this.currentBet; }
 
     public int getPotBalance(){ return this.potBalance; }
 
     public int getMinimumBet(){ return this.minimumBet; }
+
+    public int getPBal(int playerId){ return players[playerId].getBalance(); }
+
+    public String getPName(int playerId){ return players[playerId].getName(); }
 
     public Player[] getPlayersArray(){ return this.players; }
 

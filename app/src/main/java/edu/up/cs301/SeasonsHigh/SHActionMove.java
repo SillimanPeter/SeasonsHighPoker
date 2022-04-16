@@ -34,6 +34,12 @@ public abstract class SHActionMove extends GameAction {
 
     /**
      * @return
+     * 		whether the move was a "ChangeBetValue"
+     */
+    public boolean isChangeBetValue(){ return false; }
+
+    /**
+     * @return
      * 		whether the move was a "Fold"
      */
     public boolean isFold(){ return false; }
