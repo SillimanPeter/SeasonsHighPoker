@@ -171,6 +171,57 @@ public class SHState extends GameState {
      */
     public void shuffleDeck(){ Collections.shuffle(this.deck); }
 
+    public int getHandStrength(int playerId){
+        Card[] cards = new Card[4];
+        boolean seasoned = true;
+        boolean fourKind = true;
+        boolean straight = false;
+        boolean threeKind = false;
+        int pairNum = 0;
+        int handNum = 0;
+        int numPairs = 0;
+        int score = 0;
+
+        for(int c = 0; c < cards.length; c++){
+            cards[c] = new Card(getPlayersArray()[playerId].getHand()[c]);
+        }
+
+        //compare player 0's cards
+        for(int pc = 0; pc < cards.length; pc++){
+            for(int pc2 = 0; pc2 < cards.length; pc2++){
+                if(pc < pc2){
+                    if(cards[pc].getSuit() != cards[pc2].getSuit()){
+                        seasoned = false;
+                    }
+                    if(cards[pc].getValue() == cards[pc2].getValue()){
+                        if(pairNum == cards[pc].getValue()){
+                            if(threeKind) {
+                                threeKind = false;
+                                fourKind = true;
+                            } else {
+                                threeKind = true;
+                            }
+                        }
+                        numPairs++;
+                        pairNum = cards[pc].getValue();
+                    }
+                }
+            }
+        }
+        //add values relative to the hand to the player 0's handStrength
+        if(seasoned){ score += 100; } //seasoned
+
+        if(fourKind){ score += 50; } //four of a kind
+        else if(straight){ score += 40; } //straight
+        else if(threeKind){ score += 30; } //three of a kind
+        else if(numPairs == 2){ score += 20; } //two pair
+        else if(numPairs == 1){ score += 10; } //single pair
+
+        score += handNum; //handType rank TODO: calculate handNum
+
+        return score;
+    }
+
     /**
      * Finds out which player has the best hand and if there has been a tie
      *
@@ -180,170 +231,23 @@ public class SHState extends GameState {
 
         /** instantiate and declare helper variables */
         ArrayList<Integer> winnerIds = new ArrayList<Integer>();
-
-        //creates copies of each players hand
-        Card[] p0Cards = new Card[4];
-        Card[] p1Cards = new Card[4];
-        Card[] p2Cards = new Card[4];
-
-        int[] pHandScores = new int[3];
-        for(int score: pHandScores){
-            score = 0;
-        }
-
-        boolean seasoned = true;
-        boolean fourKind = true;
-        boolean straight = false;
-        boolean threeKind = false;
-        int pairNum = 0;
-        int handNum = 0;
-        int numPairs = 0;
-
-        //copy player hand array to new help arrays
-        for(int i = 0; i < getPlayersArray().length; i++){
-            for(int h = 0; h < getPlayersArray()[i].getHand().length; h++){
-                if (i == 0) {
-                    for(int handIndex = 0; handIndex < p0Cards.length; handIndex++){
-                        p0Cards[handIndex] = new Card(getPlayersArray()[i].getHand()[handIndex]);
-                    }
-                } else if (i == 1) {
-                    for(int handIndex = 0; handIndex < p1Cards.length; handIndex++){
-                        p1Cards[handIndex] = new Card(getPlayersArray()[i].getHand()[handIndex]);
-                    }
-                } else { //i == 2
-                    for(int handIndex = 0; handIndex < p2Cards.length; handIndex++){
-                        p2Cards[handIndex] = new Card(getPlayersArray()[i].getHand()[handIndex]);
-                    }
-                }
-            }
-        }
-
-        //compare player 0's cards
-        for(int pc = 0; pc < p0Cards.length; pc++){
-            for(int pc2 = 0; pc2 < p0Cards.length; pc2++){
-                if(pc < pc2){
-                    if(p0Cards[pc].getSuit() != p0Cards[pc2].getSuit()){
-                        seasoned = false;
-                    }
-                    if(p0Cards[pc].getValue() == p0Cards[pc2].getValue()){
-                        if(pairNum == p0Cards[pc].getValue()){
-                            if(threeKind) {
-                                threeKind = false;
-                                fourKind = true;
-                            } else {
-                                threeKind = true;
-                            }
-                        }
-                        numPairs++;
-                        pairNum = p0Cards[pc].getValue();
-                    }
-                }
-            }
-        }
-        //add values relative to the hand to the player 0's handStrength
-        if(seasoned){ pHandScores[0] += 100; } //seasoned
-
-        if(fourKind){ pHandScores[0] += 50; } //four of a kind
-        else if(straight){ pHandScores[0] += 40; } //straight
-        else if(threeKind){ pHandScores[0] += 30; } //three of a kind
-        else if(numPairs == 2){ pHandScores[0] += 20; } //two pair
-        else if(numPairs == 1){ pHandScores[0] += 10; } //single pair
-
-        pHandScores[0] += handNum; //handType rank
-
-        //reset helper variables
-        seasoned = true;
-        fourKind = true;
-        straight = false;
-        threeKind = false;
-        pairNum = 0;
-        handNum = 0;
-        numPairs = 0;
-
-        //compare player 1's cards
-        for(int pc = 0; pc < p1Cards.length; pc++){
-            for(int pc2 = 0; pc2 < p1Cards.length; pc2++){
-                if(pc < pc2){
-                    if(p1Cards[pc].getSuit() != p1Cards[pc2].getSuit()){
-                        seasoned = false;
-                    }
-                    if(p1Cards[pc].getValue() == p1Cards[pc2].getValue()){
-                        if(pairNum == p1Cards[pc].getValue()){
-                            if(threeKind) {
-                                threeKind = false;
-                                fourKind = true;
-                            } else {
-                                threeKind = true;
-                            }
-                        }
-                        numPairs++;
-                        pairNum = p1Cards[pc].getValue();
-                    }
-                }
-            }
-        }
-        //add values relative to the hand to the player 0's handStrength
-        if(seasoned){ pHandScores[1] += 100; } //seasoned
-
-        if(fourKind){ pHandScores[1] += 50; } //four of a kind
-        else if(straight){ pHandScores[1] += 40; } //straight
-        else if(threeKind){ pHandScores[1] += 30; } //three of a kind
-        else if(numPairs == 2){ pHandScores[1] += 20; } //two pair
-        else if(numPairs == 1){ pHandScores[1] += 10; } //single pair
-
-        pHandScores[1] += handNum; //handType rank
-
-        //reset helper variables
-        seasoned = true;
-        fourKind = true;
-        straight = false;
-        threeKind = false;
-        pairNum = 0;
-        handNum = 0;
-        numPairs = 0;
-
-        //compare player 2's cards
-        for(int pc = 0; pc < p2Cards.length; pc++){
-            for(int pc2 = 0; pc2 < p2Cards.length; pc2++){
-                if(pc < pc2){
-                    if(p2Cards[pc].getSuit() != p2Cards[pc2].getSuit()){
-                        seasoned = false;
-                    }
-                    if(p2Cards[pc].getValue() == p2Cards[pc2].getValue()){
-                        if(pairNum == p1Cards[pc].getValue()){
-                            if(threeKind) {
-                                threeKind = false;
-                                fourKind = true;
-                            } else {
-                                threeKind = true;
-                            }
-                        }
-                        numPairs++;
-                        pairNum = p1Cards[pc].getValue();
-                    }
-                }
-            }
-        }
-        //add values relative to the hand to the player 0's handStrength
-        if(seasoned){ pHandScores[2] += 100; } //seasoned
-
-        if(fourKind){ pHandScores[2] += 50; } //four of a kind
-        else if(straight){ pHandScores[2] += 40; } //straight
-        else if(threeKind){ pHandScores[2] += 30; } //three of a kind
-        else if(numPairs == 2){ pHandScores[2] += 20; } //two pair
-        else if(numPairs == 1){ pHandScores[2] += 10; } //single pair
-
-        pHandScores[2] += handNum; //handType rank TODO: calculate handNum
-
-
-        /** find out which player (or players) have won*/
         int highestScorePlayerId = -1;//id of player with highest score
         int highestScore = 0;
         int highestScoreTieId = -1;//id of 2nd player that has the highest score (for ties)
         int highestScoreTie = 0;//needed to ensure there has been a tie
         int highestScoreTie2Id = -1;//id of 3rd player that has the highest score (for 3-way ties)
         int highestScoreTie2 = 0;//needed to ensure there has been a 3-way tie
+        int[] pHandScores = new int[3];
+        for(int score: pHandScores){
+            score = 0;
+        }
 
+        //get the handStrengths of each player
+        for(int e = 0; e < pHandScores.length; e++){
+            pHandScores[e] = getHandStrength(e);
+        }
+
+        //compare their handStrengths and find out who won
         for(int v = 0; v < pHandScores.length; v++){
             if(pHandScores[v] > highestScore && !getPlayersArray()[v].getFolded()){
                 highestScore = pHandScores[v];
@@ -356,6 +260,7 @@ public class SHState extends GameState {
                 }
             }
         }
+        //declare winner in debug log
         if(highestScore == highestScoreTie2){
             winnerIds.add(highestScorePlayerId);
             winnerIds.add(highestScoreTieId);
@@ -371,7 +276,9 @@ public class SHState extends GameState {
             winnerIds.add(highestScorePlayerId);
             Log.d("The round is over", "Player " + highestScorePlayerId + " has Won!");
         }
+
         return winnerIds;
+
     }
 
     /**
