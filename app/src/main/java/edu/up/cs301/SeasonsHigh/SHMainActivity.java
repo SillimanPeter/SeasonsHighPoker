@@ -34,11 +34,11 @@ public class SHMainActivity extends GameMainActivity {
             }});
         playerTypes.add(new GamePlayerType("computer player (pro)") {
             public GamePlayer createPlayer(String name) {
-                return new SHComputerPlayer(name, 0.3);
+                return new SHComputerPlayer(name, true);
             }});
         playerTypes.add(new GamePlayerType("computer player (noob)") {
             public GamePlayer createPlayer(String name) {
-                return new SHComputerPlayer(name, 1.0);
+                return new SHComputerPlayer(name, false);
             }});
 
         // Create a game configuration class for SlapJack
