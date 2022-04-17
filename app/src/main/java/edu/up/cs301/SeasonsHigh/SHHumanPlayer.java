@@ -178,45 +178,44 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
     public void onClick(View button) {
         if(button instanceof ImageButton) {
             if(button.getId() == this.userCard0.getId()){
-                this.game.sendAction(new SHActionCard0Select(this));
                 Log.d("Human sendAction", "Card0Select Action");
                 this.infoSection.append("Card 0 has been clicked \n");
+                this.game.sendAction(new SHActionCard0Select(this));
             } else if(button.getId() == this.userCard1.getId()){
-                this.game.sendAction(new SHActionCard1Select(this));
                 Log.d("Human sendAction", "Card1Select Action");
                 this.infoSection.append("Card 1 has been clicked \n");
+                this.game.sendAction(new SHActionCard1Select(this));
             } else if(button.getId() == this.userCard2.getId()){
-                this.game.sendAction(new SHActionCard2Select(this));
                 Log.d("Human sendAction", "Card2Select Action");
                 this.infoSection.append("Card 2 has been clicked \n");
+                this.game.sendAction(new SHActionCard2Select(this));
             } else if(button.getId() == this.userCard3.getId()){
-                this.game.sendAction(new SHActionCard3Select(this));
                 Log.d("Human sendAction", "Card3Select Action");
                 this.infoSection.append("Card 3 has been clicked \n");
+                this.game.sendAction(new SHActionCard3Select(this));
             }
         } else if(button instanceof Button){
             if(button.getId() == this.betButt.getId()){
-                super.game.sendAction(new SHActionBet(this));
                 Log.d("Human sendAction", "Bet Action");
-                this.currentBet.setText(""+getBetAmount());
                 this.potAmount.setText("" + getBetAmount());
                 int bal = Integer.parseInt(""+userBal.getText());
                 int newBal = bal - getBetAmount();
                 this.userBal.setText("" + newBal);
                 this.infoSection.append(this.name + " bet " + getBetAmount() + "\n");
-
+                this.currentBet.setText(""+getBetAmount());
+                super.game.sendAction(new SHActionBet(this));
             } else if(button.getId() == this.holdButt.getId()){
-                super.game.sendAction(new SHActionHold(this));
                 Log.d("Human sendAction", "Hold Action");
                 this.infoSection.append("Hold button clicked \n");
+                super.game.sendAction(new SHActionHold(this));
             } else if(button.getId() == this.drawButt.getId()){
-                super.game.sendAction(new SHActionDraw(this));
                 Log.d("Human sendAction", "Draw Action");
                 this.infoSection.append("Draw button clicked \n");
+                super.game.sendAction(new SHActionDraw(this));
             } else if(button.getId() == foldButt.getId()){
-                super.game.sendAction(new SHActionFold(this));
                 Log.d("Human sendAction", "Fold Action");
                 this.infoSection.append("Fold button clicked \n");
+                super.game.sendAction(new SHActionFold(this));
             }
         }
     }// onClick
