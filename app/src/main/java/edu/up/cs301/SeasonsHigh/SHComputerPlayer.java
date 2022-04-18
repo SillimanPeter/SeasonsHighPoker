@@ -1,6 +1,5 @@
 package edu.up.cs301.SeasonsHigh;
 
-
 import android.util.Log;
 
 import java.util.Random;
@@ -15,6 +14,8 @@ public class SHComputerPlayer extends GameComputerPlayer {
     // the most recent state of the game
     private SHState savedState;
 
+    private int id;
+
     /**
      * Constructor for the SHComputerPlayer class; creates an "average"
      * player.
@@ -22,20 +23,21 @@ public class SHComputerPlayer extends GameComputerPlayer {
      * @param name
      * 		the player's name
      */
-    public SHComputerPlayer(String name) {
+    public SHComputerPlayer(String name, int id) {
         // invoke general constructor to create player whose average reaction
         // time is half a second.
-        this(name, false);
+        this(name, false, id);
     }
 
     /**
      * Constructor for the SHComputerPlayer class
      */
-    public SHComputerPlayer(String name, boolean intelligence) {
+    public SHComputerPlayer(String name, boolean intelligence, int pId) {
         // invoke superclass constructor
         super(name);
 
         isSmart = intelligence;
+        this.id = pId;
     }
 
     /**
@@ -50,92 +52,108 @@ public class SHComputerPlayer extends GameComputerPlayer {
             return;
         }
 
+        //helper variable
+        int handStrength = this.savedState.getHandStrength(this.id); /*this ai's id*/
+
         // update our state variable
-        savedState = (SHState)info;
+        this.savedState = (SHState)info;
 
         /**Create the computerPlayer brain here (what moves to make when)*/
+
         //Pro AI brain here
-        if(isSmart) {
+        if(this.isSmart) {
             // if it's not their turn do nothing else make a move depending
             //      on the phase of the game
-            if (savedState.getPlayerTurnId() != this.playerNum) {
+            if (this.savedState.getPlayerTurnId() != this.playerNum) {
                 //do nothing if not their turn
-            } else if (savedState.getPlayerTurnId() == this.playerNum) {
-                if(savedState.getCurrentPhase() == "Betting-Phase"){
+            } else if (this.savedState.getPlayerTurnId() == this.playerNum) {
+                //betting phase actions
+                if(this.savedState.getCurrentPhase() == "Betting-Phase"){
+                    if(this.savedState.getPlayersArray()[id].getBalance()
+                            > this.savedState.getCurrentBet() + 10 && handStrength > 1010) {
+                        sleep(2.0 * Math.random());
+                        Log.d("Computer sendAction", "Attempting Bet Action");
+                        //bet the minimum amount to stay in the game
+                        this.savedState.getPlayersArray()[id]
+                                .setCurrentBet(this.savedState.getCurrentBet() + 10);
+                        this.game.sendAction(new SHActionBet(this));
+                    } //makes a bet if they have a great hand
+                    else if(this.savedState.getPlayersArray()[id].getBalance() > this.savedState.getCurrentBet()
+                        && handStrength % 1000 > 100 && handStrength % 100 > 10)
+                    { //if hand is better than 10 pair
+                        sleep(2.0 * Math.random());
+                        Log.d("Computer sendAction", "Attempting Bet Action");
+                        //bet the minimum amount to stay in the game
+                        this.savedState.getPlayersArray()[id]
+                                .setCurrentBet(this.savedState.getCurrentBet());
+                        this.game.sendAction(new SHActionBet(this));
+                    } //makes a bet if they have a decent hand
+                    else {
+                        sleep(2.0 * Math.random());
+                        Log.d("Computer sendAction", "Attempting Fold Action");
+                        this.game.sendAction(new SHActionFold(this));
+                    } //folds if they have a bad hand
+                }
 
-//                    if(move <= 1) {
-//                        sleep(2.0 * Math.random());
-//                        game.sendAction(new SHActionCard0Select(this));
-//                        game.sendAction(new SHActionBet(this));
-//                        Log.d("Computer sendAction", "Bet Action");
-//                    }else{
-//                        sleep(2.0 * Math.random());
-//                        game.sendAction(new SHActionFold(this));
-//                        Log.d("Computer sendAction", "Fold Action");
-//                    }
-//                }else if(savedState.getCurrentPhase() == "Drawing-Phase"){
-//                    if(move == 0){
-//                        sleep(2.0 * Math.random());
-//                        game.sendAction((new SHActionHold(this)));
-//                        Log.d("Computer sendAction", "Hold Action");
-//                    }else if (move == 1){
-//                        sleep(2.0 * Math.random());
-//                        game.sendAction(new SHActionFold(this));
-//                        Log.d("Computer sendAction", "Fold Action");
-//                    }else if(move > 1){
-//                        sleep(2.0 * Math.random());
-//                        game.sendAction((new SHActionDraw(this)));
-//                        Log.d("Computer sendAction", "Draw Action");
-//                    }
-                }else{
-                    sleep(2.0 * Math.random());
-                    game.sendAction(new SHActionFold(this));
-                    Log.d("Computer sendAction", "Fold Action");
+                //draw phase actions
+                else if(this.savedState.getCurrentPhase() == "Drawing-Phase"){
+                    if(handStrength >= 1000){ //if has seasoned
+                        sleep(2.0 * Math.random());
+                        Log.d("Computer sendAction", "Attempting Hold Action");
+                        this.game.sendAction((new SHActionHold(this)));
+                    } else {
+/**TODO:find out which cards are the same suit and send cardSelectAction for the lower valued card*/
+                        sleep(2.0 * Math.random());
+                        Log.d("Computer sendAction", "Attempting Draw Action");
+                        this.game.sendAction(new SHActionCard0Select(this));
+                        this.game.sendAction((new SHActionDraw(this)));
+                    }
                 }
             }
         }
+
         //Noob AI brain here
         else {
             // if it's not their turn do nothing else make a move depending
             //      on the phase of the game
-            if (savedState.getPlayerTurnId() != this.playerNum) {
+            if (this.savedState.getPlayerTurnId() != this.playerNum) {
                 //do nothing if not their turn
-            } else if (savedState.getPlayerTurnId() == this.playerNum) {
+            } else if (this.savedState.getPlayerTurnId() == this.playerNum) {
+                //random int to dictate random actions
                 Random gen = new Random();
                 int move = gen.nextInt(4);
-
-                if(savedState.getCurrentPhase() == "Betting-Phase"){
+                //betting phase action
+                if(this.savedState.getCurrentPhase() == "Betting-Phase"){
                     if(move <= 1) {
                         sleep(2.0 * Math.random());
-                        game.sendAction(new SHActionCard0Select(this));
-                        game.sendAction(new SHActionBet(this));
-                        Log.d("Computer sendAction", "Bet Action");
-                    }else{
+                        Log.d("Computer sendAction", "Attempting Bet Action");
+                        this.game.sendAction(new SHActionCard0Select(this));
+                        this.game.sendAction(new SHActionBet(this));
+                    } else {
                         sleep(2.0 * Math.random());
-                        game.sendAction(new SHActionFold(this));
-                        Log.d("Computer sendAction", "Fold Action");
+                        Log.d("Computer sendAction", "Attempting Fold Action");
+                        this.game.sendAction(new SHActionFold(this));
                     }
-                }else if(savedState.getCurrentPhase() == "Drawing-Phase"){
+                }
+                //draw phase action
+                else if(this.savedState.getCurrentPhase() == "Drawing-Phase"){
                     if(move == 0){
                         sleep(2.0 * Math.random());
-                        game.sendAction((new SHActionHold(this)));
-                        Log.d("Computer sendAction", "Hold Action");
+                        Log.d("Computer sendAction", "Attempting Hold Action");
+                        this.game.sendAction((new SHActionHold(this)));
                     }else if (move == 1){
                         sleep(2.0 * Math.random());
-                        game.sendAction(new SHActionFold(this));
-                        Log.d("Computer sendAction", "Fold Action");
+                        Log.d("Computer sendAction", "Attempting Fold Action");
+                        this.game.sendAction(new SHActionFold(this));
                     }else if(move > 1){
                         sleep(2.0 * Math.random());
-                        game.sendAction((new SHActionDraw(this)));
-                        Log.d("Computer sendAction", "Draw Action");
+                        Log.d("Computer sendAction", "Attempting Draw Action");
+                        this.game.sendAction((new SHActionDraw(this)));
                     }
-                }else{
-                    sleep(2.0 * Math.random());
-                    game.sendAction(new SHActionFold(this));
-                    Log.d("Computer sendAction", "Fold Action");
                 }
-
             }
         }
+
     }
+
 }

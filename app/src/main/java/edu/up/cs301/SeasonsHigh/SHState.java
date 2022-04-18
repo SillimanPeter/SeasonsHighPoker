@@ -186,7 +186,7 @@ public class SHState extends GameState {
             cards[c] = new Card(getPlayersArray()[playerId].getHand()[c]);
         }
 
-        //compare player 0's cards
+        //find handType and if seasoned
         for(int pc = 0; pc < cards.length; pc++){
             for(int pc2 = 0; pc2 < cards.length; pc2++){
                 if(pc < pc2){
@@ -208,14 +208,15 @@ public class SHState extends GameState {
                 }
             }
         }
-        //add values relative to the hand to the player 0's handStrength
-        if(seasoned){ score += 100; } //seasoned
 
-        if(fourKind){ score += 50; } //four of a kind
-        else if(straight){ score += 40; } //straight
-        else if(threeKind){ score += 30; } //three of a kind
-        else if(numPairs == 2){ score += 20; } //two pair
-        else if(numPairs == 1){ score += 10; } //single pair
+        //add values relative to the hand to the player 0's handStrength
+        if(seasoned){ score += 1000; } //seasoned
+
+        if(fourKind){ score += 500; } //four of a kind
+        else if(straight){ score += 400; } //straight
+        else if(threeKind){ score += 300; } //three of a kind
+        else if(numPairs == 2){ score += 200; } //two pair
+        else if(numPairs == 1){ score += 100; } //single pair
 
         score += handNum; //handType rank TODO: calculate handNum
 

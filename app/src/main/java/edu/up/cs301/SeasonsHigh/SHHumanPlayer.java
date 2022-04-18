@@ -178,25 +178,25 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
     public void onClick(View button) {
         if(button instanceof ImageButton) {
             if(button.getId() == this.userCard0.getId()){
-                Log.d("Human sendAction", "Card0Select Action");
+                Log.d("Human sendAction", "Attempting Card0Select Action");
                 this.infoSection.append("Card 0 has been clicked \n");
                 this.game.sendAction(new SHActionCard0Select(this));
             } else if(button.getId() == this.userCard1.getId()){
-                Log.d("Human sendAction", "Card1Select Action");
+                Log.d("Human sendAction", "Attempting Card1Select Action");
                 this.infoSection.append("Card 1 has been clicked \n");
                 this.game.sendAction(new SHActionCard1Select(this));
             } else if(button.getId() == this.userCard2.getId()){
-                Log.d("Human sendAction", "Card2Select Action");
+                Log.d("Human sendAction", "Attempting Card2Select Action");
                 this.infoSection.append("Card 2 has been clicked \n");
                 this.game.sendAction(new SHActionCard2Select(this));
             } else if(button.getId() == this.userCard3.getId()){
-                Log.d("Human sendAction", "Card3Select Action");
+                Log.d("Human sendAction", "Attempting Card3Select Action");
                 this.infoSection.append("Card 3 has been clicked \n");
                 this.game.sendAction(new SHActionCard3Select(this));
             }
         } else if(button instanceof Button){
             if(button.getId() == this.betButt.getId()){
-                Log.d("Human sendAction", "Bet Action");
+                Log.d("Human sendAction", "Attempting Bet Action");
                 this.potAmount.setText("" + getBetAmount());
                 int bal = Integer.parseInt(""+userBal.getText());
                 int newBal = bal - getBetAmount();
@@ -205,15 +205,15 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
                 this.currentBet.setText(""+getBetAmount());
                 super.game.sendAction(new SHActionBet(this));
             } else if(button.getId() == this.holdButt.getId()){
-                Log.d("Human sendAction", "Hold Action");
+                Log.d("Human sendAction", "Attempting Hold Action");
                 this.infoSection.append("Hold button clicked \n");
                 super.game.sendAction(new SHActionHold(this));
             } else if(button.getId() == this.drawButt.getId()){
-                Log.d("Human sendAction", "Draw Action");
+                Log.d("Human sendAction", "Attempting Draw Action");
                 this.infoSection.append("Draw button clicked \n");
                 super.game.sendAction(new SHActionDraw(this));
             } else if(button.getId() == foldButt.getId()){
-                Log.d("Human sendAction", "Fold Action");
+                Log.d("Human sendAction", "Attempting Fold Action");
                 this.infoSection.append("Fold button clicked \n");
                 super.game.sendAction(new SHActionFold(this));
             }
