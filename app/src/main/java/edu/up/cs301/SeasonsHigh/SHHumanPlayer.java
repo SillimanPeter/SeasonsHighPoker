@@ -1,6 +1,7 @@
 package edu.up.cs301.SeasonsHigh;
 
 import android.graphics.Color;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -8,6 +9,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.android.material.internal.ScrimInsetsFrameLayout;
 
 import edu.up.cs301.game.GameFramework.GameMainActivity;
 import edu.up.cs301.game.GameFramework.infoMessage.GameInfo;
@@ -312,6 +315,7 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
         this.potAmount = (TextView) activity.findViewById(R.id.potAmountTV);
         this.currentBet = (TextView) activity.findViewById(R.id.currentBetTV);
         this.infoSection = (TextView) activity.findViewById(R.id.infoSectionTV);
+        infoSection.setMovementMethod(new ScrollingMovementMethod());
 
         //Listen for button/ImageButton presses
         this.betButt.setOnClickListener(this);

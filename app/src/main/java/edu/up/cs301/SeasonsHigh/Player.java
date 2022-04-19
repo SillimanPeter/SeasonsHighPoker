@@ -27,7 +27,6 @@ public class Player {
         this.balance = 250; //$250k or $0.25m (initial value may change)
         this.isTurn = false;
         this.folded = false;
-        this.hasDrawnOrHeld = false;
         this.hand = new Card[4];
         for(int i = 0; i < hand.length; i++){
             hand[i] = new Card('c','b');
@@ -42,7 +41,6 @@ public class Player {
         this.isTurn = orig.isTurn;
         this.folded = orig.folded;
         this.turnId = orig.turnId;
-        this.hasDrawnOrHeld = orig.hasDrawnOrHeld;
         this.hand = new Card[4];
         for(int i = 0; i < orig.hand.length; i++){
             this.hand[i] = new Card(orig.hand[i]);
