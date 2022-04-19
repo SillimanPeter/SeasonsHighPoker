@@ -91,15 +91,30 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
                 this.infoSection.setText("Let's play a game! \n");
                 shgs.setPotBalance(0);
                 shgs.setCurrentBet(0);
-            }
-            //sets current pot
-            this.potAmount.setText("" + shgs.getPotBalance());
-            //sets current bet
-            this.currentBet.setText("" + shgs.getCurrentBet());
-            //shows current phase
-            this.infoSection.append("It is currently the " + shgs.getCurrentPhase() + "\n"
-                    + "It is " + shgs.getPlayersArray()[playerNum].getName() + "'s turn \n" );
+                //sets current pot
+                this.potAmount.setText("$" + shgs.getPotBalance());
+                //sets current bet
+                this.currentBet.setText("$" + shgs.getCurrentBet());
+                this.infoSection.append("It is currently the " + shgs.getCurrentPhase() + "\n"
+                        + "It is " + shgs.getPlayersArray()[shgs.getPlayerTurnId()].getName() + "'s turn \n");
+            }else if(shgs.getCurrentPhase().equals("Reveal-Phase")){
+                //sets current pot
+                this.potAmount.setText("$" + shgs.getPotBalance());
+                //sets current bet
+                this.currentBet.setText("$" + shgs.getLastBet());
 
+                infoSection.append(shgs.getPlayersArray()[shgs.getPlayerTurnId()].getName()
+                        + " won that round with a total of $" + shgs.getPotBalance() + "\n");
+            }else {
+                this.infoSection.append(shgs.getMessage());
+                //sets current pot
+                this.potAmount.setText("$" + shgs.getPotBalance());
+                //sets current bet
+                this.currentBet.setText("$" + shgs.getLastBet());
+                //shows current phase
+                this.infoSection.append("It is currently the " + shgs.getCurrentPhase() + "\n"
+                        + "It is " + shgs.getPlayersArray()[shgs.getPlayerTurnId()].getName() + "'s turn \n");
+            }
             //determine human player, set TextViews accordingly
             if (super.playerNum == 0) {
                 //sets balances
@@ -198,25 +213,24 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
         if (button instanceof ImageButton) {
             if (button.getId() == this.userCard0.getId()) {
                 Log.d("Human sendAction", "Attempting Card0Select Action");
-                this.infoSection.append("Card 0 has been clicked \n");
                 shgs.getPlayersArray()[playerNum].hand[0].setSelected(true);
-                //this.game.sendAction(new SHActionCard0Select(this));
+                this.infoSection.append("Card 0 has been clicked. Is Selected = "
+                        + shgs.getPlayersArray()[playerNum].getHand()[0].getIsSelected() + "\n");
             } else if (button.getId() == this.userCard1.getId()) {
                 Log.d("Human sendAction", "Attempting Card1Select Action");
-                this.infoSection.append("Card 1 has been clicked \n");
                 shgs.getPlayersArray()[playerNum].hand[1].setSelected(true);
-                //this.game.sendAction(new SHActionCard1Select(this));
+                this.infoSection.append("Card 1 has been clicked. Is Selected = "
+                        + shgs.getPlayersArray()[playerNum].getHand()[1].getIsSelected() + "\n");
             } else if (button.getId() == this.userCard2.getId()) {
                 Log.d("Human sendAction", "Attempting Card2Select Action");
-                this.infoSection.append("Card 2 has been clicked \n");
                 shgs.getPlayersArray()[playerNum].hand[2].setSelected(true);
-                //this.game.sendAction(new SHActionCard2Select(this));
+                this.infoSection.append("Card 2 has been clicked. Is Selected = "
+                        + shgs.getPlayersArray()[playerNum].getHand()[2].getIsSelected() + "\n");
             } else if (button.getId() == this.userCard3.getId()) {
                 Log.d("Human sendAction", "Attempting Card3Select Action");
-                this.infoSection.append("Card 3 has been clicked \n");
                 shgs.getPlayersArray()[playerNum].hand[3].setSelected(true);
-
-                //this.game.sendAction(new SHActionCard3Select(this));
+                this.infoSection.append("Card 3 has been clicked. Is Selected = "
+                        + shgs.getPlayersArray()[playerNum].getHand()[3].getIsSelected() + "\n");
             }
         } else if (button instanceof Button) {
             if (button.getId() == this.betButt.getId()) {

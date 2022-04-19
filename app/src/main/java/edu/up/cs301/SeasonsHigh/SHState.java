@@ -17,6 +17,7 @@ public class SHState extends GameState {
     /** Instantiate variables and lists, and declare initial values */
     private int potBalance;
     private int currentBet;
+    private int lastBet;
     private int currentPhaseLocation;
     private int playersTurnId;
     private int minimumBet;
@@ -24,6 +25,7 @@ public class SHState extends GameState {
     private String[] phases;
     private Player[] players;
     private List<Card> deck;
+    private String message;
     final private String[] cardRecName = {"card_2c","card_2d","card_2h","card_2s",
                                         "card_3c","card_3d","card_3h","card_3s",
                                         "card_4c","card_4d","card_4h","card_4s",
@@ -63,9 +65,11 @@ public class SHState extends GameState {
         this.currentBet = 0;
         this.minimumBet = 5; //$5k (this may change)
         this.playersTurnId = 0;
+        this.lastBet = 0;
         this.phases = new String[9];
         this.deck = new ArrayList<Card>();
         this.players = new Player[3]; //3 player max
+        this.message = "";
 
         this.players[0] = new Player("Player 0", 0);
         this.players[1] = new Player("Player 1", 1);
@@ -107,6 +111,8 @@ public class SHState extends GameState {
         this.potBalance = orig.potBalance;
         this.currentBet = orig.currentBet;
         this.minimumBet = orig.minimumBet;
+        this.message = orig.message;
+        this.lastBet = orig.lastBet;
 
         //creates deep copy of the phases array
         this.currentPhaseLocation = orig.currentPhaseLocation;
@@ -368,10 +374,19 @@ public class SHState extends GameState {
         this.currentPhase = phases[idx];
     }
 
+    public void setMessage(String initMessage){
+        this.message = initMessage;
+    }
+
+    public void setLastBet(int val){this.lastBet = val;}
     //getter methods
+    public String getMessage(){return this.message;}
+
     public int getCurrentBet(){ return this.currentBet; }
 
     public int getPotBalance(){ return this.potBalance; }
+
+    public int getLastBet(){return this.lastBet;}
 
     public int getMinimumBet(){ return this.minimumBet; }
 

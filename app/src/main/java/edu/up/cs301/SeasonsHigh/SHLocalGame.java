@@ -89,11 +89,12 @@ public class SHLocalGame extends LocalGame {
                 if(p.getHand()[i].getIsSelected()){
                     p.getHand()[i] = null; //removes card from hand
                     p.getHand()[i] = SHGS.draw(); //draws new card
-                    Log.d("Draw Action","player drew new cards");
+
                 }
 
             }
-
+            SHGS.setMessage(p.getName() + " drew cards \n");
+            Log.d("Draw Action","player drew new cards");
         }
 
         else if(sham.isHold()){
@@ -105,6 +106,7 @@ public class SHLocalGame extends LocalGame {
                 return false;
             } else {
                 //do nothing
+                SHGS.setMessage(p.getName() + " held \n");
                 Log.d("Hold Action","player held");
             }
         }
@@ -121,7 +123,7 @@ public class SHLocalGame extends LocalGame {
                 return false;
             }
             //is the bet value greater than or equal to current bet?
-            else if (p.getLastBet() > SHGS.getCurrentBet()) {
+            else if (((SHActionBet) sham).getBetAmount() < SHGS.getMinimumBet()) {
                 Log.d("flash red","not high enough bet for that action");
                 return false;
             } else {
@@ -133,8 +135,10 @@ public class SHLocalGame extends LocalGame {
                 int pot = SHGS.getPotBalance();
 
                 SHGS.setPotBalance(bet + pot);
-                p.setLastBet(bet);
+                SHGS.setLastBet(bet);
                 p.setBalance(p.getBalance() - bet);
+                SHGS.setCurrentBet(SHGS.getMinimumBet());
+                SHGS.setMessage(p.getName() + " bet " + bet + "\n");
                 Log.d("Bet Action","was made");
 
             }
@@ -143,7 +147,7 @@ public class SHLocalGame extends LocalGame {
 
         else if(sham instanceof SHActionFold) {
             SHGS.getPlayersArray()[thisPlayerIdx].setFolded(true);
-
+            SHGS.setMessage(p.getName() + " folded \n");
             Log.d("Fold Action","player has folded");
         }
 
@@ -173,7 +177,31 @@ public class SHLocalGame extends LocalGame {
         //find how many players have folded
         int numFolded = 0;
 
+        //checks if the round is over, then reset hands, and give the winner the potBalance
+        ArrayList<Integer> winnerIdList = new ArrayList<Integer>();
+
         if(SHGS.getCurrentPhase().equals("Reveal-Phase")){
+            //gives the winners their share of the pot
+            for(int winIdIndex = 0; winIdIndex < SHGS.compareHands().size(); winIdIndex++) {
+                winnerIdList.add(SHGS.compareHands().get(winIdIndex));//arraylist of winner id's
+            }
+            if(winnerIdList.size() == 1){
+                //add pot balance to winner balance
+                SHGS.getPlayersArray()[winnerIdList.get(0)].addBalance(SHGS.getPotBalance());
+            } else if(winnerIdList.size() == 2){
+                //add pot balance to winners' balance
+                int splitPotBal = SHGS.getPotBalance()/2;
+                for(int g = 0; g < winnerIdList.size(); g++){
+                    SHGS.getPlayersArray()[winnerIdList.get(g)].addBalance(splitPotBal);
+                }
+            } else if(winnerIdList.size() == 3){
+                //add pot balance to winners' balance
+                int splitPotBal = SHGS.getPotBalance()/3;
+                for(int w = 0; w < winnerIdList.size(); w++){
+                    SHGS.getPlayersArray()[winnerIdList.get(w)].addBalance(splitPotBal);
+                }
+            }
+            SHGS.setPotBalance(0);
             SHGS.changeGamePhase();
             Log.d("phase change", "It is now the " + SHGS.getCurrentPhase());
         }
@@ -251,32 +279,10 @@ public class SHLocalGame extends LocalGame {
         }
 
 
-        //checks if the round is over, then reset hands, and give the winner the potBalance
-        ArrayList<Integer> winnerIdList = new ArrayList<Integer>();
 
         if(SHGS.getCurrentPhase().equals("Reset-Phase")){
             sleep(10.0);
-            //gives the winners their share of the pot
-            for(int winIdIndex = 0; winIdIndex < SHGS.compareHands().size(); winIdIndex++) {
-                winnerIdList.add(SHGS.compareHands().get(winIdIndex));//arraylist of winner id's
-            }
-            if(winnerIdList.size() == 1){
-                //add pot balance to winner balance
-                SHGS.getPlayersArray()[winnerIdList.get(0)].addBalance(SHGS.getPotBalance());
-            } else if(winnerIdList.size() == 2){
-                //add pot balance to winners' balance
-                int splitPotBal = SHGS.getPotBalance()/2;
-                for(int g = 0; g < winnerIdList.size(); g++){
-                    SHGS.getPlayersArray()[winnerIdList.get(g)].addBalance(splitPotBal);
-                }
-            } else if(winnerIdList.size() == 3){
-                //add pot balance to winners' balance
-                int splitPotBal = SHGS.getPotBalance()/3;
-                for(int w = 0; w < winnerIdList.size(); w++){
-                    SHGS.getPlayersArray()[winnerIdList.get(w)].addBalance(splitPotBal);
-                }
-            }
-            SHGS.setPotBalance(0);
+
 
             //resets all players' data for this round
             for(int k = 0; k < SHGS.getPlayersArray().length; k++){
