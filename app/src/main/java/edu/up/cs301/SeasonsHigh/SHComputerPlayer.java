@@ -56,7 +56,7 @@ public class SHComputerPlayer extends GameComputerPlayer {
         this.savedState = (SHState)info;
 
         //helper variable
-        int handStrength = this.savedState.getHandStrength(this.id); /*this ai's id*/
+        int handStrength = 150; //this.savedState.getHandStrength(this.id); /*this ai's id*/
 
 
         /**Create the computerPlayer brain here (what moves to make when)*/
