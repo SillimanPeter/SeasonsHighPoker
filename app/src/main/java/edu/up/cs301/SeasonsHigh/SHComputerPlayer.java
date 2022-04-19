@@ -174,4 +174,6 @@ public class SHComputerPlayer extends GameComputerPlayer {
 
     }
 
+    public String getName(){ return this.name;}
+
 }

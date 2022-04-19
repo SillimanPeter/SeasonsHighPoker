@@ -25,6 +25,7 @@ public class SHLocalGame extends LocalGame {
         // create the state for the beginning of the game
         this.SHGS = new SHState();
         super.state = this.SHGS;
+
     }
 
     public SHLocalGame(SHState initState) {
@@ -32,7 +33,11 @@ public class SHLocalGame extends LocalGame {
         // create the state for the beginning of the game
         this.SHGS = initState;
         super.state = initState;
+
+
     }
+
+
 
     /**
      * can the player with the given id take an action right now?
@@ -99,6 +104,7 @@ public class SHLocalGame extends LocalGame {
 
         else if(sham.isHold()){
             if(SHGS.getCurrentPhase().equals("Reveal-Phase")){
+                SHGS.setMessage("Resetting for next round");
                 Log.d("Round Reset","Starting Next Round");
 
             }else if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
@@ -113,20 +119,20 @@ public class SHLocalGame extends LocalGame {
 
 
         else if (sham instanceof SHActionBet) {
-            if(!SHGS.getCurrentPhase().equals("Betting-Phase")) {
-                Log.d("flash red","It must be the Betting-Phase for that action");
+            if (!SHGS.getCurrentPhase().equals("Betting-Phase")) {
+                Log.d("flash red", "It must be the Betting-Phase for that action");
                 return false;
             }
             //is the players balance greater than or equal to the bet value?
             else if (p.getBalance() < SHGS.getCurrentBet()) {
-                Log.d("flash red","not enough balance for that action");
+                Log.d("flash red", "not enough balance for that action");
                 return false;
             }
             //is the bet value greater than or equal to current bet?
             else if (((SHActionBet) sham).getBetAmount() < SHGS.getMinimumBet()) {
-                Log.d("flash red","not high enough bet for that action");
+                Log.d("flash red", "not high enough bet for that action");
                 return false;
-            } else {
+            }else {
                 //commits bet made
 
                 SHGS.setCurrentBet(((SHActionBet) sham).getBetAmount());
@@ -136,6 +142,7 @@ public class SHLocalGame extends LocalGame {
 
                 SHGS.setPotBalance(bet + pot);
                 SHGS.setLastBet(bet);
+                p.setLastBet(bet);
                 p.setBalance(p.getBalance() - bet);
                 SHGS.setCurrentBet(SHGS.getMinimumBet());
                 SHGS.setMessage(p.getName() + " bet " + bet + "\n");
@@ -180,7 +187,7 @@ public class SHLocalGame extends LocalGame {
         //checks if the round is over, then reset hands, and give the winner the potBalance
         ArrayList<Integer> winnerIdList = new ArrayList<Integer>();
 
-        if(SHGS.getCurrentPhase().equals("Reveal-Phase")){
+        if(SHGS.getCurrentPhaseLocation() == 6){
             //gives the winners their share of the pot
             for(int winIdIndex = 0; winIdIndex < SHGS.compareHands().size(); winIdIndex++) {
                 winnerIdList.add(SHGS.compareHands().get(winIdIndex));//arraylist of winner id's
@@ -188,6 +195,7 @@ public class SHLocalGame extends LocalGame {
             if(winnerIdList.size() == 1){
                 //add pot balance to winner balance
                 SHGS.getPlayersArray()[winnerIdList.get(0)].addBalance(SHGS.getPotBalance());
+                SHGS.setWinnerID(winnerIdList.get(0));
             } else if(winnerIdList.size() == 2){
                 //add pot balance to winners' balance
                 int splitPotBal = SHGS.getPotBalance()/2;
@@ -201,9 +209,7 @@ public class SHLocalGame extends LocalGame {
                     SHGS.getPlayersArray()[winnerIdList.get(w)].addBalance(splitPotBal);
                 }
             }
-            SHGS.setPotBalance(0);
-            SHGS.changeGamePhase();
-            Log.d("phase change", "It is now the " + SHGS.getCurrentPhase());
+
         }
 
         for(int h = 0; h < SHGS.getPlayersArray().length; h++){
@@ -281,7 +287,10 @@ public class SHLocalGame extends LocalGame {
 
 
         if(SHGS.getCurrentPhase().equals("Reset-Phase")){
-            sleep(10.0);
+            SHGS.setPotBalance(0);
+            SHGS.changeGamePhase();
+            Log.d("phase change", "It is now the " + SHGS.getCurrentPhase());
+            sleep(5.0);
 
 
             //resets all players' data for this round
@@ -309,7 +318,7 @@ public class SHLocalGame extends LocalGame {
             Log.d("phase change", "It is now the " + SHGS.getCurrentPhase());
         }
 
-
+        sendAllUpdatedState();
     }
 
     /**
@@ -330,6 +339,8 @@ public class SHLocalGame extends LocalGame {
 
         SHState playerGS = new SHState(SHGS);
         p.sendInfo(playerGS);
+
+
     }//sendUpdatedS
 
     /**

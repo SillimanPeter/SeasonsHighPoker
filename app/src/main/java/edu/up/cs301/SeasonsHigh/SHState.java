@@ -26,6 +26,7 @@ public class SHState extends GameState {
     private Player[] players;
     private List<Card> deck;
     private String message;
+    private int winnerID;
     final private String[] cardRecName = {"card_2c","card_2d","card_2h","card_2s",
                                         "card_3c","card_3d","card_3h","card_3s",
                                         "card_4c","card_4d","card_4h","card_4s",
@@ -63,13 +64,14 @@ public class SHState extends GameState {
         //declare default values for the variables
         this.potBalance = 0;
         this.currentBet = 0;
-        this.minimumBet = 5; //$5k (this may change)
+        this.minimumBet = 5; //$0 players are allowed to check
         this.playersTurnId = 0;
         this.lastBet = 0;
         this.phases = new String[9];
         this.deck = new ArrayList<Card>();
         this.players = new Player[3]; //3 player max
         this.message = "";
+        this.winnerID = -1; //default
 
         this.players[0] = new Player("Player 0", 0);
         this.players[1] = new Player("Player 1", 1);
@@ -113,6 +115,7 @@ public class SHState extends GameState {
         this.minimumBet = orig.minimumBet;
         this.message = orig.message;
         this.lastBet = orig.lastBet;
+        this.winnerID = orig.winnerID;
 
         //creates deep copy of the phases array
         this.currentPhaseLocation = orig.currentPhaseLocation;
@@ -374,6 +377,10 @@ public class SHState extends GameState {
         this.currentPhase = phases[idx];
     }
 
+    public void setWinnerID(int idx){
+        this.winnerID = idx;
+    }
+
     public void setMessage(String initMessage){
         this.message = initMessage;
     }
@@ -385,6 +392,8 @@ public class SHState extends GameState {
     public int getCurrentBet(){ return this.currentBet; }
 
     public int getPotBalance(){ return this.potBalance; }
+
+    public int getWinnerID() { return winnerID;  }
 
     public int getLastBet(){return this.lastBet;}
 

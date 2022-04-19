@@ -55,6 +55,8 @@ public class Player {
     //set methods
     public void setIsTurn(boolean turn){ this.isTurn = turn; }
 
+    public void setName(String initName){ this.name = initName; }
+
     public void setFolded(boolean fold){ this.folded = fold; }
 
     public void setLastBet(int bet){ this.lastBet = bet; }

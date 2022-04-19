@@ -105,9 +105,10 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
                 this.potAmount.setText("$" + shgs.getPotBalance());
                 //sets current bet
                 this.currentBet.setText("$" + shgs.getLastBet());
+                infoSection.append(shgs.getPlayersArray()[shgs.getWinnerID()].getName()
+                        + " won  $" + shgs.getPotBalance() + " that round \n");
+                infoSection.append("Please click \"hold\" to reset for the next round \n");
 
-                infoSection.append(shgs.getPlayersArray()[shgs.getPlayerTurnId()].getName()
-                        + " won that round with a total of $" + shgs.getPotBalance() + "\n");
             }else {
                 this.infoSection.append(shgs.getMessage());
                 //sets current pot
@@ -344,5 +345,7 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
     public void appendToInfo(String input){
         infoSection.append(input + "\n");
     }
+
+    public String getName(){ return this.name;}
 
 }// class SHHumanPlayer

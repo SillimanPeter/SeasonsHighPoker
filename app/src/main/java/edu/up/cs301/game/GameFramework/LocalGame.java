@@ -1,5 +1,8 @@
 package edu.up.cs301.game.GameFramework;
 
+import edu.up.cs301.SeasonsHigh.SHComputerPlayer;
+import edu.up.cs301.SeasonsHigh.SHHumanPlayer;
+import edu.up.cs301.SeasonsHigh.SHState;
 import edu.up.cs301.game.GameFramework.actionMessage.EndTurnAction;
 import edu.up.cs301.game.GameFramework.actionMessage.GameAction;
 import edu.up.cs301.game.GameFramework.actionMessage.GameOverAckAction;
@@ -90,6 +93,7 @@ public abstract class LocalGame implements Game, Tickable {
 
         // create/store a copy of the player array
         this.players = (GamePlayer[])players.clone();
+        this.setNames();
 
         // create an array for the players' names; these names will be
         // filled during the initial message-protocol between the game
@@ -467,6 +471,20 @@ public abstract class LocalGame implements Game, Tickable {
     @Override
     public GameState getGameState(){
         return state;
+    }
+
+    private void setNames() {
+        if (this.players == null) {
+            return;
+        } else {
+            for (int i = 0; i < ((SHState)state).getPlayersArray().length; i++) {
+                if(this.players[i] instanceof SHHumanPlayer) {
+                    ((SHState) state).getPlayersArray()[i].setName(((SHHumanPlayer) this.players[i]).getName());
+                }else if(this.players[i] instanceof SHComputerPlayer){
+                    ((SHState)state).getPlayersArray()[i].setName(((SHComputerPlayer)this.players[i]).getName());
+                }
+            }
+        }
     }
 
 }// class LocalGame
