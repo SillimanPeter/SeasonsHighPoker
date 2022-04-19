@@ -85,9 +85,9 @@ public class SHState extends GameState {
         this.phases[index] = "Betting-Phase";
         index++;
         for(; index < 4; index++) {
-            this.phases[index] = "Betting-Phase";
-            index++;
             this.phases[index] = "Draw-Phase";
+            index++;
+            this.phases[index] = "Betting-Phase";
             index++;
         }
         this.phases[index] = "Reveal-Phase";

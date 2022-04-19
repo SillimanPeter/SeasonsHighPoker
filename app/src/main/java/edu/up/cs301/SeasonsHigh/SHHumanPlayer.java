@@ -58,6 +58,7 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
 
     private EditText userBetAmount;
 
+    private SHState shgs;
     // the android activity that we are running
     private GameMainActivity myActivity;
 
@@ -82,7 +83,7 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
     public void receiveInfo(GameInfo info) {
         //set gui
         if(info instanceof SHState){
-            SHState shgs = (SHState)info;
+            shgs = (SHState)info;
             this.infoSection.setText("Let's play a game! \n");
             //determine human player, set TextViews accordingly
             if(super.playerNum == 0) {
@@ -289,6 +290,13 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
 
     }//setAsGui
 
-    public int getBetAmount(){return Integer.parseInt("" + betValue.getText());}
+    public int getBetAmount(){
+        int amount;
+        if("" + betValue.getText() == ""){
+            amount = shgs.getMinimumBet();
+        }else{
+            amount = Integer.parseInt("" + betValue.getText());
+        }
+        return amount;}
 
 }// class SHHumanPlayer

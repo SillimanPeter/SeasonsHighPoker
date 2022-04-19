@@ -52,11 +52,12 @@ public class SHComputerPlayer extends GameComputerPlayer {
             return;
         }
 
+        // update our state variable
+        this.savedState = (SHState)info;
+
         //helper variable
         int handStrength = this.savedState.getHandStrength(this.id); /*this ai's id*/
 
-        // update our state variable
-        this.savedState = (SHState)info;
 
         /**Create the computerPlayer brain here (what moves to make when)*/
 

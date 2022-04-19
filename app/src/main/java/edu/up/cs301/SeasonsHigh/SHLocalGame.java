@@ -104,51 +104,51 @@ public class SHLocalGame extends LocalGame {
             }
         }
 
-        else if(sham.isCard0Select()){
-            if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
-                Log.d("flash red","It must be the Draw-Phase for that action");
-                return false;
-            } else {
-                p.getHand()[0].toggleIsSelected();
-                Log.d("Card0Select Action","was called and Card 0 was toggled");
+//        else if(sham.isCard0Select()){
+//            if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
+//                Log.d("flash red","It must be the Draw-Phase for that action");
+//                return false;
+//            } else {
+//                p.getHand()[0].toggleIsSelected();
+//                Log.d("Card0Select Action","was called and Card 0 was toggled");
+//
+//            }
+//        }
+//
+//        else if(sham.isCard1Select()){
+//            if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
+//                Log.d("flash red","It must be the Draw-Phase for that action");
+//                return false;
+//            } else {
+//                p.getHand()[1].toggleIsSelected();
+//                Log.d("Card1Select Action","was called and Card 1 was toggled");
+//
+//            }
+//        }
+//
+//        else if(sham.isCard2Select()){
+//            if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
+//                Log.d("flash red","It must be the Draw-Phase for that action");
+//                return false;
+//            } else {
+//                p.getHand()[2].toggleIsSelected();
+//                Log.d("Card2Select Action","was called and Card 2 was toggled");
+//
+//            }
+//        }
+//
+//        else if(sham.isCard3Select()){
+//            if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
+//                Log.d("flash red","It must be the Draw-Phase for that action");
+//                return false;
+//            } else {
+//                p.getHand()[3].toggleIsSelected();
+//                Log.d("Card3Select Action","was called and Card 3 was toggled");
+//
+//            }
+//        }
 
-            }
-        }
-
-        else if(sham.isCard1Select()){
-            if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
-                Log.d("flash red","It must be the Draw-Phase for that action");
-                return false;
-            } else {
-                p.getHand()[1].toggleIsSelected();
-                Log.d("Card1Select Action","was called and Card 1 was toggled");
-
-            }
-        }
-
-        else if(sham.isCard2Select()){
-            if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
-                Log.d("flash red","It must be the Draw-Phase for that action");
-                return false;
-            } else {
-                p.getHand()[2].toggleIsSelected();
-                Log.d("Card2Select Action","was called and Card 2 was toggled");
-
-            }
-        }
-
-        else if(sham.isCard3Select()){
-            if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
-                Log.d("flash red","It must be the Draw-Phase for that action");
-                return false;
-            } else {
-                p.getHand()[3].toggleIsSelected();
-                Log.d("Card3Select Action","was called and Card 3 was toggled");
-
-            }
-        }
-
-        else if (sham.isBet()) {
+        else if (sham instanceof SHActionBet) {
             if(!SHGS.getCurrentPhase().equals("Betting-Phase")) {
                 Log.d("flash red","It must be the Betting-Phase for that action");
                 return false;
