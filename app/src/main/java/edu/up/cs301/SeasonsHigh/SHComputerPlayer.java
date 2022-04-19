@@ -136,8 +136,13 @@ public class SHComputerPlayer extends GameComputerPlayer {
                 int move = gen.nextInt(4);
                 //betting phase action
                 if(this.savedState.getCurrentPhase() == "Betting-Phase"){
-                    if(move <= 1) {
-                        sleep(2.0 * Math.random());
+                    if(this.savedState.getCurrentPhaseLocation() == 0) {
+                            sleep(5.0 * Math.random());
+                            Log.d("Computer sendAction", "Attempting Bet Action");
+                            this.game.sendAction(new SHActionBet(this, savedState.getCurrentBet()));
+                    }
+                    if (move <= 1) {
+                        sleep(5.0 * Math.random());
                         Log.d("Computer sendAction", "Attempting Bet Action");
                         this.game.sendAction(new SHActionCard0Select(this));
                         this.game.sendAction(new SHActionBet(this, savedState.getCurrentBet()));

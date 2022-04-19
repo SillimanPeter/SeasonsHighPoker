@@ -69,6 +69,8 @@ public class Player {
 
     public void setHasDrawnOrHeld(boolean drawnOrHeld){ this.hasDrawnOrHeld = drawnOrHeld; }
 
+
+
     //get methods
     public boolean getHasDrawnOrHeld(){ return this.hasDrawnOrHeld; }
 
@@ -87,5 +89,7 @@ public class Player {
     public int getTurnId(){ return this.turnId; }
 
     public int getCurrentBet(){ return this.currentBet; }
+
+
 
 }

@@ -161,9 +161,8 @@ public class SHState extends GameState {
         if(currentPhaseLocation == 1){
             shuffleDeck();
             dealCards();
-        }
-        if(this.currentPhaseLocation == phases.length-1){
-            this.currentPhaseLocation = 0;
+        }else if(currentPhaseLocation >= phases.length-1){
+            currentPhaseLocation = 8;
         }
         this.currentPhase = this.phases[this.currentPhaseLocation];
     }
@@ -362,7 +361,7 @@ public class SHState extends GameState {
     //setter methods
     public void setCurrentBet(int value){ this.currentBet = value; }
 
-    public void setPotBalance(int value){ this.potBalance += value; }
+    public void setPotBalance(int value){ this.potBalance = value; }
 
     public void setGamePhase(int idx){
         this.currentPhaseLocation = idx;

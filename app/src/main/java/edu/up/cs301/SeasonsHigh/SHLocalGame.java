@@ -14,6 +14,7 @@ public class SHLocalGame extends LocalGame {
 
     //initializing variables
     private SHState SHGS;
+    private Player p;
 
     /**
      * declares the goldenGameState and creates a copy that excludes the hand for each
@@ -52,7 +53,7 @@ public class SHLocalGame extends LocalGame {
         }
     }
 
-    /**
+    /**if
      * This method is called when a new action arrives from a player
      *
      * @return true if the action was taken or false if the action was invalid/illegal.
@@ -70,8 +71,7 @@ public class SHLocalGame extends LocalGame {
         // get the index of the player making the move; return false
         int thisPlayerIdx = getPlayerIdx(sham.getPlayer());
         //to clean up code a bit
-        Player p = SHGS.getPlayersArray()[thisPlayerIdx];
-
+        p = SHGS.getPlayersArray()[thisPlayerIdx];
         if (thisPlayerIdx < 0 || thisPlayerIdx > 2
                 || SHGS.getPlayerTurnId() != thisPlayerIdx
                 || SHGS.getPlayersArray()[thisPlayerIdx].getFolded()) { // illegal player
@@ -99,9 +99,7 @@ public class SHLocalGame extends LocalGame {
         else if(sham.isHold()){
             if(SHGS.getCurrentPhase().equals("Reveal-Phase")){
                 Log.d("Round Reset","Starting Next Round");
-                afterActionMade();
 
-                return true;
             }else if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
                 Log.d("flash red","It must be the Draw-Phase for that action");
                 return false;
@@ -128,11 +126,15 @@ public class SHLocalGame extends LocalGame {
                 return false;
             } else {
                 //commits bet made
-                p.setCurrentBet(SHGS.getCurrentBet());
-                SHGS.setCurrentBet(p.getCurrentBet());
-                SHGS.setPotBalance(SHGS.getPotBalance() + SHGS.getCurrentBet());
-                p.setLastBet(p.getCurrentBet());
-                p.setBalance(p.getBalance() - SHGS.getCurrentBet());
+
+                SHGS.setCurrentBet(((SHActionBet) sham).getBetAmount());
+                p.setCurrentBet(((SHActionBet) sham).getBetAmount());
+                int bet = SHGS.getCurrentBet();
+                int pot = SHGS.getPotBalance();
+
+                SHGS.setPotBalance(bet + pot);
+                p.setLastBet(bet);
+                p.setBalance(p.getBalance() - bet);
                 Log.d("Bet Action","was made");
 
             }
@@ -141,6 +143,7 @@ public class SHLocalGame extends LocalGame {
 
         else if(sham instanceof SHActionFold) {
             SHGS.getPlayersArray()[thisPlayerIdx].setFolded(true);
+
             Log.d("Fold Action","player has folded");
         }
 
@@ -161,15 +164,19 @@ public class SHLocalGame extends LocalGame {
         SHGS.getPlayersArray()[nextPlayerIdx].setIsTurn(true);
         Log.d("playerTurn","it is player " + nextPlayerIdx + "'s turn");
 
+
+
         return true;
     }//makeMove
 
     private void afterActionMade(){
         //find how many players have folded
         int numFolded = 0;
-//        if(SHGS.getCurrentPhase().equals("Reveal-Phase")){
-//            SHGS.setGamePhase(8);
-//        }
+
+        if(SHGS.getCurrentPhase().equals("Reveal-Phase")){
+            SHGS.changeGamePhase();
+            Log.d("phase change", "It is now the " + SHGS.getCurrentPhase());
+        }
 
         for(int h = 0; h < SHGS.getPlayersArray().length; h++){
             if(SHGS.getPlayersArray()[h].getFolded()){
@@ -248,7 +255,7 @@ public class SHLocalGame extends LocalGame {
         ArrayList<Integer> winnerIdList = new ArrayList<Integer>();
 
         if(SHGS.getCurrentPhase().equals("Reset-Phase")){
-            sleep(20.0);
+            sleep(10.0);
             //gives the winners their share of the pot
             for(int winIdIndex = 0; winIdIndex < SHGS.compareHands().size(); winIdIndex++) {
                 winnerIdList.add(SHGS.compareHands().get(winIdIndex));//arraylist of winner id's
@@ -292,9 +299,10 @@ public class SHLocalGame extends LocalGame {
                 allCards.setIsDealt(false);
             } //resets the deck
 
-            SHGS.changeGamePhase();
+            SHGS.setGamePhase(0);
             Log.d("phase change", "It is now the " + SHGS.getCurrentPhase());
         }
+
 
     }
 
