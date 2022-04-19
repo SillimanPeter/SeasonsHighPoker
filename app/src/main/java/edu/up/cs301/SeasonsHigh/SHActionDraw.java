@@ -7,6 +7,7 @@ public class SHActionDraw extends SHActionMove {
 
     private static final long serialVersionUID = 9L;
 
+
     /**
      * Constructor for the SHActionMove class.
      *
@@ -14,6 +15,7 @@ public class SHActionDraw extends SHActionMove {
      */
     public SHActionDraw(GamePlayer player) {
         super(player);
+
     }
 
     /**

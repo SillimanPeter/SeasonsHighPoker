@@ -70,7 +70,13 @@ public class Card {
     public boolean getIsDealt(){ return this.isDealt; }
 
     public void setIsDealt(boolean f){ this.isDealt = f; }
-
+    public void setSelected(boolean initSelected){
+        if(this.isSelected == true && initSelected ==true){
+            this.isSelected = false;
+        }else{
+            this.isSelected = initSelected;
+        }
+    }
     @Override
     public String toString(){
         return this.cardRank + "" + this.cardSuit;

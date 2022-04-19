@@ -44,7 +44,7 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
     private TextView foe0Name;
     private TextView foe1Name;
     private TextView infoSection;
-    private TextView betValue;
+    private TextView userBetAmount;
 
     private Button holdButt;
     private Button foldButt;
@@ -56,7 +56,7 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
     private ImageButton userCard2;
     private ImageButton userCard3;
 
-    private EditText userBetAmount;
+    private int currentBetAmount;
 
     private SHState shgs;
     // the android activity that we are running
@@ -101,15 +101,17 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
                 this.userCard2.setImageResource(shgs.getPCardRecId(0, 2));
                 this.userCard3.setImageResource(shgs.getPCardRecId(0, 3));
                 //sets foe0's cards
-                this.foe0Card4.setImageResource(shgs.getPCardRecId(1, 0));
-                this.foe0Card1.setImageResource(shgs.getPCardRecId(1, 1));
-                this.foe0Card2.setImageResource(shgs.getPCardRecId(1, 2));
-                this.foe0Card3.setImageResource(shgs.getPCardRecId(1, 3));
-                //sets foe1's cards
-                this.foe1Card4.setImageResource(shgs.getPCardRecId(2, 0));
-                this.foe1Card1.setImageResource(shgs.getPCardRecId(2, 1));
-                this.foe1Card2.setImageResource(shgs.getPCardRecId(2, 2));
-                this.foe1Card3.setImageResource(shgs.getPCardRecId(2, 3));
+                if (shgs.getCurrentPhase().equals("Reveal-Phase") || shgs.getCurrentPhaseLocation() == 0){
+                    this.foe0Card4.setImageResource(shgs.getPCardRecId(1, 0));
+                    this.foe0Card1.setImageResource(shgs.getPCardRecId(1, 1));
+                    this.foe0Card2.setImageResource(shgs.getPCardRecId(1, 2));
+                    this.foe0Card3.setImageResource(shgs.getPCardRecId(1, 3));
+                    //sets foe1's cards
+                    this.foe1Card4.setImageResource(shgs.getPCardRecId(2, 0));
+                    this.foe1Card1.setImageResource(shgs.getPCardRecId(2, 1));
+                    this.foe1Card2.setImageResource(shgs.getPCardRecId(2, 2));
+                    this.foe1Card3.setImageResource(shgs.getPCardRecId(2, 3));
+                }
             } else if(super.playerNum == 1){
                 //sets balances
                 this.userBal.setText("" + shgs.getPBal(1));
@@ -125,15 +127,17 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
                 this.userCard2.setImageResource(shgs.getPCardRecId(1, 2));
                 this.userCard3.setImageResource(shgs.getPCardRecId(1, 3));
                 //sets foe0's cards
-                this.foe0Card4.setImageResource(shgs.getPCardRecId(0, 0));
-                this.foe0Card1.setImageResource(shgs.getPCardRecId(0, 1));
-                this.foe0Card2.setImageResource(shgs.getPCardRecId(0, 2));
-                this.foe0Card3.setImageResource(shgs.getPCardRecId(0, 3));
-                //sets foe1's cards
-                this.foe1Card4.setImageResource(shgs.getPCardRecId(2, 0));
-                this.foe1Card1.setImageResource(shgs.getPCardRecId(2, 1));
-                this.foe1Card2.setImageResource(shgs.getPCardRecId(2, 2));
-                this.foe1Card3.setImageResource(shgs.getPCardRecId(2, 3));
+                if (shgs.getCurrentPhase().equals("Reveal-Phase") || shgs.getCurrentPhaseLocation() == 0){
+                    this.foe0Card4.setImageResource(shgs.getPCardRecId(0, 0));
+                    this.foe0Card1.setImageResource(shgs.getPCardRecId(0, 1));
+                    this.foe0Card2.setImageResource(shgs.getPCardRecId(0, 2));
+                    this.foe0Card3.setImageResource(shgs.getPCardRecId(0, 3));
+                    //sets foe1's cards
+                    this.foe1Card4.setImageResource(shgs.getPCardRecId(2, 0));
+                    this.foe1Card1.setImageResource(shgs.getPCardRecId(2, 1));
+                    this.foe1Card2.setImageResource(shgs.getPCardRecId(2, 2));
+                    this.foe1Card3.setImageResource(shgs.getPCardRecId(2, 3));
+                }
             } else {
                 //sets balances
                 this.userBal.setText("" + shgs.getPBal(2));
@@ -149,15 +153,17 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
                 this.userCard2.setImageResource(shgs.getPCardRecId(2, 2));
                 this.userCard3.setImageResource(shgs.getPCardRecId(2, 3));
                 //sets foe0's cards
-                this.foe0Card4.setImageResource(shgs.getPCardRecId(1, 0));
-                this.foe0Card1.setImageResource(shgs.getPCardRecId(1, 1));
-                this.foe0Card2.setImageResource(shgs.getPCardRecId(1, 2));
-                this.foe0Card3.setImageResource(shgs.getPCardRecId(1, 3));
+                if (shgs.getCurrentPhase().equals("Reveal-Phase") || shgs.getCurrentPhaseLocation() == 0){
+                    this.foe0Card4.setImageResource(shgs.getPCardRecId(1, 0));
+                    this.foe0Card1.setImageResource(shgs.getPCardRecId(1, 1));
+                    this.foe0Card2.setImageResource(shgs.getPCardRecId(1, 2));
+                    this.foe0Card3.setImageResource(shgs.getPCardRecId(1, 3));
                 //sets foe1's cards
-                this.foe1Card4.setImageResource(shgs.getPCardRecId(0, 0));
-                this.foe1Card1.setImageResource(shgs.getPCardRecId(0, 1));
-                this.foe1Card2.setImageResource(shgs.getPCardRecId(0, 2));
-                this.foe1Card3.setImageResource(shgs.getPCardRecId(0, 3));
+                    this.foe1Card4.setImageResource(shgs.getPCardRecId(0, 0));
+                    this.foe1Card1.setImageResource(shgs.getPCardRecId(0, 1));
+                    this.foe1Card2.setImageResource(shgs.getPCardRecId(0, 2));
+                    this.foe1Card3.setImageResource(shgs.getPCardRecId(0, 3));
+                }
             }/* TODO: issue - establishes the correct user but not other players
                                 (i.e. non-user players' may be switched in order)*/
             //sets current pot
@@ -177,23 +183,29 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
      */
     @Override
     public void onClick(View button) {
+        shgs = (SHState) game.getGameState();
         if(button instanceof ImageButton) {
             if(button.getId() == this.userCard0.getId()){
                 Log.d("Human sendAction", "Attempting Card0Select Action");
                 this.infoSection.append("Card 0 has been clicked \n");
-                this.game.sendAction(new SHActionCard0Select(this));
+                shgs.getPlayersArray()[playerNum].hand[0].setSelected(true);
+                //this.game.sendAction(new SHActionCard0Select(this));
             } else if(button.getId() == this.userCard1.getId()){
                 Log.d("Human sendAction", "Attempting Card1Select Action");
                 this.infoSection.append("Card 1 has been clicked \n");
-                this.game.sendAction(new SHActionCard1Select(this));
+                shgs.getPlayersArray()[playerNum].hand[1].setSelected(true);
+                //this.game.sendAction(new SHActionCard1Select(this));
             } else if(button.getId() == this.userCard2.getId()){
                 Log.d("Human sendAction", "Attempting Card2Select Action");
                 this.infoSection.append("Card 2 has been clicked \n");
-                this.game.sendAction(new SHActionCard2Select(this));
+                shgs.getPlayersArray()[playerNum].hand[2].setSelected(true);
+                //this.game.sendAction(new SHActionCard2Select(this));
             } else if(button.getId() == this.userCard3.getId()){
                 Log.d("Human sendAction", "Attempting Card3Select Action");
                 this.infoSection.append("Card 3 has been clicked \n");
-                this.game.sendAction(new SHActionCard3Select(this));
+                shgs.getPlayersArray()[playerNum].hand[3].setSelected(true);
+
+                //this.game.sendAction(new SHActionCard3Select(this));
             }
         } else if(button instanceof Button){
             if(button.getId() == this.betButt.getId()){
@@ -202,12 +214,14 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
                     return;
                 }else {
                     shgs.setCurrentBet(getBetAmount());
+                    super.game.sendAction(new SHActionBet(this, currentBetAmount));
                 }
-                super.game.sendAction(new SHActionBet(this));
+
             } else if(button.getId() == this.holdButt.getId()){
                 Log.d("Human sendAction", "Attempting Hold Action");
                 this.infoSection.append("Hold button clicked \n");
                 super.game.sendAction(new SHActionHold(this));
+
             } else if(button.getId() == this.drawButt.getId()){
                 Log.d("Human sendAction", "Attempting Draw Action");
                 this.infoSection.append("Draw button clicked \n");
@@ -245,7 +259,7 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
         this.userCard1 = (ImageButton)activity.findViewById(R.id.userCard1IB);
         this.userCard2 = (ImageButton)activity.findViewById(R.id.userCard2IB);
         this.userCard3 = (ImageButton)activity.findViewById(R.id.userCard3IB);
-        this.betValue = (TextView)activity.findViewById(R.id.betAmountET);
+        this.userBetAmount = (TextView)activity.findViewById(R.id.betAmountET);
 
         //user buttons
         this.betButt = (Button)activity.findViewById(R.id.betButton);
@@ -291,10 +305,10 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
 
     public int getBetAmount(){
         int amount;
-        if("" + betValue.getText() == ""){
+        if("" + userBetAmount.getText() == ""){
             amount = shgs.getMinimumBet();
         }else{
-            amount = Integer.parseInt("" + betValue.getText());
+            amount = Integer.parseInt("" + userBetAmount.getText());
         }
         return amount;}
 

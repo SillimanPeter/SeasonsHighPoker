@@ -25,13 +25,13 @@ public class SHState extends GameState {
     private Player[] players;
     private List<Card> deck;
     final private String[] cardRecName = {"card_2c","card_2d","card_2h","card_2s",
-                                        "card_3c","card_3d","card_2h","card_2s",
-                                        "card_4c","card_4d","card_2h","card_2s",
-                                        "card_5c","card_5d","card_2h","card_2s",
-                                        "card_6c","card_6d","card_2h","card_2s",
-                                        "card_7c","card_7d","card_2h","card_2s",
-                                        "card_8c","card_8d","card_2h","card_2s",
-                                        "card_9c","card_9d","card_2h","card_2s",
+                                        "card_3c","card_3d","card_3h","card_3s",
+                                        "card_4c","card_4d","card_4h","card_4s",
+                                        "card_5c","card_5d","card_5h","card_5s",
+                                        "card_6c","card_6d","card_6h","card_6s",
+                                        "card_7c","card_7d","card_7h","card_7s",
+                                        "card_8c","card_8d","card_8h","card_8s",
+                                        "card_9c","card_9d","card_9h","card_9s",
                                         "card_ac","card_ad","card_ah","card_as",
                                         "card_jc","card_jd","card_jh","card_js",
                                         "card_kc","card_kd","card_kh","card_ks",
@@ -85,11 +85,12 @@ public class SHState extends GameState {
         int index = 0;
         this.phases[index] = "Betting-Phase";
         index++;
-        for(; index < 4; index++) {
-            this.phases[index] = "Draw-Phase";
-            index++;
-            this.phases[index] = "Betting-Phase";
-            index++;
+        for(index = 1; index < 7; index++) {
+            if(index %2 != 0) {
+                this.phases[index] = "Draw-Phase";
+            }else {
+                this.phases[index] = "Betting-Phase";
+            }
         }
         this.phases[index] = "Reveal-Phase";
         index++;
@@ -181,9 +182,9 @@ public class SHState extends GameState {
         int idx;
         for(int i = 0; i < players.length; i++){
             for(int j = 0; j <  players[i].getHand().length; j++){
-                idx = gen.nextInt(52);
+                idx = gen.nextInt(deck.size());
                 while(deck.get(idx).getIsDealt()) {
-                    idx = gen.nextInt(52);
+                    idx = gen.nextInt(deck.size());
                 }
                 players[i].hand[j] = deck.get(idx);
                 deck.get(idx).setIsDealt(true);
@@ -363,6 +364,10 @@ public class SHState extends GameState {
 
     public void setPotBalance(int value){ this.potBalance += value; }
 
+    public void setGamePhase(int idx){
+        this.currentPhaseLocation = idx;
+        this.currentPhase = phases[idx];
+    }
 
     //getter methods
     public int getCurrentBet(){ return this.currentBet; }

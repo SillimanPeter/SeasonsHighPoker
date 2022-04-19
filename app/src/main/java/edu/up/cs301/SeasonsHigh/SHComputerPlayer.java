@@ -77,7 +77,7 @@ public class SHComputerPlayer extends GameComputerPlayer {
                         //bet the minimum amount to stay in the game
                         this.savedState.getPlayersArray()[id]
                                 .setCurrentBet(this.savedState.getCurrentBet() + 10);
-                        this.game.sendAction(new SHActionBet(this));
+                        this.game.sendAction(new SHActionBet(this,  savedState.getCurrentBet()));
                     } //makes a bet if they have a great hand
                     else if(this.savedState.getPlayersArray()[id].getBalance() > this.savedState.getCurrentBet()
                         && handStrength % 1000 > 100 && handStrength % 100 > 10)
@@ -87,7 +87,7 @@ public class SHComputerPlayer extends GameComputerPlayer {
                         //bet the minimum amount to stay in the game
                         this.savedState.getPlayersArray()[id]
                                 .setCurrentBet(this.savedState.getCurrentBet());
-                        this.game.sendAction(new SHActionBet(this));
+                        this.game.sendAction(new SHActionBet(this, savedState.getCurrentBet()));
                     } //makes a bet if they have a decent hand
                     else {
                         sleep(2.0 * Math.random());
@@ -107,6 +107,17 @@ public class SHComputerPlayer extends GameComputerPlayer {
                         sleep(2.0 * Math.random());
                         Log.d("Computer sendAction", "Attempting Draw Action");
                         this.game.sendAction(new SHActionCard0Select(this));
+                        Card[] hand = savedState.getPlayersArray()[this.playerNum].getHand();
+                        int index = -1;
+                        int sameSuit = 0;
+                        for(int i = 0; i < hand.length; i++){
+                            for(int j = 0; j < hand.length; j++){
+                                if(hand[i].getSuit() == hand[j].getSuit()){
+                                    sameSuit++;
+                                    index = j;
+                                }
+                            }
+                        }
                         this.game.sendAction((new SHActionDraw(this)));
                     }
                 }
@@ -129,7 +140,7 @@ public class SHComputerPlayer extends GameComputerPlayer {
                         sleep(2.0 * Math.random());
                         Log.d("Computer sendAction", "Attempting Bet Action");
                         this.game.sendAction(new SHActionCard0Select(this));
-                        this.game.sendAction(new SHActionBet(this));
+                        this.game.sendAction(new SHActionBet(this, savedState.getCurrentBet()));
                     } else {
                         sleep(2.0 * Math.random());
                         Log.d("Computer sendAction", "Attempting Fold Action");
@@ -149,7 +160,8 @@ public class SHComputerPlayer extends GameComputerPlayer {
                     }else if(move > 1){
                         sleep(2.0 * Math.random());
                         Log.d("Computer sendAction", "Attempting Draw Action");
-                        this.game.sendAction((new SHActionDraw(this)));
+                        int index = gen.nextInt();
+                        this.game.sendAction((new SHActionDraw(this))); //dumb AI draws random card;
                     }
                 }
             }

@@ -12,13 +12,16 @@ public class SHActionBet extends SHActionMove {
 
     private static final long serialVersionUID = 0L;
 
+    private int betAmount; // amount to bet
+
     /**
      * Constructor for the SHActionBet class.
      *
      * @param player  the player making the move
      */
-    public SHActionBet(GamePlayer player) {
+    public SHActionBet(GamePlayer player, int amount) {
         super(player);
+        betAmount = amount;
     }
 
     /**
@@ -26,4 +29,7 @@ public class SHActionBet extends SHActionMove {
      */
     public boolean isBetRaiseCheckCall() { return true; }
 
+    public int getBetAmount() {
+        return betAmount;
+    }
 }

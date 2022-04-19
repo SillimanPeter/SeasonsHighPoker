@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import edu.up.cs301.game.GameFramework.LocalGame;
 import edu.up.cs301.game.GameFramework.actionMessage.GameAction;
 import edu.up.cs301.game.GameFramework.players.GamePlayer;
+import edu.up.cs301.game.GameFramework.utilities.Logger;
 import edu.up.cs301.game.R;
 
 public class SHLocalGame extends LocalGame {
@@ -79,7 +80,7 @@ public class SHLocalGame extends LocalGame {
             return false;
         }
 
-        if(sham.isDraw()){
+        if(sham instanceof SHActionDraw){
             if(!SHGS.getCurrentPhase().equals("Draw-Phase")) {
                 Log.d("flash red","It must be the Draw-Phase for that action");
                 return false;
@@ -88,14 +89,20 @@ public class SHLocalGame extends LocalGame {
                 if(p.getHand()[i].getIsSelected()){
                     p.getHand()[i] = null; //removes card from hand
                     p.getHand()[i] = SHGS.draw(); //draws new card
-                    p.getHand()[i].setIsDealt(true);
                     Log.d("Draw Action","player drew new cards");
                 }
+
             }
+
         }
 
         else if(sham.isHold()){
-            if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
+            if(SHGS.getCurrentPhase().equals("Reveal-Phase")){
+                Log.d("Round Reset","Starting Next Round");
+                afterActionMade();
+
+                return true;
+            }else if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
                 Log.d("flash red","It must be the Draw-Phase for that action");
                 return false;
             } else {
@@ -104,49 +111,6 @@ public class SHLocalGame extends LocalGame {
             }
         }
 
-//        else if(sham.isCard0Select()){
-//            if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
-//                Log.d("flash red","It must be the Draw-Phase for that action");
-//                return false;
-//            } else {
-//                p.getHand()[0].toggleIsSelected();
-//                Log.d("Card0Select Action","was called and Card 0 was toggled");
-//
-//            }
-//        }
-//
-//        else if(sham.isCard1Select()){
-//            if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
-//                Log.d("flash red","It must be the Draw-Phase for that action");
-//                return false;
-//            } else {
-//                p.getHand()[1].toggleIsSelected();
-//                Log.d("Card1Select Action","was called and Card 1 was toggled");
-//
-//            }
-//        }
-//
-//        else if(sham.isCard2Select()){
-//            if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
-//                Log.d("flash red","It must be the Draw-Phase for that action");
-//                return false;
-//            } else {
-//                p.getHand()[2].toggleIsSelected();
-//                Log.d("Card2Select Action","was called and Card 2 was toggled");
-//
-//            }
-//        }
-//
-//        else if(sham.isCard3Select()){
-//            if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
-//                Log.d("flash red","It must be the Draw-Phase for that action");
-//                return false;
-//            } else {
-//                p.getHand()[3].toggleIsSelected();
-//                Log.d("Card3Select Action","was called and Card 3 was toggled");
-//
-//            }
-//        }
 
         else if (sham instanceof SHActionBet) {
             if(!SHGS.getCurrentPhase().equals("Betting-Phase")) {
@@ -166,8 +130,9 @@ public class SHLocalGame extends LocalGame {
                 //commits bet made
                 p.setCurrentBet(SHGS.getCurrentBet());
                 SHGS.setCurrentBet(p.getCurrentBet());
-                SHGS.setPotBalance(SHGS.getPotBalance() + p.getCurrentBet());
+                SHGS.setPotBalance(SHGS.getPotBalance() + SHGS.getCurrentBet());
                 p.setLastBet(p.getCurrentBet());
+                p.setBalance(p.getBalance() - SHGS.getCurrentBet());
                 Log.d("Bet Action","was made");
 
             }
@@ -202,6 +167,10 @@ public class SHLocalGame extends LocalGame {
     private void afterActionMade(){
         //find how many players have folded
         int numFolded = 0;
+//        if(SHGS.getCurrentPhase().equals("Reveal-Phase")){
+//            SHGS.setGamePhase(8);
+//        }
+
         for(int h = 0; h < SHGS.getPlayersArray().length; h++){
             if(SHGS.getPlayersArray()[h].getFolded()){
                 numFolded ++;
@@ -231,6 +200,7 @@ public class SHLocalGame extends LocalGame {
         }
         if(playersMatched == SHGS.getPlayersArray().length - numFolded){
             SHGS.changeGamePhase();
+
             Log.d("numFolded","" + numFolded);
             Log.d("numPlayersMatched","" + playersMatched);
             Log.d("currentBet","" + SHGS.getCurrentBet());
@@ -273,10 +243,12 @@ public class SHLocalGame extends LocalGame {
             }
         }
 
+
         //checks if the round is over, then reset hands, and give the winner the potBalance
         ArrayList<Integer> winnerIdList = new ArrayList<Integer>();
 
-        if(SHGS.getCurrentPhaseLocation() == SHGS.getPhases().length - 1){
+        if(SHGS.getCurrentPhase().equals("Reset-Phase")){
+            sleep(20.0);
             //gives the winners their share of the pot
             for(int winIdIndex = 0; winIdIndex < SHGS.compareHands().size(); winIdIndex++) {
                 winnerIdList.add(SHGS.compareHands().get(winIdIndex));//arraylist of winner id's
@@ -366,6 +338,22 @@ public class SHLocalGame extends LocalGame {
         if(haveLost == SHGS.getPlayersArray().length - 1){
             return winnerName + " has won!";
         } else { return null;}
+    }
+
+    protected void sleep(double seconds) {
+        long milliseconds;
+
+        //Since Thread.sleep takes in milliseconds, convert from seconds to milliseconds
+        milliseconds = (long)(seconds * 1000);
+
+        try {
+            Log.d("Sleep", "Action Delay");
+            Thread.sleep(milliseconds);
+            Log.d("Sleep", "Action Delay Complete");
+        }
+        catch (InterruptedException e) {
+            Log.d("Sleep", "Action Delay Complete");
+        }
     }
 
 }
