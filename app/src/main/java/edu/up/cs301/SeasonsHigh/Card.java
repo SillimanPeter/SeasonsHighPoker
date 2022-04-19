@@ -42,15 +42,15 @@ public class Card {
     public int getValue(){
         if(this.cardRank == 'c') {
             return 0;
-        } else if(this.cardRank == 'A'){
+        } else if(this.cardRank == 'a'){
             return 1;
-        } else if(this.cardRank == 'T') {
+        } else if(this.cardRank == 't') {
             return 10;
-        } else if(this.cardRank == 'J'){
+        } else if(this.cardRank == 'j'){
             return 11;
-        } else if(this.cardRank == 'Q'){
+        } else if(this.cardRank == 'q'){
             return 12;
-        } else if(this.cardRank == 'K'){
+        } else if(this.cardRank == 'k'){
             return 13;
         } else {
             return valueOf(this.cardRank);

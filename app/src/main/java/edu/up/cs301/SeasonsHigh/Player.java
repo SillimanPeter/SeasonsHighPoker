@@ -8,7 +8,7 @@ public class Player {
     private static final long serialVersionUID = 96L;
 
     //initialize variables
-    private Card[] hand;
+    public Card[] hand;
     private String name;
     private int lastBet;
     private int balance;

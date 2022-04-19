@@ -5,6 +5,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import edu.up.cs301.game.GameFramework.infoMessage.GameState;
 import edu.up.cs301.game.R;
@@ -73,8 +74,8 @@ public class SHState extends GameState {
         this.players[1].setIsTurn(true);
 
         //Creates all 52 card objects and puts them into the deck arraylist
-        for (char s : "SHDC".toCharArray()) {
-            for (char r : "KQJT98765432A".toCharArray()) {
+        for (char s : "shdc".toCharArray()) {
+            for (char r : "kqjt98765432a".toCharArray()) {
                 this.deck.add(new Card(r, s));
             }
         }
@@ -156,6 +157,10 @@ public class SHState extends GameState {
      */
     public void changeGamePhase(){
         this.currentPhaseLocation++;
+        if(currentPhaseLocation == 1){
+            shuffleDeck();
+            dealCards();
+        }
         if(this.currentPhaseLocation == phases.length-1){
             this.currentPhaseLocation = 0;
         }
@@ -170,6 +175,21 @@ public class SHState extends GameState {
      * Solution: Use an ArrayList for deck array and shuffle the list with Collections.shuffle()
      */
     public void shuffleDeck(){ Collections.shuffle(this.deck); }
+
+    public void dealCards(){
+        Random gen = new Random();
+        int idx;
+        for(int i = 0; i < players.length; i++){
+            for(int j = 0; j <  players[i].getHand().length; j++){
+                idx = gen.nextInt(52);
+                while(deck.get(idx).getIsDealt()) {
+                    idx = gen.nextInt(52);
+                }
+                players[i].hand[j] = deck.get(idx);
+                deck.get(idx).setIsDealt(true);
+            }
+        }
+    }
 
     public int getHandStrength(int playerId){
         Card[] cards = new Card[4];
@@ -326,12 +346,15 @@ public class SHState extends GameState {
     public int getPCardRecId(int playerId, int handIndex){
         String recName = "card_" + players[playerId].getHand()[handIndex].toString();
         int recIndex = -1;
+        int rec = -1;
         for(int i = 0; i < cardRecName.length; i++){
             if(cardRecName[i].equals(recName)){
                 recIndex = i;
+                rec = cardRecIds[recIndex];
+                return rec;
             }
         }
-        int rec = cardRecIds[recIndex];
+
         return rec;
     }
 

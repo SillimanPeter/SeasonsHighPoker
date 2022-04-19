@@ -198,12 +198,11 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
         } else if(button instanceof Button){
             if(button.getId() == this.betButt.getId()){
                 Log.d("Human sendAction", "Attempting Bet Action");
-                this.potAmount.setText("" + getBetAmount());
-                int bal = Integer.parseInt(""+userBal.getText());
-                int newBal = bal - getBetAmount();
-                this.userBal.setText("" + newBal);
-                this.infoSection.append(this.name + " bet " + getBetAmount() + "\n");
-                this.currentBet.setText(""+getBetAmount());
+                if(shgs.getPlayerTurnId() != this.playerNum){
+                    return;
+                }else {
+                    shgs.setCurrentBet(getBetAmount());
+                }
                 super.game.sendAction(new SHActionBet(this));
             } else if(button.getId() == this.holdButt.getId()){
                 Log.d("Human sendAction", "Attempting Hold Action");
