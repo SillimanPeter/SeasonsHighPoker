@@ -1,14 +1,11 @@
 package edu.up.cs301.SeasonsHigh;
 
 import android.util.Log;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import edu.up.cs301.game.GameFramework.LocalGame;
 import edu.up.cs301.game.GameFramework.actionMessage.GameAction;
 import edu.up.cs301.game.GameFramework.players.GamePlayer;
-import edu.up.cs301.game.GameFramework.utilities.Logger;
-import edu.up.cs301.game.R;
 
 public class SHLocalGame extends LocalGame {
 
@@ -180,75 +177,76 @@ public class SHLocalGame extends LocalGame {
         return true;
     }//makeMove
 
-    private void afterActionMade(){
+    private void afterActionMade() {
         //find how many players have folded
         int numFolded = 0;
 
         //checks if the round is over, then reset hands, and give the winner the potBalance
         ArrayList<Integer> winnerIdList = new ArrayList<Integer>();
 
-        if(SHGS.getCurrentPhaseLocation() == 6){
+        if (SHGS.getCurrentPhaseLocation() == 6) {
             //gives the winners their share of the pot
-            for(int winIdIndex = 0; winIdIndex < SHGS.compareHands().size(); winIdIndex++) {
+            for (int winIdIndex = 0; winIdIndex < SHGS.compareHands().size(); winIdIndex++) {
                 winnerIdList.add(SHGS.compareHands().get(winIdIndex));//arraylist of winner id's
             }
-            if(winnerIdList.size() == 1){
+            if (winnerIdList.size() == 1) {
                 //add pot balance to winner balance
                 SHGS.getPlayersArray()[winnerIdList.get(0)].addBalance(SHGS.getPotBalance());
                 SHGS.setWinnerID(winnerIdList.get(0));
-            } else if(winnerIdList.size() == 2){
+            } else if (winnerIdList.size() == 2) {
                 //add pot balance to winners' balance
-                int splitPotBal = SHGS.getPotBalance()/2;
-                for(int g = 0; g < winnerIdList.size(); g++){
+                int splitPotBal = SHGS.getPotBalance() / 2;
+                for (int g = 0; g < winnerIdList.size(); g++) {
                     SHGS.getPlayersArray()[winnerIdList.get(g)].addBalance(splitPotBal);
                 }
-            } else if(winnerIdList.size() == 3){
+            } else if (winnerIdList.size() == 3) {
                 //add pot balance to winners' balance
-                int splitPotBal = SHGS.getPotBalance()/3;
-                for(int w = 0; w < winnerIdList.size(); w++){
+                int splitPotBal = SHGS.getPotBalance() / 3;
+                for (int w = 0; w < winnerIdList.size(); w++) {
                     SHGS.getPlayersArray()[winnerIdList.get(w)].addBalance(splitPotBal);
                 }
             }
 
         }
 
-        for(int h = 0; h < SHGS.getPlayersArray().length; h++){
-            if(SHGS.getPlayersArray()[h].getFolded()){
-                numFolded ++;
+        for (int h = 0; h < SHGS.getPlayersArray().length; h++) {
+            if (SHGS.getPlayersArray()[h].getFolded()) {
+                numFolded++;
             }
         }
 
         //find how many players have lost the game
         int haveLost = 0;
-        for(Player i: SHGS.getPlayersArray()){
-            if(i.getBalance() <= 5/*minimumBet*/){
+        for (Player i : SHGS.getPlayersArray()) {
+            if (i.getBalance() <= 5/*minimumBet*/) {
                 haveLost++;
             }
         }
 
         //declare winner and end game
-        if(haveLost == SHGS.getPlayersArray().length - 1){
+        if (haveLost == SHGS.getPlayersArray().length - 1) {
             //TODO: game is over, declare winner and end game
         }
 
         //checks if the betting phase is over, then changes it.
         int playersMatched = 0;
-        for(int i = 0; i < SHGS.getPlayersArray().length; i++) { //loops through the players array
-            if (SHGS.getPlayersArray()[i].getLastBet() == SHGS.getCurrentBet() //checks if player has called
-                    && !SHGS.getPlayersArray()[i].getFolded()) {
-                playersMatched ++;
+        if (SHGS.getCurrentPhase().equals("Betting-Phase") && SHGS.getCurrentPhaseLocation() != 6) {
+            for (int i = 0; i < SHGS.getPlayersArray().length; i++) { //loops through the players array
+                if (SHGS.getPlayersArray()[i].getLastBet() == SHGS.getCurrentBet() //checks if player has called
+                        && !SHGS.getPlayersArray()[i].getFolded()) {
+                    playersMatched++;
+                }
+            }
+            if (playersMatched == SHGS.getPlayersArray().length - numFolded) {
+                SHGS.changeGamePhase();
+
+                Log.d("numFolded", "" + numFolded);
+                Log.d("numPlayersMatched", "" + playersMatched);
+                Log.d("currentBet", "" + SHGS.getCurrentBet());
+                Log.d("PlayersArrayLength", "" + SHGS.getPlayersArray().length);
+                Log.d("phase change", "It is now the " + SHGS.getCurrentPhase());
             }
         }
-        if(playersMatched == SHGS.getPlayersArray().length - numFolded){
-            SHGS.changeGamePhase();
-
-            Log.d("numFolded","" + numFolded);
-            Log.d("numPlayersMatched","" + playersMatched);
-            Log.d("currentBet","" + SHGS.getCurrentBet());
-            Log.d("PlayersArrayLength","" + SHGS.getPlayersArray().length);
-            Log.d("phase change", "It is now the " + SHGS.getCurrentPhase());
-        }
-
         //checks if the drawing phase is over, then changes it.
         int playersHaveDrawnOrHeld = 0;
         for(int i = 0; i < SHGS.getPlayersArray().length; i++) {
@@ -318,7 +316,9 @@ public class SHLocalGame extends LocalGame {
             Log.d("phase change", "It is now the " + SHGS.getCurrentPhase());
         }
 
-        sendAllUpdatedState();
+        for(int l = 0; l < this.players.length; l++) {
+            sendUpdatedStateTo(this.players[l]);
+        }
     }
 
     /**

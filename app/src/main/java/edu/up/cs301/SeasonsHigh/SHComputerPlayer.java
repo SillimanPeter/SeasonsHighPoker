@@ -128,7 +128,7 @@ public class SHComputerPlayer extends GameComputerPlayer {
         else {
             // if it's not their turn do nothing else make a move depending
             //      on the phase of the game
-            if (this.savedState.getPlayerTurnId() != this.playerNum) {
+            if (this.savedState.getCurrentTurnId() != this.playerNum) {
                 //do nothing if not their turn
             } else if (this.savedState.getPlayerTurnId() == this.playerNum) {
                 //random int to dictate random actions

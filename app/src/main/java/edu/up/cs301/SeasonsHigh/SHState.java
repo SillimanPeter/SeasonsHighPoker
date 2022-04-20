@@ -19,7 +19,7 @@ public class SHState extends GameState {
     private int currentBet;
     private int lastBet;
     private int currentPhaseLocation;
-    private int playersTurnId;
+    private int currentTurnId;
     private int minimumBet;
     private String currentPhase;
     private String[] phases;
@@ -65,7 +65,7 @@ public class SHState extends GameState {
         this.potBalance = 0;
         this.currentBet = 0;
         this.minimumBet = 5; //$0 players are allowed to check
-        this.playersTurnId = 0;
+        this.currentTurnId = 0;
         this.lastBet = 0;
         this.phases = new String[9];
         this.deck = new ArrayList<Card>();
@@ -338,13 +338,13 @@ public class SHState extends GameState {
                     + "\nFolded: " + h.getFolded()
                     + "\n";
         }
-        playerString += "\nIt is " + this.players[playersTurnId].getName() + "'s turn";
+        playerString += "\nIt is " + this.players[currentTurnId].getName() + "'s turn";
 
         gameState = "\nCurrent Phase: " + getCurrentPhase()
                 + "\nPot Balance: " + getPotBalance()
                 + "\nMinimum Bet: " + getMinimumBet()
                 + "\nCurrent Bet: " + getCurrentBet()
-                + "\nCurrent Players Turn: " + this.playersTurnId
+                + "\nCurrent Players Turn: " + this.currentTurnId
                 + "\n" //leave a gap for formatting
                 + "\n" + playerString
                 + "\n" + deckString
@@ -381,6 +381,8 @@ public class SHState extends GameState {
         this.winnerID = idx;
     }
 
+    public void setCurrentTurnId(int initTurn){ this.currentTurnId = initTurn;}
+
     public void setMessage(String initMessage){
         this.message = initMessage;
     }
@@ -411,8 +413,10 @@ public class SHState extends GameState {
 
     public String[] getPhases(){ return this.phases; }
 
+    public int getCurrentTurnId(){ return this.currentTurnId;}
+
     public int getCurrentPhaseLocation(){ return this.currentPhaseLocation; }
 
-    public int getPlayerTurnId(){ return this.playersTurnId; }
+    public int getPlayerTurnId(){ return this.currentTurnId; }
 
 }
