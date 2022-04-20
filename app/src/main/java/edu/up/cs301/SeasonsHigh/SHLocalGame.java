@@ -3,6 +3,7 @@ package edu.up.cs301.SeasonsHigh;
 import android.util.Log;
 
 import java.util.ArrayList;
+
 import edu.up.cs301.game.GameFramework.LocalGame;
 import edu.up.cs301.game.GameFramework.actionMessage.GameAction;
 import edu.up.cs301.game.GameFramework.players.GamePlayer;
@@ -16,7 +17,7 @@ public class SHLocalGame extends LocalGame {
     /**
      * declares the goldenGameState and creates a copy that excludes the hand for each
      */
-    public SHLocalGame(){
+    public SHLocalGame() {
         super();
         Log.i("SHLocalGame", "creating game");
         // create the state for the beginning of the game
@@ -35,34 +36,35 @@ public class SHLocalGame extends LocalGame {
     }
 
 
-
     /**
      * can the player with the given id take an action right now?
      */
     @Override
     protected boolean canMove(int playerIdx) {
-        Log.d("CanMove","has been called");
+        Log.d("CanMove", "has been called");
         Log.d("Current Phase", "it is the " + SHGS.getCurrentPhase());
-        if (playerIdx < 0 || playerIdx > 2
+        if (SHGS.getCurrentPhase().equals("Reveal-Phase")) {
+            return true;
+        } else if (playerIdx < 0 || playerIdx > 2
                 || SHGS.getPlayerTurnId() != playerIdx
                 || SHGS.getPlayersArray()[playerIdx].getFolded()) {
             // if our player-number is out of range or it is not this players turn
             //      or player folded, return false
             return false;
-        }
-        else {
+        } else {
             return true;
         }
     }
 
-    /**if
+    /**
+     * if
      * This method is called when a new action arrives from a player
      *
      * @return true if the action was taken or false if the action was invalid/illegal.
      */
     @Override
     protected boolean makeMove(GameAction action) {
-        Log.d("MakeMove","has been called");
+        Log.d("MakeMove", "has been called");
 
         // check that we have slap-jack action; if so cast it
         if (!(action instanceof SHActionMove)) {
@@ -78,17 +80,17 @@ public class SHLocalGame extends LocalGame {
                 || SHGS.getPlayerTurnId() != thisPlayerIdx
                 || SHGS.getPlayersArray()[thisPlayerIdx].getFolded()) { // illegal player
             Log.d("no action made",
-                 "Player tried to take an action on someone else's turn or after they folded");
+                    "Player tried to take an action on someone else's turn or after they folded");
             return false;
         }
 
-        if(sham instanceof SHActionDraw){
-            if(!SHGS.getCurrentPhase().equals("Draw-Phase")) {
-                Log.d("flash red","It must be the Draw-Phase for that action");
+        if (sham instanceof SHActionDraw) {
+            if (!SHGS.getCurrentPhase().equals("Draw-Phase")) {
+                Log.d("flash red", "It must be the Draw-Phase for that action");
                 return false;
             }
-            for(int i = 0; i < 4; i++){
-                if(p.getHand()[i].getIsSelected()){
+            for (int i = 0; i < 4; i++) {
+                if (p.getHand()[i].getIsSelected()) {
                     p.getHand()[i] = null; //removes card from hand
                     p.getHand()[i] = SHGS.draw(); //draws new card
 
@@ -96,26 +98,24 @@ public class SHLocalGame extends LocalGame {
 
             }
             SHGS.setMessage(p.getName() + " drew cards \n");
-            Log.d("Draw Action","player drew new cards");
-        }
-
-        else if(sham.isHold()){
-            if(SHGS.getCurrentPhase().equals("Reveal-Phase")){
+            SHGS.getPlayersArray()[SHGS.getCurrentTurnId()].setHasDrawnOrHeld(true);
+            Log.d("Draw Action", "player drew new cards");
+        } else if (sham.isHold()) {
+            if (SHGS.getCurrentPhase().equals("Reveal-Phase")) {
+                SHGS.setGamePhase(8);
                 SHGS.setMessage("Resetting for next round");
-                Log.d("Round Reset","Starting Next Round");
+                Log.d("Round Reset", "Starting Next Round");
 
-            }else if(!SHGS.getCurrentPhase().equals("Draw-Phase")){
-                Log.d("flash red","It must be the Draw-Phase for that action");
+            } else if (!SHGS.getCurrentPhase().equals("Draw-Phase")) {
+                Log.d("flash red", "It must be the Draw-Phase for that action");
                 return false;
             } else {
                 //do nothing
                 SHGS.setMessage(p.getName() + " held \n");
-                Log.d("Hold Action","player held");
+                SHGS.getPlayersArray()[SHGS.getCurrentTurnId()].setHasDrawnOrHeld(true);
+                Log.d("Hold Action", "player held");
             }
-        }
-
-
-        else if (sham instanceof SHActionBet) {
+        } else if (sham instanceof SHActionBet) {
             if (!SHGS.getCurrentPhase().equals("Betting-Phase")) {
                 Log.d("flash red", "It must be the Betting-Phase for that action");
                 return false;
@@ -129,7 +129,7 @@ public class SHLocalGame extends LocalGame {
             else if (((SHActionBet) sham).getBetAmount() < SHGS.getMinimumBet()) {
                 Log.d("flash red", "not high enough bet for that action");
                 return false;
-            }else {
+            } else {
                 //commits bet made
 
                 SHGS.setCurrentBet(((SHActionBet) sham).getBetAmount());
@@ -141,37 +141,22 @@ public class SHLocalGame extends LocalGame {
                 SHGS.setLastBet(bet);
                 p.setLastBet(bet);
                 p.setBalance(p.getBalance() - bet);
-                SHGS.setCurrentBet(SHGS.getMinimumBet());
+                SHGS.setCurrentBet(bet);
                 SHGS.setMessage(p.getName() + " bet " + bet + "\n");
-                Log.d("Bet Action","was made");
+                Log.d("Bet Action", "was made");
 
             }
 
-        }
-
-        else if(sham instanceof SHActionFold) {
+        } else if (sham instanceof SHActionFold) {
             SHGS.getPlayersArray()[thisPlayerIdx].setFolded(true);
             SHGS.setMessage(p.getName() + " folded \n");
-            Log.d("Fold Action","player has folded");
-        }
-
-        else { // some unexpected action
+            Log.d("Fold Action", "player has folded");
+        } else { // some unexpected action
             return false;
         }
 
         //checks if a game phase change is needed and makes that change
         afterActionMade();
-
-        //changes whose turn it is
-        SHGS.getPlayersArray()[thisPlayerIdx].setIsTurn(false);
-
-        int nextPlayerIdx = thisPlayerIdx++;
-        if(thisPlayerIdx == 2){
-            nextPlayerIdx = 0;
-        }
-        SHGS.getPlayersArray()[nextPlayerIdx].setIsTurn(true);
-        Log.d("playerTurn","it is player " + nextPlayerIdx + "'s turn");
-
 
 
         return true;
@@ -180,33 +165,45 @@ public class SHLocalGame extends LocalGame {
     private void afterActionMade() {
         //find how many players have folded
         int numFolded = 0;
+        int totalMoved = 0;
+        SHGS.setHasMoved(SHGS.getCurrentTurnId(), true);
 
+        for (int i = 0; i < SHGS.getHasMovedArray().length; i++) {
+            if (SHGS.getHasMoved(i)) {
+                totalMoved = totalMoved + 1;
+            }
+        }
+        //if(totalMoved == SHGS.getPlayersArray().length) {
         //checks if the round is over, then reset hands, and give the winner the potBalance
         ArrayList<Integer> winnerIdList = new ArrayList<Integer>();
 
         if (SHGS.getCurrentPhaseLocation() == 6) {
             //gives the winners their share of the pot
-            for (int winIdIndex = 0; winIdIndex < SHGS.compareHands().size(); winIdIndex++) {
-                winnerIdList.add(SHGS.compareHands().get(winIdIndex));//arraylist of winner id's
-            }
-            if (winnerIdList.size() == 1) {
-                //add pot balance to winner balance
-                SHGS.getPlayersArray()[winnerIdList.get(0)].addBalance(SHGS.getPotBalance());
-                SHGS.setWinnerID(winnerIdList.get(0));
-            } else if (winnerIdList.size() == 2) {
-                //add pot balance to winners' balance
-                int splitPotBal = SHGS.getPotBalance() / 2;
-                for (int g = 0; g < winnerIdList.size(); g++) {
-                    SHGS.getPlayersArray()[winnerIdList.get(g)].addBalance(splitPotBal);
+            if (totalMoved != SHGS.getPlayersArray().length - numFolded) {
+                //do nothing
+            } else {
+                for (int winIdIndex = 0; winIdIndex < SHGS.compareHands().size(); winIdIndex++) {
+                    winnerIdList.add(SHGS.compareHands().get(winIdIndex));//arraylist of winner id's
                 }
-            } else if (winnerIdList.size() == 3) {
-                //add pot balance to winners' balance
-                int splitPotBal = SHGS.getPotBalance() / 3;
-                for (int w = 0; w < winnerIdList.size(); w++) {
-                    SHGS.getPlayersArray()[winnerIdList.get(w)].addBalance(splitPotBal);
+                if (winnerIdList.size() == 1) {
+                    //add pot balance to winner balance
+                    SHGS.getPlayersArray()[winnerIdList.get(0)].addBalance(SHGS.getPotBalance());
+                    SHGS.setWinnerID(winnerIdList.get(0));
+                } else if (winnerIdList.size() == 2) {
+                    //add pot balance to winners' balance
+                    int splitPotBal = SHGS.getPotBalance() / 2;
+                    for (int g = 0; g < winnerIdList.size(); g++) {
+                        SHGS.getPlayersArray()[winnerIdList.get(g)].addBalance(splitPotBal);
+                    }
+                } else if (winnerIdList.size() == 3) {
+                    //add pot balance to winners' balance
+                    int splitPotBal = SHGS.getPotBalance() / 3;
+                    for (int w = 0; w < winnerIdList.size(); w++) {
+                        SHGS.getPlayersArray()[winnerIdList.get(w)].addBalance(splitPotBal);
+                    }
                 }
+                SHGS.changeGamePhase();
             }
-
         }
 
         for (int h = 0; h < SHGS.getPlayersArray().length; h++) {
@@ -231,6 +228,7 @@ public class SHLocalGame extends LocalGame {
         //checks if the betting phase is over, then changes it.
         int playersMatched = 0;
         if (SHGS.getCurrentPhase().equals("Betting-Phase") && SHGS.getCurrentPhaseLocation() != 6) {
+
             for (int i = 0; i < SHGS.getPlayersArray().length; i++) { //loops through the players array
                 if (SHGS.getPlayersArray()[i].getLastBet() == SHGS.getCurrentBet() //checks if player has called
                         && !SHGS.getPlayersArray()[i].getFolded()) {
@@ -239,7 +237,12 @@ public class SHLocalGame extends LocalGame {
             }
             if (playersMatched == SHGS.getPlayersArray().length - numFolded) {
                 SHGS.changeGamePhase();
-
+                for (int i = 0; i < SHGS.getPlayersArray().length; i++) {
+                    SHGS.getPlayersArray()[i].setLastBet(0);
+                    SHGS.getPlayersArray()[i].setHasDrawnOrHeld(false);
+                    SHGS.setHasMoved(i, false);
+                }
+                SHGS.setCurrentBet(SHGS.getMinimumBet());
                 Log.d("numFolded", "" + numFolded);
                 Log.d("numPlayersMatched", "" + playersMatched);
                 Log.d("currentBet", "" + SHGS.getCurrentBet());
@@ -249,53 +252,58 @@ public class SHLocalGame extends LocalGame {
         }
         //checks if the drawing phase is over, then changes it.
         int playersHaveDrawnOrHeld = 0;
-        for(int i = 0; i < SHGS.getPlayersArray().length; i++) {
-            if (SHGS.getPlayersArray()[i].getHasDrawnOrHeld()
-                    || !SHGS.getPlayersArray()[i].getFolded()) {
-                playersHaveDrawnOrHeld ++;
-            }
-        }
-        if(playersHaveDrawnOrHeld == SHGS.getPlayersArray().length - numFolded){
-            SHGS.changeGamePhase();
-            Log.d("phase change", "It is now the " + SHGS.getCurrentPhase());
-        }
-
-        //checks if the ante phase is over, draws players' cards then changes it
-        int playersAnted = 0;
-        if(SHGS.getCurrentPhaseLocation() == 0){
-            for(int i = 0; i < SHGS.getPlayersArray().length; i++) {
-                if (SHGS.getPlayersArray()[i].getLastBet() == SHGS.getCurrentBet()
-                        || !SHGS.getPlayersArray()[i].getFolded()) {
-                    playersAnted ++;
+        if (SHGS.getCurrentPhase().equals("Draw-Phase")) {
+            for (int i = 0; i < SHGS.getPlayersArray().length; i++) {
+                if (SHGS.getPlayersArray()[i].getHasDrawnOrHeld()
+                        && !SHGS.getPlayersArray()[i].getFolded()) {
+                    playersHaveDrawnOrHeld++;
                 }
             }
-            if(playersAnted == SHGS.getPlayersArray().length - numFolded){
-                for(int j = 0; j < SHGS.getPlayersArray().length; j++){
-                    if(!SHGS.getPlayersArray()[j].getFolded()){
-                        for(int handIndex = 0; handIndex < 4; handIndex++){
+            if (playersHaveDrawnOrHeld == SHGS.getPlayersArray().length - numFolded) {
+                SHGS.changeGamePhase();
+                for (int i = 0; i < SHGS.getPlayersArray().length; i++) {
+                    SHGS.getPlayersArray()[i].setLastBet(0);
+                    SHGS.getPlayersArray()[i].setHasDrawnOrHeld(false);
+                    SHGS.setHasMoved(i, false);
+                }
+                Log.d("phase change", "It is now the " + SHGS.getCurrentPhase());
+            }
+        }
+        //checks if the ante phase is over, draws players' cards then changes it
+        int playersAnted = 0;
+        if (SHGS.getCurrentPhaseLocation() == 0) {
+            for (int i = 0; i < SHGS.getPlayersArray().length; i++) {
+                if (SHGS.getPlayersArray()[i].getLastBet() == SHGS.getCurrentBet()
+                        && !SHGS.getPlayersArray()[i].getFolded()) {
+                    playersAnted++;
+                }
+            }
+            if (playersAnted == SHGS.getPlayersArray().length - numFolded) {
+                for (int j = 0; j < SHGS.getPlayersArray().length; j++) {
+                    if (!SHGS.getPlayersArray()[j].getFolded()) {
+                        for (int handIndex = 0; handIndex < 4; handIndex++) {
                             SHGS.getPlayersArray()[j].getHand()[handIndex] = SHGS.draw();
                         }
                     }
                 }
                 SHGS.changeGamePhase();
+                for (int i = 0; i < SHGS.getPlayersArray().length; i++) {
+                    SHGS.getPlayersArray()[i].setLastBet(0);
+                    SHGS.getPlayersArray()[i].setHasDrawnOrHeld(false);
+                    SHGS.setHasMoved(i, false);
+                }
                 Log.d("phase change", "It is now the " + SHGS.getCurrentPhase());
             }
         }
 
 
-
-        if(SHGS.getCurrentPhase().equals("Reset-Phase")){
-            SHGS.setPotBalance(0);
-            SHGS.changeGamePhase();
-            Log.d("phase change", "It is now the " + SHGS.getCurrentPhase());
+        if (SHGS.getCurrentPhase().equals("Reset-Phase")) {
             sleep(5.0);
-
-
             //resets all players' data for this round
-            for(int k = 0; k < SHGS.getPlayersArray().length; k++){
+            for (int k = 0; k < SHGS.getPlayersArray().length; k++) {
                 //resets all players hands to card backs
-                for(int l = 0; l < SHGS.getPlayersArray()[k].getHand().length; l++){
-                    SHGS.getPlayersArray()[k].getHand()[l] = new Card('c','b');
+                for (int l = 0; l < SHGS.getPlayersArray()[k].getHand().length; l++) {
+                    SHGS.getPlayersArray()[k].getHand()[l] = new Card('c', 'b');
                 }
                 //resets lastBet
                 SHGS.getPlayersArray()[k].setLastBet(0);
@@ -307,18 +315,51 @@ public class SHLocalGame extends LocalGame {
                 SHGS.getPlayersArray()[k].setCurrentBet(0);
             }
 
-            for(Card allCards: SHGS.getDeckArray()){
+            for (Card allCards : SHGS.getDeckArray()) {
                 allCards.toggleIsSelected();
                 allCards.setIsDealt(false);
             } //resets the deck
 
+            for (int i = 0; i < SHGS.getPlayersArray().length; i++) {
+                SHGS.getPlayersArray()[i].setLastBet(0);
+                SHGS.getPlayersArray()[i].setHasDrawnOrHeld(false);
+                SHGS.setHasMoved(i, false);
+            }
+            SHGS.setPotBalance(0);
+            SHGS.setCurrentBet(SHGS.getMinimumBet());
             SHGS.setGamePhase(0);
+            SHGS.setCurrentTurnId(2);
             Log.d("phase change", "It is now the " + SHGS.getCurrentPhase());
         }
 
-        for(int l = 0; l < this.players.length; l++) {
-            sendUpdatedStateTo(this.players[l]);
-        }
+
+            if (SHGS.getCurrentTurnId() == 0) {
+                if (SHGS.getCurrentTurnId() == 2) {
+                    this.SHGS.setCurrentTurnId(0);
+                } else {
+                    this.SHGS.setCurrentTurnId(SHGS.getCurrentTurnId() + 1);
+                }
+                sendUpdatedStateTo(this.players[1]);
+                sendUpdatedStateTo(this.players[2]);
+            } else if (SHGS.getCurrentTurnId() == 1) {
+                if (SHGS.getCurrentTurnId() == 2) {
+                    this.SHGS.setCurrentTurnId(0);
+                } else {
+                    this.SHGS.setCurrentTurnId(SHGS.getCurrentTurnId() + 1);
+                }
+                sendUpdatedStateTo(this.players[0]);
+                sendUpdatedStateTo(this.players[2]);
+            } else if (SHGS.getCurrentTurnId() == 2) {
+                if (SHGS.getCurrentTurnId() == 2) {
+                    this.SHGS.setCurrentTurnId(0);
+                } else {
+                    this.SHGS.setCurrentTurnId(SHGS.getCurrentTurnId() + 1);
+                }
+                sendUpdatedStateTo(this.players[1]);
+                sendUpdatedStateTo(this.players[0]);
+            }
+
+
     }
 
     /**
@@ -346,37 +387,38 @@ public class SHLocalGame extends LocalGame {
     /**
      * Check if the game is over
      *
-     * @return
-     * 		a message that tells who has won the game, or null if the
-     * 		game is not over
+     * @return a message that tells who has won the game, or null if the
+     * game is not over
      */
     @Override
     protected String checkIfGameOver() {
         int haveLost = 0;
         String winnerName = "";
-        for(Player i: SHGS.getPlayersArray()){
-            if(i.getBalance() == 0){
+        for (Player i : SHGS.getPlayersArray()) {
+            if (i.getBalance() == 0) {
                 haveLost++;
+            } else {
+                winnerName = i.getName();
             }
-            else { winnerName = i.getName(); }
         }
-        if(haveLost == SHGS.getPlayersArray().length - 1){
+        if (haveLost == SHGS.getPlayersArray().length - 1) {
             return winnerName + " has won!";
-        } else { return null;}
+        } else {
+            return null;
+        }
     }
 
     protected void sleep(double seconds) {
         long milliseconds;
 
         //Since Thread.sleep takes in milliseconds, convert from seconds to milliseconds
-        milliseconds = (long)(seconds * 1000);
+        milliseconds = (long) (seconds * 1000);
 
         try {
             Log.d("Sleep", "Action Delay");
             Thread.sleep(milliseconds);
             Log.d("Sleep", "Action Delay Complete");
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             Log.d("Sleep", "Action Delay Complete");
         }
     }

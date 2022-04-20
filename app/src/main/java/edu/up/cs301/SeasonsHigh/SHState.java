@@ -24,6 +24,7 @@ public class SHState extends GameState {
     private String currentPhase;
     private String[] phases;
     private Player[] players;
+    private boolean[] hasMoved;
     private List<Card> deck;
     private String message;
     private int winnerID;
@@ -66,16 +67,21 @@ public class SHState extends GameState {
         this.currentBet = 0;
         this.minimumBet = 5; //$0 players are allowed to check
         this.currentTurnId = 0;
+
         this.lastBet = 0;
         this.phases = new String[9];
         this.deck = new ArrayList<Card>();
         this.players = new Player[3]; //3 player max
+        this.hasMoved = new boolean[3];
         this.message = "";
         this.winnerID = -1; //default
 
         this.players[0] = new Player("Player 0", 0);
+        this.hasMoved[0] = false;
         this.players[1] = new Player("Player 1", 1);
+        this.hasMoved[1] = false;
         this.players[2] = new Player("Player 2", 2);
+        this.hasMoved[2] = false;
 
         this.players[1].setIsTurn(true);
 
@@ -113,6 +119,8 @@ public class SHState extends GameState {
         this.potBalance = orig.potBalance;
         this.currentBet = orig.currentBet;
         this.minimumBet = orig.minimumBet;
+        this.currentTurnId = orig.currentTurnId;
+        this.hasMoved = orig.hasMoved;
         this.message = orig.message;
         this.lastBet = orig.lastBet;
         this.winnerID = orig.winnerID;
@@ -383,6 +391,8 @@ public class SHState extends GameState {
 
     public void setCurrentTurnId(int initTurn){ this.currentTurnId = initTurn;}
 
+    public void setHasMoved(int idx, boolean b){ this.hasMoved[idx] = b;}
+
     public void setMessage(String initMessage){
         this.message = initMessage;
     }
@@ -390,6 +400,10 @@ public class SHState extends GameState {
     public void setLastBet(int val){this.lastBet = val;}
     //getter methods
     public String getMessage(){return this.message;}
+
+    public boolean getHasMoved(int idx){ return this.hasMoved[idx];}
+
+    public boolean[] getHasMovedArray(){ return this.hasMoved;}
 
     public int getCurrentBet(){ return this.currentBet; }
 
