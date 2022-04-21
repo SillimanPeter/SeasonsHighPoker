@@ -55,8 +55,7 @@ public class SHComputerPlayer extends GameComputerPlayer {
         this.savedState = (SHState) info;
 
         //helper variable
-        int handStrength = 150; //this.savedState.getHandStrength(this.id); /*this ai's id*/
-
+        int handStrength = this.savedState.getHandStrength(this.id); /*this ai's id*/
 
         /**Create the computerPlayer brain here (what moves to make when)*/
 
@@ -120,7 +119,7 @@ public class SHComputerPlayer extends GameComputerPlayer {
                     }
                 }
             }
-        }
+        }//big brain ai
 
         //Noob AI brain here
         else {
@@ -134,21 +133,27 @@ public class SHComputerPlayer extends GameComputerPlayer {
                 int move = gen.nextInt(4);
                 //betting phase action
                 if (this.savedState.getCurrentPhase().equals("Betting-Phase")) {
-                    if (this.savedState.getCurrentPhaseLocation() == 0) {
+                    if (this.savedState.getPlayersArray()[this.playerNum].getBalance() <
+                                this.savedState.getCurrentBet()){
+                        sleep(2.0 * Math.random());
+                        Log.d("Computer sendAction", "Attempting Fold Action");
+                        this.game.sendAction(new SHActionFold(this));
+                    }
+                    else if (this.savedState.getCurrentPhaseLocation() == 0) {
                         sleep(5.0 * Math.random());
                         Log.d("Computer sendAction", "Attempting Bet Action");
-                        this.game.sendAction(new SHActionBet(this, savedState.getCurrentBet()));
-                    } else if (move >= 1) {
-                        sleep(5.0 * Math.random());
-                        Log.d("Computer sendAction", "Attempting Bet Action");
-                        //this.game.sendAction(new SHActionCard0Select(this));
                         this.game.sendAction(new SHActionBet(this, savedState.getCurrentBet()));
                     }
-//                    else {
-//                        sleep(2.0 * Math.random());
-//                        Log.d("Computer sendAction", "Attempting Fold Action");
-//                        this.game.sendAction(new SHActionFold(this));
-//                    }
+                    else if (move >= 1) {
+                        sleep(5.0 * Math.random());
+                        Log.d("Computer sendAction", "Attempting Bet Action");
+                        this.game.sendAction(new SHActionBet(this, savedState.getCurrentBet()));
+                    }
+                    else {
+                        sleep(2.0 * Math.random());
+                        Log.d("Computer sendAction", "Attempting Fold Action");
+                        this.game.sendAction(new SHActionFold(this));
+                    }
                 }//draw phase action
                 else if (this.savedState.getCurrentPhase().equals("Draw-Phase")) {
                     if (move == 0) {
@@ -156,25 +161,27 @@ public class SHComputerPlayer extends GameComputerPlayer {
                         Log.d("Computer sendAction", "Attempting Hold Action");
                         this.game.sendAction((new SHActionHold(this)));
                     }
-//                    else if (move == 1){
-//                        sleep(2.0 * Math.random());
-//                        Log.d("Computer sendAction", "Attempting Fold Action");
-//                        this.game.sendAction(new SHActionFold(this));
-//                    }
-                    else if (move >= 1) {
+                    else if (move == 1){
+                        sleep(2.0 * Math.random());
+                        Log.d("Computer sendAction", "Attempting Fold Action");
+                        this.game.sendAction(new SHActionFold(this));
+                    }
+                    else if (move > 1) {
                         sleep(2.0 * Math.random());
                         Log.d("Computer sendAction", "Attempting Draw Action");
                         int index = gen.nextInt(3);
-                        this.savedState.getPlayersArray()[this.playerNum].getHand()[index].setSelected(true);
-                        this.game.sendAction((new SHActionDraw(this))); //dumb AI draws random card;
+                        int numCards = gen.nextInt(3);
+                        for(int i = 0 ; i < numCards + 1; i++){
+                            this.savedState.getPlayersArray()[this.playerNum].getHand()[index].setSelected(true);
+                        } //draws random amount of cards
+                        this.game.sendAction((new SHActionDraw(this))); //dumb AI draws random cards;
                         this.savedState.getPlayersArray()[this.playerNum].getHand()[index].setSelected(false);
                     }
                 }
             }
-        }
+        }//noob ai
 
     }
-
 
     public String getName() {
         return this.name;

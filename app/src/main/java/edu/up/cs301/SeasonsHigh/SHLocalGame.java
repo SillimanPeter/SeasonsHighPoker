@@ -23,7 +23,6 @@ public class SHLocalGame extends LocalGame {
         // create the state for the beginning of the game
         this.SHGS = new SHState();
         super.state = this.SHGS;
-
     }
 
     public SHLocalGame(SHState initState) {
@@ -31,10 +30,7 @@ public class SHLocalGame extends LocalGame {
         // create the state for the beginning of the game
         this.SHGS = initState;
         super.state = initState;
-
-
     }
-
 
     /**
      * can the player with the given id take an action right now?
@@ -118,32 +114,33 @@ public class SHLocalGame extends LocalGame {
             if (!SHGS.getCurrentPhase().equals("Betting-Phase")) {
                 Log.d("flash red", "It must be the Betting-Phase for that action");
                 return false;
-            }
-            //is the players balance greater than or equal to the bet value?
-            else if (p.getBalance() < SHGS.getCurrentBet()) {
-                Log.d("flash red", "not enough balance for that action");
-                return false;
-            }
-            //is the bet value greater than or equal to current bet?
-            else if (((SHActionBet) sham).getBetAmount() < SHGS.getMinimumBet()) {
-                Log.d("flash red", "not high enough bet for that action");
-                return false;
             } else {
-                //commits bet made
+                //is the players balance greater than or equal to the bet value?
+            if (p.getBalance() < SHGS.getCurrentBet()) {
+                    Log.d("flash red", "not enough balance for that action");
+                    return false;
+                }
+                //is the bet value greater than or equal to current bet?
+                else if (((SHActionBet) sham).getBetAmount() < SHGS.getMinimumBet()) {
+                    Log.d("flash red", "not high enough bet for that action");
+                    return false;
+                } else {
+                    //commits bet made
 
-                SHGS.setCurrentBet(((SHActionBet) sham).getBetAmount());
-                p.setCurrentBet(((SHActionBet) sham).getBetAmount());
-                int bet = SHGS.getCurrentBet();
-                int pot = SHGS.getPotBalance();
+                    SHGS.setCurrentBet(((SHActionBet) sham).getBetAmount());
+                    p.setCurrentBet(((SHActionBet) sham).getBetAmount());
+                    int bet = SHGS.getCurrentBet();
+                    int pot = SHGS.getPotBalance();
 
-                SHGS.setPotBalance(bet + pot);
-                SHGS.setLastBet(bet);
-                p.setLastBet(bet);
-                p.setBalance(p.getBalance() - bet);
-                SHGS.setCurrentBet(bet);
-                SHGS.setMessage(p.getName() + " bet " + bet + "\n");
-                Log.d("Bet Action", "was made");
+                    SHGS.setPotBalance(bet + pot);
+                    SHGS.setLastBet(bet);
+                    p.setLastBet(bet);
+                    p.setBalance(p.getBalance() - bet);
+                    SHGS.setCurrentBet(bet);
+                    SHGS.setMessage(p.getName() + " bet " + bet + "\n");
+                    Log.d("Bet Action", "was made");
 
+                }
             }
 
         } else if (sham instanceof SHActionFold) {
