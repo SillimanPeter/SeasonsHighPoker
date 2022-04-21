@@ -65,7 +65,6 @@ public class SHLocalGame extends LocalGame {
     @Override
     protected boolean makeMove(GameAction action) {
         Log.d("MakeMove", "has been called");
-
         // check that we have slap-jack action; if so cast it
         if (!(action instanceof SHActionMove)) {
             return false;
@@ -263,7 +262,7 @@ public class SHLocalGame extends LocalGame {
                 SHGS.changeGamePhase();
                 for (int i = 0; i < SHGS.getPlayersArray().length; i++) {
                     SHGS.getPlayersArray()[i].setLastBet(0);
-                    SHGS.getPlayersArray()[i].setHasDrawnOrHeld(false);
+                    //SHGS.getPlayersArray()[i].setHasDrawnOrHeld(false);
                     SHGS.setHasMoved(i, false);
                 }
                 Log.d("phase change", "It is now the " + SHGS.getCurrentPhase());
@@ -378,8 +377,8 @@ public class SHLocalGame extends LocalGame {
         // send the modified copy of the state to the player
         p.sendInfo(stateForPlayer);
 
-        SHState playerGS = new SHState(SHGS);
-        p.sendInfo(playerGS);
+//        SHState playerGS = new SHState(SHGS);
+//        p.sendInfo(playerGS);
 
 
     }//sendUpdatedS
