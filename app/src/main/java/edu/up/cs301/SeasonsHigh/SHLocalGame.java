@@ -332,31 +332,25 @@ public class SHLocalGame extends LocalGame {
         }
 
 
-            if (SHGS.getCurrentTurnId() == 0) {
-                if (SHGS.getCurrentTurnId() == 2) {
-                    this.SHGS.setCurrentTurnId(0);
-                } else {
-                    this.SHGS.setCurrentTurnId(SHGS.getCurrentTurnId() + 1);
-                }
-                sendUpdatedStateTo(this.players[1]);
-                sendUpdatedStateTo(this.players[2]);
-            } else if (SHGS.getCurrentTurnId() == 1) {
-                if (SHGS.getCurrentTurnId() == 2) {
-                    this.SHGS.setCurrentTurnId(0);
-                } else {
-                    this.SHGS.setCurrentTurnId(SHGS.getCurrentTurnId() + 1);
-                }
-                sendUpdatedStateTo(this.players[0]);
-                sendUpdatedStateTo(this.players[2]);
-            } else if (SHGS.getCurrentTurnId() == 2) {
-                if (SHGS.getCurrentTurnId() == 2) {
-                    this.SHGS.setCurrentTurnId(0);
-                } else {
-                    this.SHGS.setCurrentTurnId(SHGS.getCurrentTurnId() + 1);
-                }
-                sendUpdatedStateTo(this.players[1]);
-                sendUpdatedStateTo(this.players[0]);
-            }
+        if (SHGS.getCurrentTurnId() == 0) {
+
+            this.SHGS.setCurrentTurnId(SHGS.getCurrentTurnId() + 1);
+
+            sendUpdatedStateTo(this.players[1]);
+            sendUpdatedStateTo(this.players[2]);
+        } else if (SHGS.getCurrentTurnId() == 1) {
+
+            this.SHGS.setCurrentTurnId(SHGS.getCurrentTurnId() + 1);
+
+            sendUpdatedStateTo(this.players[0]);
+            sendUpdatedStateTo(this.players[2]);
+        } else if (SHGS.getCurrentTurnId() == 2) {
+
+            this.SHGS.setCurrentTurnId(0);
+
+            sendUpdatedStateTo(this.players[1]);
+            sendUpdatedStateTo(this.players[0]);
+        }
 
 
     }
