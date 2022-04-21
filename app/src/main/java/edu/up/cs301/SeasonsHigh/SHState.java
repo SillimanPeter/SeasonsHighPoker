@@ -64,7 +64,7 @@ public class SHState extends GameState {
     public SHState(){
         //declare default values for the variables
         this.potBalance = 0;
-        this.currentBet = 0;
+        this.currentBet = 5;
         this.minimumBet = 5; //$0 players are allowed to check
         this.currentTurnId = 0;
 

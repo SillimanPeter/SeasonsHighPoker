@@ -91,14 +91,13 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
         if (info instanceof SHState) {
             shgs = (SHState) info;
             if (shgs.getCurrentPhaseLocation() == 0) {
-                this.infoSection.setText("Let's play a game! \n");
                 shgs.setPotBalance(0);
                 shgs.setCurrentBet(0);
                 //sets current pot
                 this.potAmount.setText("$" + shgs.getPotBalance());
                 //sets current bet
                 this.currentBet.setText("$" + shgs.getCurrentBet());
-                this.infoSection.append("It is currently the " + shgs.getCurrentPhase() + "\n"
+                this.infoSection.append("It is currently the Ante-Phase\n"
                         + "It is " + shgs.getPlayersArray()[shgs.getPlayerTurnId()].getName() + "'s turn \n");
             }else if(shgs.getCurrentPhase().equals("Reveal-Phase")){
                 //sets current pot
@@ -110,14 +109,13 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
                 infoSection.append("Please click \"hold\" to reset for the next round \n");
 
             }else {
-                this.infoSection.append(shgs.getMessage());
+                this.infoSection.append(shgs.getMessage() + "\n");
                 //sets current pot
                 this.potAmount.setText("$" + shgs.getPotBalance());
                 //sets current bet
                 this.currentBet.setText("$" + shgs.getLastBet());
                 //shows current phase
-                this.infoSection.append("It is currently the " + shgs.getCurrentPhase() + "\n"
-                        + "It is " + shgs.getPlayersArray()[shgs.getPlayerTurnId()].getName() + "'s turn \n");
+                this.infoSection.append("It is " + shgs.getPlayersArray()[shgs.getPlayerTurnId()].getName() + "'s turn \n");
             }
             //determine human player, set TextViews accordingly
             if (super.playerNum == 0) {

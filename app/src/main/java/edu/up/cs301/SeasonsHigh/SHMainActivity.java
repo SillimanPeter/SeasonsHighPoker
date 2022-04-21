@@ -45,9 +45,9 @@ public class SHMainActivity extends GameMainActivity {
         GameConfig defaultConfig = new GameConfig(playerTypes, 3, 3, "SeasonsHigh", PORT_NUMBER);
 
         // Add the default players
-        defaultConfig.addPlayer("Human", 0);
-        defaultConfig.addPlayer("Computer 1", 2);
-        defaultConfig.addPlayer("Computer 2", 2);
+        defaultConfig.addPlayer("(Your Name Here)", 0);
+        defaultConfig.addPlayer("Little Johnny", 2);
+        defaultConfig.addPlayer("Phillip Oliver Holes", 1);
 
         // Set the initial information for the remote player
         defaultConfig.setRemoteData("Guest", "", 1);
