@@ -371,7 +371,6 @@ public class SHLocalGame extends LocalGame {
 //        SHState playerGS = new SHState(SHGS);
 //        p.sendInfo(playerGS);
 
-
     }//sendUpdatedS
 
     /**

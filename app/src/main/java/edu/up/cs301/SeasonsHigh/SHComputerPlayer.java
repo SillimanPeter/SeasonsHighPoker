@@ -100,18 +100,13 @@ public class SHComputerPlayer extends GameComputerPlayer {
                         Log.d("Computer sendAction", "Attempting Hold Action");
                         this.game.sendAction((new SHActionHold(this)));
                     } else {
-/**TODO:find out which cards are the same suit and send cardSelectAction for the lower valued card*/
                         sleep(2.0 * Math.random());
                         Log.d("Computer sendAction", "Attempting Draw Action");
-                        this.game.sendAction(new SHActionCard0Select(this));
                         Card[] hand = savedState.getPlayersArray()[this.playerNum].getHand();
-                        int index = -1;
-                        int sameSuit = 0;
                         for (int i = 0; i < hand.length; i++) {
                             for (int j = 0; j < hand.length; j++) {
                                 if (hand[i].getSuit() == hand[j].getSuit()) {
-                                    sameSuit++;
-                                    index = j;
+                                    this.savedState.getPlayersArray()[this.playerNum].getHand()[i].setSelected(true);
                                 }
                             }
                         }
