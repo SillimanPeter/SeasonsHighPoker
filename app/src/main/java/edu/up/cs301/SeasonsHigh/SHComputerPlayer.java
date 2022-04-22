@@ -102,9 +102,14 @@ public class SHComputerPlayer extends GameComputerPlayer {
                     } else {
                         sleep(2.0 * Math.random());
                         Log.d("Computer sendAction", "Attempting Draw Action");
-                        Card[] hand = savedState.getPlayersArray()[this.playerNum].getHand();
+                        //helper variable to clean up code
+                        Card[] hand = new Card[4];
+                        for(int j = 0; j < hand.length; j++){
+                            hand[j] = new Card(this.savedState.getPlayersArray()[this.playerNum].getHand()[j]);
+                        }//copy player's hand
+                        //find and select cards with the same suit.
                         for (int i = 0; i < hand.length; i++) {
-                            for (int j = 0; j < hand.length; j++) {
+                            for (int j = 0; j < i; j++) {
                                 if (hand[i].getSuit() == hand[j].getSuit()) {
                                     this.savedState.getPlayersArray()[this.playerNum].getHand()[i].setSelected(true);
                                 }
@@ -170,7 +175,6 @@ public class SHComputerPlayer extends GameComputerPlayer {
                             this.savedState.getPlayersArray()[this.playerNum].getHand()[index].setSelected(true);
                         } //draws random amount of cards
                         this.game.sendAction((new SHActionDraw(this))); //dumb AI draws random cards;
-                        this.savedState.getPlayersArray()[this.playerNum].getHand()[index].setSelected(false);
                     }
                 }
             }
