@@ -95,7 +95,7 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
                 this.potAmount.setText("$" + shgs.getPotBalance());
                 //sets current bet
                 this.currentBet.setText("$" + shgs.getCurrentBet());
-                this.infoSection.append("It is currently the Ante-Phase\n"
+                this.infoSection.append("\n It is currently the Ante-Phase\n"
                         + "It is " + shgs.getPlayersArray()[shgs.getPlayerTurnId()].getName() + "'s turn \n");
             }else if(shgs.getCurrentPhase().equals("Reveal-Phase")){
                 //sets current pot
