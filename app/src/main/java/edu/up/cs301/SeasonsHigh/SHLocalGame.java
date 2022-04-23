@@ -13,6 +13,7 @@ public class SHLocalGame extends LocalGame {
     //initializing variables
     private SHState SHGS;
     private Player p;
+    private int numFolded;
 
     /**
      * declares the goldenGameState and creates a copy that excludes the hand for each
@@ -96,13 +97,13 @@ public class SHLocalGame extends LocalGame {
                 }
 
             }
-            SHGS.setMessage(p.getName() + " drew cards \n");
+            SHGS.setActionMessage(p.getName() + " drew cards \n");
             SHGS.getPlayersArray()[SHGS.getCurrentTurnId()].setHasDrawnOrHeld(true);
             Log.d("Draw Action", "player drew new cards");
         } else if (sham instanceof SHActionHold) {
             if (SHGS.getCurrentPhase().equals("Reveal-Phase")) {
                 SHGS.setGamePhase(8);
-                SHGS.setMessage("Resetting for next round");
+                SHGS.setPhaseMessage("Resetting for next round");
                 Log.d("Round Reset", "Starting Next Round");
 
             } else if (!SHGS.getCurrentPhase().equals("Draw-Phase")) {
@@ -110,7 +111,7 @@ public class SHLocalGame extends LocalGame {
                 return false;
             } else {
                 //do nothing
-                SHGS.setMessage(p.getName() + " held \n");
+                SHGS.setActionMessage(p.getName() + " held \n");
                 SHGS.getPlayersArray()[SHGS.getCurrentTurnId()].setHasDrawnOrHeld(true);
                 Log.d("Hold Action", "player held");
             }
@@ -141,14 +142,14 @@ public class SHLocalGame extends LocalGame {
                 p.setLastBet(bet);
                 p.setBalance(p.getBalance() - bet);
                 SHGS.setCurrentBet(bet);
-                SHGS.setMessage(p.getName() + " bet " + bet + "\n");
+                SHGS.setActionMessage(p.getName() + " bet " + bet + "\n");
                 Log.d("Bet Action", "was made");
 
             }
 
         } else if (sham instanceof SHActionFold) {
             SHGS.getPlayersArray()[thisPlayerIdx].setFolded(true);
-            SHGS.setMessage(p.getName() + " folded \n");
+            SHGS.setActionMessage(p.getName() + " folded \n");
             Log.d("Fold Action", "player has folded");
         } else { // some unexpected action
             return false;
@@ -163,7 +164,7 @@ public class SHLocalGame extends LocalGame {
 
     private void afterActionMade() {
         //find how many players have folded
-        int numFolded = 0;
+        numFolded = 0;
         int totalMoved = 0;
         SHGS.setHasMoved(SHGS.getCurrentTurnId(), true);
 
@@ -175,42 +176,41 @@ public class SHLocalGame extends LocalGame {
         //if(totalMoved == SHGS.getPlayersArray().length) {
         //checks if the round is over, then reset hands, and give the winner the potBalance
         ArrayList<Integer> winnerIdList = new ArrayList<Integer>();
-
-        if (SHGS.getCurrentPhaseLocation() == 6) {
-            //gives the winners their share of the pot
-            if (totalMoved != SHGS.getPlayersArray().length - numFolded) {
-                //do nothing
-            } else {
-                for (int winIdIndex = 0; winIdIndex < SHGS.compareHands().size(); winIdIndex++) {
-                    winnerIdList.add(SHGS.compareHands().get(winIdIndex));//arraylist of winner id's
-                }
-                if (winnerIdList.size() == 1) {
-                    //add pot balance to winner balance
-                    SHGS.getPlayersArray()[winnerIdList.get(0)].addBalance(SHGS.getPotBalance());
-                    SHGS.setWinnerID(winnerIdList.get(0));
-                } else if (winnerIdList.size() == 2) {
-                    //add pot balance to winners' balance
-                    int splitPotBal = SHGS.getPotBalance() / 2;
-                    for (int g = 0; g < winnerIdList.size(); g++) {
-                        SHGS.getPlayersArray()[winnerIdList.get(g)].addBalance(splitPotBal);
-                    }
-                } else if (winnerIdList.size() == 3) {
-                    //add pot balance to winners' balance
-                    int splitPotBal = SHGS.getPotBalance() / 3;
-                    for (int w = 0; w < winnerIdList.size(); w++) {
-                        SHGS.getPlayersArray()[winnerIdList.get(w)].addBalance(splitPotBal);
-                    }
-                }
-                SHGS.changeGamePhase();
-            }
-        }
-
         //find how many players have folded
         for (int h = 0; h < SHGS.getPlayersArray().length; h++) {
             if (SHGS.getPlayersArray()[h].getFolded()) {
                 numFolded++;
             }
         }
+
+        if (SHGS.getCurrentPhaseLocation() == 6 || numFolded == 2) {
+            if (SHGS.getCurrentPhaseLocation() != 6 && SHGS.getCurrentPhaseLocation() != 8) {
+                SHGS.setGamePhase(6);
+            }
+            //gives the winners their share of the pot
+            for (int winIdIndex = 0; winIdIndex < SHGS.compareHands().size(); winIdIndex++) {
+                winnerIdList.add(SHGS.compareHands().get(winIdIndex));//arraylist of winner id's
+            }
+            if (winnerIdList.size() == 1) {
+                //add pot balance to winner balance
+                SHGS.getPlayersArray()[winnerIdList.get(0)].addBalance(SHGS.getPotBalance());
+                SHGS.setWinnerID(winnerIdList.get(0));
+            } else if (winnerIdList.size() == 2) {
+                //add pot balance to winners' balance
+                int splitPotBal = SHGS.getPotBalance() / 2;
+                for (int g = 0; g < winnerIdList.size(); g++) {
+                    SHGS.getPlayersArray()[winnerIdList.get(g)].addBalance(splitPotBal);
+                }
+            } else if (winnerIdList.size() == 3) {
+                //add pot balance to winners' balance
+                int splitPotBal = SHGS.getPotBalance() / 3;
+                for (int w = 0; w < winnerIdList.size(); w++) {
+                    SHGS.getPlayersArray()[winnerIdList.get(w)].addBalance(splitPotBal);
+                }
+            }
+            SHGS.changeGamePhase();
+        }
+
 
         //find how many players have lost the game
         int haveLost = 0;
@@ -243,6 +243,7 @@ public class SHLocalGame extends LocalGame {
                     SHGS.setHasMoved(i, false);
                 }
                 SHGS.setCurrentBet(SHGS.getMinimumBet());
+                SHGS.setPhaseMessage((SHGS.getCurrentPhase()));
                 Log.d("numFolded", "" + numFolded);
                 Log.d("numPlayersMatched", "" + playersMatched);
                 Log.d("currentBet", "" + SHGS.getCurrentBet());
@@ -266,6 +267,7 @@ public class SHLocalGame extends LocalGame {
                     //SHGS.getPlayersArray()[i].setHasDrawnOrHeld(false);
                     SHGS.setHasMoved(i, false);
                 }
+                SHGS.setPhaseMessage(SHGS.getCurrentPhase());
                 Log.d("phase change", "It is now the " + SHGS.getCurrentPhase());
             }
         }
@@ -292,6 +294,7 @@ public class SHLocalGame extends LocalGame {
                     SHGS.getPlayersArray()[i].setHasDrawnOrHeld(false);
                     SHGS.setHasMoved(i, false);
                 }
+                SHGS.setPhaseMessage(SHGS.getCurrentPhase());
                 Log.d("phase change", "It is now the " + SHGS.getCurrentPhase());
             }
         }
@@ -328,18 +331,19 @@ public class SHLocalGame extends LocalGame {
             SHGS.setPotBalance(0);
             SHGS.setCurrentBet(SHGS.getMinimumBet());
             SHGS.setGamePhase(0);
+            this.numFolded = 0;
             SHGS.setCurrentTurnId(2);
             Log.d("phase change", "It is now the " + SHGS.getCurrentPhase());
         }
 
         //changes who's turn it is
         int idNum = this.SHGS.getCurrentTurnId() + 1;
-        if(idNum >= this.SHGS.getPlayersArray().length){
+        if (idNum >= this.SHGS.getPlayersArray().length) {
             idNum = 0;
         }
-        while(this.SHGS.getPlayersArray()[idNum].getFolded()){
+        while (this.SHGS.getPlayersArray()[idNum].getFolded()) {
             idNum++;
-            if(idNum >= this.SHGS.getPlayersArray().length){
+            if (idNum >= this.SHGS.getPlayersArray().length) {
                 idNum = 0;
             }
         }//@caveat this must be run after "the game has ended" catch or it will be an infinite loop
@@ -357,7 +361,7 @@ public class SHLocalGame extends LocalGame {
             sendUpdatedStateTo(this.players[0]);
         }
 
-        SHGS.setMessage("");
+
     }
 
     /**

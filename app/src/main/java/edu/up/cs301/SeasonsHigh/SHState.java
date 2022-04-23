@@ -26,7 +26,8 @@ public class SHState extends GameState {
     private Player[] players;
     private boolean[] hasMoved;
     private List<Card> deck;
-    private String message;
+    private String phaseMessage;
+    private String actionMessage;
     private int winnerID;
     final private String[] cardRecName = {"card_2c","card_2d","card_2h","card_2s",
                                         "card_3c","card_3d","card_3h","card_3s",
@@ -73,7 +74,8 @@ public class SHState extends GameState {
         this.deck = new ArrayList<Card>();
         this.players = new Player[3]; //3 player max
         this.hasMoved = new boolean[3];
-        this.message = "";
+        this.phaseMessage = "";
+        this.actionMessage = "";
         this.winnerID = -1; //default
 
         this.players[0] = new Player("Player 0", 0);
@@ -121,7 +123,8 @@ public class SHState extends GameState {
         this.minimumBet = orig.minimumBet;
         this.currentTurnId = orig.currentTurnId;
         this.hasMoved = orig.hasMoved;
-        this.message = orig.message;
+        this.phaseMessage = orig.phaseMessage;
+        this.actionMessage = orig.actionMessage;
         this.lastBet = orig.lastBet;
         this.winnerID = orig.winnerID;
 
@@ -393,13 +396,16 @@ public class SHState extends GameState {
 
     public void setHasMoved(int idx, boolean b){ this.hasMoved[idx] = b;}
 
-    public void setMessage(String initMessage){
-        this.message = initMessage;
+    public void setPhaseMessage(String initMessage){
+        this.phaseMessage = initMessage;
     }
 
     public void setLastBet(int val){this.lastBet = val;}
+
+    public void setActionMessage(String initMessage){ this.actionMessage = initMessage;}
     //getter methods
-    public String getMessage(){return this.message;}
+    public String getPhaseMessage(){return this.phaseMessage;}
+    public String getActionMessage(){return this.actionMessage;}
 
     public boolean getHasMoved(int idx){ return this.hasMoved[idx];}
 

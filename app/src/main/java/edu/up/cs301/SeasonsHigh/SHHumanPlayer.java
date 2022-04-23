@@ -10,8 +10,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.material.internal.ScrimInsetsFrameLayout;
-
 import edu.up.cs301.game.GameFramework.GameMainActivity;
 import edu.up.cs301.game.GameFramework.infoMessage.GameInfo;
 import edu.up.cs301.game.GameFramework.players.GameHumanPlayer;
@@ -109,7 +107,7 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
                 infoSection.append("Please click \"hold\" to reset for the next round \n");
 
             }else {
-                this.infoSection.append(shgs.getMessage() + "\n");
+                this.infoSection.append( "\n" + shgs.getActionMessage() + "\n" + shgs.getPhaseMessage() + "\n");
                 //sets current pot
                 this.potAmount.setText("$" + shgs.getPotBalance());
                 //sets current bet
