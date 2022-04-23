@@ -99,7 +99,7 @@ public class SHLocalGame extends LocalGame {
             SHGS.setMessage(p.getName() + " drew cards \n");
             SHGS.getPlayersArray()[SHGS.getCurrentTurnId()].setHasDrawnOrHeld(true);
             Log.d("Draw Action", "player drew new cards");
-        } else if (sham.isHold()) {
+        } else if (sham instanceof SHActionHold) {
             if (SHGS.getCurrentPhase().equals("Reveal-Phase")) {
                 SHGS.setGamePhase(8);
                 SHGS.setMessage("Resetting for next round");
@@ -205,6 +205,7 @@ public class SHLocalGame extends LocalGame {
             }
         }
 
+        //find how many players have folded
         for (int h = 0; h < SHGS.getPlayersArray().length; h++) {
             if (SHGS.getPlayersArray()[h].getFolded()) {
                 numFolded++;
@@ -331,23 +332,27 @@ public class SHLocalGame extends LocalGame {
             Log.d("phase change", "It is now the " + SHGS.getCurrentPhase());
         }
 
+        //changes who's turn it is
+        int idNum = this.SHGS.getCurrentTurnId() + 1;
+        if(idNum >= this.SHGS.getPlayersArray().length){
+            idNum = 0;
+        }
+        while(this.SHGS.getPlayersArray()[idNum].getFolded()){
+            idNum++;
+            if(idNum >= this.SHGS.getPlayersArray().length){
+                idNum = 0;
+            }
+        }//@caveat this must be run after "the game has ended" catch or it will be an infinite loop
+        this.SHGS.setCurrentTurnId(idNum);
 
+        //sends info to other players
         if (SHGS.getCurrentTurnId() == 0) {
-
-            this.SHGS.setCurrentTurnId(SHGS.getCurrentTurnId() + 1);
-
             sendUpdatedStateTo(this.players[1]);
             sendUpdatedStateTo(this.players[2]);
         } else if (SHGS.getCurrentTurnId() == 1) {
-
-            this.SHGS.setCurrentTurnId(SHGS.getCurrentTurnId() + 1);
-
             sendUpdatedStateTo(this.players[0]);
             sendUpdatedStateTo(this.players[2]);
         } else if (SHGS.getCurrentTurnId() == 2) {
-
-            this.SHGS.setCurrentTurnId(0);
-
             sendUpdatedStateTo(this.players[1]);
             sendUpdatedStateTo(this.players[0]);
         }

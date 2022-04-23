@@ -94,8 +94,8 @@ public class SHComputerPlayer extends GameComputerPlayer {
                 }
 
                 //draw phase actions
-                else if (this.savedState.getCurrentPhase() == "Drawing-Phase") {
-                    if (handStrength >= 1000) { //if has seasoned
+                else if (this.savedState.getCurrentPhase() == "Draw-Phase") {
+                    if(handStrength >= 1000) { //if has seasoned
                         sleep(2.0 * Math.random());
                         Log.d("Computer sendAction", "Attempting Hold Action");
                         this.game.sendAction((new SHActionHold(this)));
