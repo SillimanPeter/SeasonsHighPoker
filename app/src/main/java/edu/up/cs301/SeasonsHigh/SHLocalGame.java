@@ -32,8 +32,6 @@ public class SHLocalGame extends LocalGame {
         // create the state for the beginning of the game
         this.SHGS = initState;
         super.state = initState;
-
-
     }
 
 
