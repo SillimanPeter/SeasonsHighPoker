@@ -184,29 +184,32 @@ public class SHLocalGame extends LocalGame {
         if (SHGS.getCurrentPhaseLocation() == 6 || numFolded == 2) {
             if (SHGS.getCurrentPhaseLocation() != 6 && SHGS.getCurrentPhaseLocation() != 8) {
                 SHGS.setGamePhase(6);
-            }
-            //gives the winners their share of the pot
-            for (int winIdIndex = 0; winIdIndex < SHGS.compareHands().size(); winIdIndex++) {
-                winnerIdList.add(SHGS.compareHands().get(winIdIndex));//arraylist of winner id's
-            }
-            if (winnerIdList.size() == 1) {
-                //add pot balance to winner balance
-                SHGS.getPlayersArray()[winnerIdList.get(0)].addBalance(SHGS.getPotBalance());
-                SHGS.setWinnerID(winnerIdList.get(0));
-            } else if (winnerIdList.size() == 2) {
-                //add pot balance to winners' balance
-                int splitPotBal = SHGS.getPotBalance() / 2;
-                for (int g = 0; g < winnerIdList.size(); g++) {
-                    SHGS.getPlayersArray()[winnerIdList.get(g)].addBalance(splitPotBal);
+
+                //gives the winners their share of the pot
+                for (int winIdIndex = 0; winIdIndex < SHGS.compareHands().size(); winIdIndex++) {
+                    winnerIdList.add(SHGS.compareHands().get(winIdIndex));//arraylist of winner id's
                 }
-            } else if (winnerIdList.size() == 3) {
-                //add pot balance to winners' balance
-                int splitPotBal = SHGS.getPotBalance() / 3;
-                for (int w = 0; w < winnerIdList.size(); w++) {
-                    SHGS.getPlayersArray()[winnerIdList.get(w)].addBalance(splitPotBal);
+                if (winnerIdList.size() == 1) {
+                    //add pot balance to winner balance
+                    SHGS.getPlayersArray()[winnerIdList.get(0)].addBalance(SHGS.getPotBalance());
+                    SHGS.setWinnerID(winnerIdList.get(0));
+                } else if (winnerIdList.size() == 2) {
+                    //add pot balance to winners' balance
+                    int splitPotBal = SHGS.getPotBalance() / 2;
+                    for (int g = 0; g < winnerIdList.size(); g++) {
+                        SHGS.getPlayersArray()[winnerIdList.get(g)].addBalance(splitPotBal);
+                    }
+                } else if (winnerIdList.size() == 3) {
+                    //add pot balance to winners' balance
+                    int splitPotBal = SHGS.getPotBalance() / 3;
+                    for (int w = 0; w < winnerIdList.size(); w++) {
+                        SHGS.getPlayersArray()[winnerIdList.get(w)].addBalance(splitPotBal);
+                    }
                 }
+                SHGS.changeGamePhase();
+            }else{
+                //do nothing
             }
-            SHGS.changeGamePhase();
         }
 
 
