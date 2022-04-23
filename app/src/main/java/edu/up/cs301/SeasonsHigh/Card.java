@@ -2,9 +2,7 @@ package edu.up.cs301.SeasonsHigh;
 
 import static java.lang.Integer.valueOf;
 
-/**
- * TODO: comment class
- */
+
 public class Card {
 
     private static final long serialVersionUID = 99L;

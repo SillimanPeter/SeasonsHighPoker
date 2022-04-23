@@ -194,9 +194,7 @@ public class SHHumanPlayer extends GameHumanPlayer implements View.OnClickListen
                     this.foe1Card2.setImageResource(shgs.getPCardRecId(0, 2));
                     this.foe1Card3.setImageResource(shgs.getPCardRecId(0, 3));
                 }
-            }/* TODO: issue - establishes the correct user but not other players
-                                (i.e. non-user players' may be switched in order)*/
-
+            }
 
         } else { super.flash(Color.RED, 20); } //send error flash (is not PigGameState)
     }//receiveInfo
