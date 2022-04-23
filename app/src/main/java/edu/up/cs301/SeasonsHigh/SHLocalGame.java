@@ -32,6 +32,8 @@ public class SHLocalGame extends LocalGame {
         // create the state for the beginning of the game
         this.SHGS = initState;
         super.state = initState;
+
+
     }
 
 
@@ -171,9 +173,34 @@ public class SHLocalGame extends LocalGame {
                 totalMoved = totalMoved + 1;
             }
         }
-        //if(totalMoved == SHGS.getPlayersArray().length) {
-        //checks if the round is over, then reset hands, and give the winner the potBalance
+
         ArrayList<Integer> winnerIdList = new ArrayList<Integer>();
+
+        //if all but one player has folded end the round
+        if(numFolded == this.SHGS.getPlayersArray().length-1){
+            for (int winIdIndex = 0; winIdIndex < SHGS.compareHands().size(); winIdIndex++) {
+                winnerIdList.add(SHGS.compareHands().get(winIdIndex));//arraylist of winner id's
+            }
+            if (winnerIdList.size() == 1) {
+                //add pot balance to winner balance
+                SHGS.getPlayersArray()[winnerIdList.get(0)].addBalance(SHGS.getPotBalance());
+                SHGS.setWinnerID(winnerIdList.get(0));
+            } else if (winnerIdList.size() == 2) {
+                //add pot balance to winners' balance
+                int splitPotBal = SHGS.getPotBalance() / 2;
+                for (int g = 0; g < winnerIdList.size(); g++) {
+                    SHGS.getPlayersArray()[winnerIdList.get(g)].addBalance(splitPotBal);
+                }
+            } else if (winnerIdList.size() == 3) {
+                //add pot balance to winners' balance
+                int splitPotBal = SHGS.getPotBalance() / 3;
+                for (int w = 0; w < winnerIdList.size(); w++) {
+                    SHGS.getPlayersArray()[winnerIdList.get(w)].addBalance(splitPotBal);
+                }
+            }
+            SHGS.changeGamePhase();
+        }
+
         //find how many players have folded
         for (int h = 0; h < SHGS.getPlayersArray().length; h++) {
             if (SHGS.getPlayersArray()[h].getFolded()) {
@@ -181,6 +208,7 @@ public class SHLocalGame extends LocalGame {
             }
         }
 
+        //checks if the round is over, then reset hands, and give the winner the potBalance
         if (SHGS.getCurrentPhaseLocation() == 6 || numFolded == 2) {
             if (SHGS.getCurrentPhaseLocation() != 6 && SHGS.getCurrentPhaseLocation() != 8) {
                 SHGS.setGamePhase(6);
