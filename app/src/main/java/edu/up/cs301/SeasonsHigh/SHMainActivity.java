@@ -1,9 +1,5 @@
 package edu.up.cs301.SeasonsHigh;
 
-
-
-import android.graphics.Color;
-
 import java.util.ArrayList;
 
 import edu.up.cs301.game.GameFramework.GameMainActivity;

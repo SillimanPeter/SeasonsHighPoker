@@ -15,7 +15,6 @@ import edu.up.cs301.game.GameFramework.infoMessage.GameInfo;
 import edu.up.cs301.game.GameFramework.players.GameHumanPlayer;
 import edu.up.cs301.game.R;
 
-
 /**
  * A GUI for a human to play Pig. This default version displays the GUI but is incomplete
  *

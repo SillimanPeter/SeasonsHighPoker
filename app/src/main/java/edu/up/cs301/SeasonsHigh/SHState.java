@@ -218,7 +218,6 @@ public class SHState extends GameState {
         boolean straight = false;
         boolean threeKind = false;
         int pairNum = 0;
-        int handNum = 0;
         int numPairs = 0;
         int score = 0;
 
@@ -258,7 +257,7 @@ public class SHState extends GameState {
         else if(numPairs == 2){ score += 200; } //two pair
         else if(numPairs == 1){ score += 100; } //single pair
 
-        score += handNum; //handType rank TODO: calculate handNum
+        score += pairNum; //handType rank
 
         return score;
     }
