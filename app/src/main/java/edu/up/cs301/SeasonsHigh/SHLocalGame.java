@@ -172,7 +172,32 @@ public class SHLocalGame extends LocalGame {
                 totalMoved = totalMoved + 1;
             }
         }
-        //if(totalMoved == SHGS.getPlayersArray().length) {
+
+        //find how many players have folded
+        for (int h = 0; h < this.SHGS.getPlayersArray().length; h++) {
+            if (this.SHGS.getPlayersArray()[h].getFolded()) {
+                numFolded++;
+            }
+        }
+
+        //if all but one player has folded end the round
+        if(numFolded == this.SHGS.getPlayersArray().length-1){
+            SHGS.setGamePhase(6);
+        }
+
+        //find how many players have lost the game
+        int haveLost = 0;
+        for (Player i : SHGS.getPlayersArray()) {
+            if (i.getBalance() <= 5/*minimumBet*/) {
+                haveLost++;
+            }
+        }
+
+        //declare winner and end game
+        if (haveLost == SHGS.getPlayersArray().length - 1) {
+            //TODO: game is over, declare winner and end game
+        }
+
         //checks if the round is over, then reset hands, and give the winner the potBalance
         ArrayList<Integer> winnerIdList = new ArrayList<Integer>();
 
@@ -203,26 +228,6 @@ public class SHLocalGame extends LocalGame {
                 }
                 SHGS.changeGamePhase();
             }
-        }
-
-        //find how many players have folded
-        for (int h = 0; h < SHGS.getPlayersArray().length; h++) {
-            if (SHGS.getPlayersArray()[h].getFolded()) {
-                numFolded++;
-            }
-        }
-
-        //find how many players have lost the game
-        int haveLost = 0;
-        for (Player i : SHGS.getPlayersArray()) {
-            if (i.getBalance() <= 5/*minimumBet*/) {
-                haveLost++;
-            }
-        }
-
-        //declare winner and end game
-        if (haveLost == SHGS.getPlayersArray().length - 1) {
-            //TODO: game is over, declare winner and end game
         }
 
         //checks if the betting phase is over, then changes it.
@@ -263,7 +268,6 @@ public class SHLocalGame extends LocalGame {
                 SHGS.changeGamePhase();
                 for (int i = 0; i < SHGS.getPlayersArray().length; i++) {
                     SHGS.getPlayersArray()[i].setLastBet(0);
-                    //SHGS.getPlayersArray()[i].setHasDrawnOrHeld(false);
                     SHGS.setHasMoved(i, false);
                 }
                 Log.d("phase change", "It is now the " + SHGS.getCurrentPhase());
@@ -296,7 +300,7 @@ public class SHLocalGame extends LocalGame {
             }
         }
 
-
+        //ends the round
         if (SHGS.getCurrentPhase().equals("Reset-Phase")) {
             sleep(5.0);
             //resets all players' data for this round
