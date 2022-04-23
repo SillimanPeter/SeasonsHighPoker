@@ -132,7 +132,11 @@ public class SHComputerPlayer extends GameComputerPlayer {
                 Random gen = new Random();
                 int move = gen.nextInt(4);
                 //betting phase action
-                if (this.savedState.getCurrentPhase().equals("Betting-Phase")) {
+                if(savedState.getPlayersArray()[id].getBalance() < savedState.getCurrentBet()){
+                    sleep(2.0 * Math.random());
+                    Log.d("Computer sendAction", "Attempting Fold Action");
+                    this.game.sendAction(new SHActionFold(this));
+                } else if (this.savedState.getCurrentPhase().equals("Betting-Phase")) {
                     if (this.savedState.getPlayersArray()[this.playerNum].getBalance() <
                                 this.savedState.getCurrentBet()){
                         sleep(2.0 * Math.random());
